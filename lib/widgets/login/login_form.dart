@@ -1,16 +1,14 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/api/api.dart';
+import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/main.dart';
 import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/screen.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
 import 'package:khulnaservice/widgets/commons/shadow_button.dart';
-import 'package:khulnaservice/widgets/login/login_form_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:validators/validators.dart' as validator;
 
 import '../commons/custom_textfield.dart';
@@ -22,9 +20,9 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
-  Model model = Model();
   bool passwordVisible = false;
   bool _isLoading = false;
+  String email, password;
 
   @override
   void initState() {
@@ -52,7 +50,7 @@ class _LoginFormState extends State<LoginForm> {
                 return null;
               },
               onSaved: (String value) {
-                model.email = value;
+                email = value;
               },
             ),
             MyTextFormField(
@@ -77,12 +75,10 @@ class _LoginFormState extends State<LoginForm> {
                   return 'Password should be minimum 7 characters';
                 }
 
-                _formKey.currentState.save();
-
                 return null;
               },
               onSaved: (String value) {
-                model.password = value;
+                password = value;
               },
             ),
             Container(
@@ -97,16 +93,9 @@ class _LoginFormState extends State<LoginForm> {
                     borderRadius: new BorderRadius.circular(8.0),
                   ),
                   color: themeColor.getColor(),
-                  onPressed: _isLoading ? null : () {
-                    if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-                      _handleLogin();
-//                      Nav.routeReplacement(context, InitPage());
-//                      Navigator.push(
-//                          context,
-//                          MaterialPageRoute(
-//                              builder: (context) => Result(model: this.model)));
-                    }
+                  onPressed: () {
+                    _formKey.currentState.save();
+                    getLogin(email, password);
                   },
                   child: Text(
                     _isLoading ? 'Processing...' : 'Sign In',
@@ -125,38 +114,35 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-Future<void> _handleLogin() async {
+  FetchData fetchData = FetchData();
 
-    setState(() {
-      _isLoading = true;
-    });
+  getLogin(String email, String password) async {
+    if (_formKey.currentState.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
 
-    var data = {
-      'email' : model.email,
-      'password' : model.password,
-    };
-
-    var res = await CallApi().postData(data, 'login');
-    var body = json.decode(res.body);
-
-    if(body['message'] == 'success') {
-      SharedPreferences localStorage = await SharedPreferences.getInstance();
-      localStorage.setString('token', body['access_token']);
-      localStorage.setString('user', json.encode(['user']));
-
-      Nav.routeReplacement(context, InitPage());
-    }
-    else {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text(body['message'], textAlign: TextAlign.center),        
-      ));
-      
-       setState(() {
-        _isLoading = false;
+      fetchData.getLog(email, password).then((value) {
+        var body = jsonDecode(value);
+        if (body['message'] == 'success') {
+          Nav.routeReplacement(context, InitPage());
+        } else {
+          setState(() {
+            _isLoading = false;
+          });
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text(body['message'], textAlign: TextAlign.center),
+          ));
+        }
+      }).catchError((e) {
+        setState(() {
+          _isLoading = false;
+        });
+        var body = jsonDecode(e);
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text("Something Went Wrong", textAlign: TextAlign.center),
+        ));
       });
     }
-
   }
-
-
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/pages/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/utils/navigator.dart';
@@ -22,15 +23,15 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-
   TextEditingController fName = TextEditingController();
-
-
 
   final _formKey = GlobalKey<FormState>();
   Model model = Model();
   bool passwordVisible = false;
   bool _isLoading = false;
+
+  String name, email, password;
+
   @override
   void initState() {
     super.initState();
@@ -58,7 +59,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   return null;
                 },
                 onSaved: (String value) {
-                  model.fullName = value;
+                  name = value;
                 },
               ),
             ),
@@ -73,7 +74,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 return null;
               },
               onSaved: (String value) {
-                model.email = value;
+                email = value;
               },
             ),
             MyTextFormField(
@@ -96,14 +97,14 @@ class _RegisterFormState extends State<RegisterForm> {
               validator: (String value) {
                 if (value.length < 7) {
                   return 'Password should be minimum 7 characters';
+                } else if (value != password) {
+                  return "password don't match";
                 }
-
-                _formKey.currentState.save();
 
                 return null;
               },
               onSaved: (String value) {
-                model.password = value;
+                password = value;
               },
             ),
             MyTextFormField(
@@ -126,14 +127,11 @@ class _RegisterFormState extends State<RegisterForm> {
               validator: (String value) {
                 if (value.length < 7) {
                   return 'Password should be minimum 7 characters';
+                } else if (value != password) {
+                  return "password don't match";
                 }
 
-                _formKey.currentState.save();
-
                 return null;
-              },
-              onSaved: (String value) {
-                model.rePassword = value;
               },
             ),
             Container(
@@ -148,14 +146,17 @@ class _RegisterFormState extends State<RegisterForm> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   color: themeColor.getColor(),
-                  onPressed: _isLoading ? null : () {
-                    if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-                      _handleLogin();
-                    }
+                  onPressed: () {
+                    _formKey.currentState.save();
+                    _formKey.currentState.validate();
+                    getReg(name, email, password);
+//                    if (_formKey.currentState.validate()) {
+//                      _formKey.currentState.save();
+//                      _handleLogin();
+//                    }
                   },
                   child: Text(
-                    _isLoading ? 'Creating.....':'Register',
+                    _isLoading ? 'Creating.....' : 'Register',
                     style: GoogleFonts.poppins(
                       fontSize: 16,
                       color: Colors.white,
@@ -171,45 +172,69 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 
-  Future<void> _handleLogin() async {
+  FetchData fetchData = FetchData();
 
-    setState(() {
-      _isLoading = true;
-    });
+  getReg(String name, String email, String password) async {
+    _formKey.currentState.validate();
+    SharedPreferences Sp = await SharedPreferences.getInstance();
+    if (_formKey.currentState.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
 
-    var data = {
-      'name' : model.fullName,
-      'email' : model.email,
-      'password' : model.password,
-      'password_confirmation' : model.rePassword
-    };
+      fetchData.geReg(name, email, password).then((value) async {
 
-    var res = await CallApi().postData(data, 'register');
-    var body = json.decode(res.body);
+        var data = jsonDecode(value);
 
-    if(body['message'] == 'success') {
-      SharedPreferences localStorage = await SharedPreferences.getInstance();
-      localStorage.setString('token', body['access_token']);
-      localStorage.setString('user', json.encode(['user']));
-
-      Nav.routeReplacement(context, InitPage());
-
-
- //   Nav.routeReplacement(context, InitPage());
-//    Navigator.push(context,
-//    MaterialPageRoute(builder: (context) => Result()));
-
-    }
-    else {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text(body['message'], textAlign: TextAlign.center),
-        
-      ));
-      
-       setState(() {
-        _isLoading = false;
+        setState(() {
+          _isLoading = false;
+        });
+        Nav.routeReplacement(context, InitPage());
+      }).catchError((onError) {
+        setState(() {
+          _isLoading = false;
+        });
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text("Something went wrong", textAlign: TextAlign.center),
+        ));
       });
     }
   }
 
+//  Future<void> _handleLogin() async {
+//    setState(() {
+//      _isLoading = true;
+//    });
+//
+//    var data = {
+//      'name': model.fullName,
+//      'email': model.email,
+//      'password': model.password,
+//      'password_confirmation': model.rePassword
+//    };
+//
+//    var res = await CallApi().postData(data, 'register');
+//    var body = json.decode(res.body);
+//
+//    if (body['message'] == 'success') {
+//      SharedPreferences localStorage = await SharedPreferences.getInstance();
+//      localStorage.setString('token', body['access_token']);
+//      localStorage.setString('user', json.encode(['user']));
+//
+//      Nav.routeReplacement(context, InitPage());
+//
+//      //   Nav.routeReplacement(context, InitPage());
+////    Navigator.push(context,
+////    MaterialPageRoute(builder: (context) => Result()));
+//
+//    } else {
+//      Scaffold.of(context).showSnackBar(SnackBar(
+//        content: Text(body['message'], textAlign: TextAlign.center),
+//      ));
+//
+//      setState(() {
+//        _isLoading = false;
+//      });
+//    }
+//  }
 }

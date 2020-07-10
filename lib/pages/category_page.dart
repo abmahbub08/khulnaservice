@@ -17,8 +17,7 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
-
-  Map<String,dynamic> ls;
+  Map<String, dynamic> ls;
 
   Future<void> _getCategory() async {
     var res = await CallApi().getData('allCategories');
@@ -28,236 +27,194 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   @override
-  void initState(){
+  void initState() {
     _getCategory();
   }
-
 
   @override
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
     return Scaffold(
       backgroundColor: greyBackground,
-      body: ListView.builder(
-        itemBuilder: (context, index){
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child:Column(
-                children: <Widget>[
-                  ExpansionTile(
-                  title: Text(
-                    ls['category'][index]["name"],
-                    style: GoogleFonts.poppins(color: Color(0xFF5D6A78)),
-                    textDirection: TextDirection.ltr,
+      body: VerticalTabs(
+        indicatorColor: themeColor.getColor(),
+        selectedTabBackgroundColor: whiteColor,
+        tabBackgroundColor: themeColor.getColor(),
+        backgroundColor: greyBackground,
+        direction: TextDirection.rtl,
+        tabsWidth: 48,
+        tabsTitle: categories,
+        tabs: <Tab>[
+          Tab(
+              child: RotatedBox(
+                quarterTurns: 1,
+                child: RichText(
+                  text: TextSpan(
+                    text: 'Flutter',
+                    style: DefaultTextStyle.of(context).style.copyWith(),
                   ),
-                  leading: null,
-                    trailing: Icon(
-                      Icons.add,
-                      size: 0,
-                  ),
-                  children: [
-                      Text("data")
-                    ]
-                  ),
-
-
-                  // Text(ls['category'][index]["name"]),
-                  // Text(ls['category'][index]["slug"]),
-                ],
+                ),
+              ),
+              icon: Icon(Icons.phone)),
+          Tab(
+              child: RotatedBox(
+            quarterTurns: 1,
+            child: RichText(
+              text: TextSpan(
+                text: 'Flutter',
+                style: DefaultTextStyle.of(context).style,
               ),
             ),
-          );
-        },
-        itemCount: ls['category'].length,
-        )
+          )),
+          Tab(
+            child: Container(
+                margin: EdgeInsets.only(bottom: 1),
+                child: RotatedBox(
+                  quarterTurns: 1,
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Flutter',
+                      style: DefaultTextStyle.of(context).style,
+                    ),
+                  ),
+                )),
+          ),
+          Tab(
+              child: RotatedBox(
+            quarterTurns: 1,
+            child: RichText(
+              text: TextSpan(
+                text: 'Flutter',
+                style: DefaultTextStyle.of(context).style,
+              ),
+            ),
+          )),
+          Tab(
+              child: RotatedBox(
+            quarterTurns: 1,
+            child: RichText(
+              text: TextSpan(
+                text: 'Flutter',
+                style: DefaultTextStyle.of(context).style,
+              ),
+            ),
+          )),
+          Tab(
+              child: RotatedBox(
+            quarterTurns: 1,
+            child: RichText(
+              text: TextSpan(
+                text: 'Flutter',
+                style: DefaultTextStyle.of(context).style,
+              ),
+            ),
+          )),
+          Tab(
+              child: RotatedBox(
+            quarterTurns: 1,
+            child: RichText(
+              text: TextSpan(
+                text: 'Flutter',
+                style: DefaultTextStyle.of(context).style,
+              ),
+            ),
+          )),
+        ],
+        contents: <Widget>[
+          tabsContent(themeColor, 'Flutter',
+              'Change page by scrolling content is disabled in settings. Changing contents pages is only available via tapping on tabs'),
+          tabsContent(themeColor, 'Dart'),
+          tabsContent(themeColor, 'Javascript'),
+          tabsContent(themeColor, 'NodeJS'),
+          tabsContent(themeColor, 'HTML 5'),
+          tabsContent(themeColor, 'HTML 5'),
+          tabsContent(themeColor, 'HTML 5'),
+        ],
+      ),
     );
   }
 
+  Widget tabsContent(ThemeNotifier themeColor, String caption,
+      [String description = '']) {
+    return Container(
+      padding: EdgeInsets.only(left: 5, right: 5),
+      color: greyBackground,
+      child: ListView.builder(
+        itemCount: subCategories.length,
+        itemBuilder: (context, index) {
+          return expansionTile(themeColor, subCategories[index]);
+        },
+      ),
+    );
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     final themeColor = Provider.of<ThemeNotifier>(context);
-//     return Scaffold(
-//       backgroundColor: greyBackground,
-//       body: VerticalTabs(
-//         indicatorColor: themeColor.getColor(),
-//         selectedTabBackgroundColor: whiteColor,
-//         tabBackgroundColor: themeColor.getColor(),
-//         backgroundColor: greyBackground,
-//         direction: TextDirection.rtl,
-//         tabsWidth: 48,
-//         tabsTitle: categories,
-//         tabs: <Tab>[
-//           Tab(
-//               child: RotatedBox(
-//                 quarterTurns: 1,
-//                 child: RichText(
-//                   text: TextSpan(
-//                     text: 'Flutter',
-//                     style: DefaultTextStyle.of(context).style.copyWith(),
-//                   ),
-//                 ),
-//               ),
-//               icon: Icon(Icons.phone)),
-//           Tab(
-//               child: RotatedBox(
-//             quarterTurns: 1,
-//             child: RichText(
-//               text: TextSpan(
-//                 text: 'Flutter',
-//                 style: DefaultTextStyle.of(context).style,
-//               ),
-//             ),
-//           )),
-//           Tab(
-//             child: Container(
-//                 margin: EdgeInsets.only(bottom: 1),
-//                 child: RotatedBox(
-//                   quarterTurns: 1,
-//                   child: RichText(
-//                     text: TextSpan(
-//                       text: 'Flutter',
-//                       style: DefaultTextStyle.of(context).style,
-//                     ),
-//                   ),
-//                 )),
-//           ),
-//           Tab(
-//               child: RotatedBox(
-//             quarterTurns: 1,
-//             child: RichText(
-//               text: TextSpan(
-//                 text: 'Flutter',
-//                 style: DefaultTextStyle.of(context).style,
-//               ),
-//             ),
-//           )),
-//           Tab(
-//               child: RotatedBox(
-//             quarterTurns: 1,
-//             child: RichText(
-//               text: TextSpan(
-//                 text: 'Flutter',
-//                 style: DefaultTextStyle.of(context).style,
-//               ),
-//             ),
-//           )),
-//           Tab(
-//               child: RotatedBox(
-//             quarterTurns: 1,
-//             child: RichText(
-//               text: TextSpan(
-//                 text: 'Flutter',
-//                 style: DefaultTextStyle.of(context).style,
-//               ),
-//             ),
-//           )),
-//           Tab(
-//               child: RotatedBox(
-//             quarterTurns: 1,
-//             child: RichText(
-//               text: TextSpan(
-//                 text: 'Flutter',
-//                 style: DefaultTextStyle.of(context).style,
-//               ),
-//             ),
-//           )),
-//         ],
-//         contents: <Widget>[
-//           tabsContent(themeColor, 'Flutter',
-//               'Change page by scrolling content is disabled in settings. Changing contents pages is only available via tapping on tabs'),
-//           tabsContent(themeColor, 'Dart'),
-//           tabsContent(themeColor, 'Javascript'),
-//           tabsContent(themeColor, 'NodeJS'),
-//           tabsContent(themeColor, 'HTML 5'),
-//           tabsContent(themeColor, 'HTML 5'),
-//           tabsContent(themeColor, 'HTML 5'),
-//         ],
-//       ),
-//     );
-//   }
-
-//   Widget tabsContent(ThemeNotifier themeColor, String caption,
-//       [String description = '']) {
-//     return Container(
-//       padding: EdgeInsets.only(left: 5, right: 5),
-//       color: greyBackground,
-//       child: ListView.builder(
-//         itemCount: subCategories.length,
-//         itemBuilder: (context, index) {
-//           return expansionTile(themeColor, subCategories[index]);
-//         },
-//       ),
-//     );
-//   }
-
-//   Widget expansionTile(themeColor, String title) {
-//     return Theme(
-//       data: ThemeData(accentColor: themeColor.getColor()),
-//       child: ExpansionTile(
-//         title: Text(
-//           title,
-//           style: GoogleFonts.poppins(color: Color(0xFF5D6A78)),
-//           textDirection: TextDirection.ltr,
-//         ),
-//         leading: null,
-// //        trailing: Icon(
-// //          Icons.add,
-// //          size: 0,
-// //        ),
-//         children: [
-//           ListView(
-//             physics: NeverScrollableScrollPhysics(),
-//             shrinkWrap: true,
-//             children: <Widget>[
-//               GridView.count(
-//                 physics: NeverScrollableScrollPhysics(),
-//                 shrinkWrap: true,
-//                 childAspectRatio: 1.045,
-//                 // Create a grid with 2 columns. If you change the scrollDirection to
-//                 // horizontal, this produces 2 rows.
-//                 crossAxisCount: 3,
-//                 mainAxisSpacing: 16,
-//                 // Generate 100 widgets that display their index in the List.
-//                 children: List.generate(subCategoriesImages.length, (index) {
-//                   return Center(
-//                     child: Container(
-//                       child: Column(
-//                         children: <Widget>[
-//                           ClipRRect(
-//                             child: Image.asset(
-//                               "assets/images/${subCategoriesImages[index]}.png",
-//                               height: 75,
-//                               width: 84,
-//                               fit: BoxFit.cover,
-//                             ),
-//                             borderRadius: BorderRadius.circular(8),
-//                           ),
-//                           Padding(
-//                             padding:
-//                                 const EdgeInsets.only(top: 2.0, bottom: 1.0),
-//                             child: AutoSizeText(
-//                               subCategoriesTitle[index],
-//                               maxLines: 2,
-//                               minFontSize: 7,
-//                               style: GoogleFonts.poppins(
-//                                 fontSize: 10,
-//                                 color: Color(0xFF5D6A78),
-//                                 fontWeight: FontWeight.w400,
-//                               ),
-//                             ),
-//                           )
-//                         ],
-//                       ),
-//                     ),
-//                   );
-//                 }),
-//               )
-//             ],
-//           )
-//         ],
-//       ),
-//     );
-//   }
+  Widget expansionTile(themeColor, String title) {
+    return Theme(
+      data: ThemeData(accentColor: themeColor.getColor()),
+      child: ExpansionTile(
+        title: Text(
+          title,
+          style: GoogleFonts.poppins(color: Color(0xFF5D6A78)),
+          textDirection: TextDirection.ltr,
+        ),
+        leading: null,
+        //        trailing: Icon(
+        //          Icons.add,
+        //          size: 0,
+        //        ),
+        children: [
+          ListView(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            children: <Widget>[
+              GridView.count(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                childAspectRatio: 1.045,
+                // Create a grid with 2 columns. If you change the scrollDirection to
+                // horizontal, this produces 2 rows.
+                crossAxisCount: 3,
+                mainAxisSpacing: 16,
+                // Generate 100 widgets that display their index in the List.
+                children: List.generate(subCategoriesImages.length, (index) {
+                  return Center(
+                    child: Container(
+                      child: Column(
+                        children: <Widget>[
+                          ClipRRect(
+                            child: Image.asset(
+                              "assets/images/${subCategoriesImages[index]}.png",
+                              height: 75,
+                              width: 84,
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: 2.0, bottom: 1.0),
+                            child: AutoSizeText(
+                              subCategoriesTitle[index],
+                              maxLines: 2,
+                              minFontSize: 7,
+                              style: GoogleFonts.poppins(
+                                fontSize: 10,
+                                color: Color(0xFF5D6A78),
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+//
 }
