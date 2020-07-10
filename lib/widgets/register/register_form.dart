@@ -9,13 +9,11 @@ import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/screen.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
 import 'package:khulnaservice/widgets/commons/shadow_button.dart';
-import 'package:khulnaservice/widgets/register/register_form_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:validators/validators.dart' as validator;
 
 import '../../main.dart';
 import '../commons/custom_textfield.dart';
-import '../../api/api.dart';
 
 class RegisterForm extends StatefulWidget {
   @override
@@ -26,7 +24,6 @@ class _RegisterFormState extends State<RegisterForm> {
   TextEditingController fName = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-  Model model = Model();
   bool passwordVisible = false;
   bool _isLoading = false;
 
@@ -150,10 +147,6 @@ class _RegisterFormState extends State<RegisterForm> {
                     _formKey.currentState.save();
                     _formKey.currentState.validate();
                     getReg(name, email, password);
-//                    if (_formKey.currentState.validate()) {
-//                      _formKey.currentState.save();
-//                      _handleLogin();
-//                    }
                   },
                   child: Text(
                     _isLoading ? 'Creating.....' : 'Register',
@@ -183,7 +176,6 @@ class _RegisterFormState extends State<RegisterForm> {
       });
 
       fetchData.geReg(name, email, password).then((value) async {
-
         var data = jsonDecode(value);
 
         setState(() {
@@ -200,41 +192,4 @@ class _RegisterFormState extends State<RegisterForm> {
       });
     }
   }
-
-//  Future<void> _handleLogin() async {
-//    setState(() {
-//      _isLoading = true;
-//    });
-//
-//    var data = {
-//      'name': model.fullName,
-//      'email': model.email,
-//      'password': model.password,
-//      'password_confirmation': model.rePassword
-//    };
-//
-//    var res = await CallApi().postData(data, 'register');
-//    var body = json.decode(res.body);
-//
-//    if (body['message'] == 'success') {
-//      SharedPreferences localStorage = await SharedPreferences.getInstance();
-//      localStorage.setString('token', body['access_token']);
-//      localStorage.setString('user', json.encode(['user']));
-//
-//      Nav.routeReplacement(context, InitPage());
-//
-//      //   Nav.routeReplacement(context, InitPage());
-////    Navigator.push(context,
-////    MaterialPageRoute(builder: (context) => Result()));
-//
-//    } else {
-//      Scaffold.of(context).showSnackBar(SnackBar(
-//        content: Text(body['message'], textAlign: TextAlign.center),
-//      ));
-//
-//      setState(() {
-//        _isLoading = false;
-//      });
-//    }
-//  }
 }

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:khulnaservice/api/api.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/main.dart';
