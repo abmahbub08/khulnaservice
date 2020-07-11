@@ -7,6 +7,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:flutter_translate/localization_delegate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:khulnaservice/api/fetchdata.dart';
+import 'package:khulnaservice/provider/category_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:khulnaservice/pages/category_page.dart';
@@ -34,17 +36,22 @@ void main() async {
       color = Color(prefs.getInt('color'));
     }
 
-    runApp(
-      ChangeNotifierProvider<ThemeNotifier>(
-        create: (_) => ThemeNotifier(color),
-        child: Phoenix(
-          child: LocalizedApp(
-            delegate,
-            MyApp(),
-          ),
+    runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeNotifier>(
+          create: (_) => ThemeNotifier(color),
+        ),
+        ChangeNotifierProvider<CategoryProvider>(
+          create: (_) => CategoryProvider(),
+        ),
+      ],
+      child: Phoenix(
+        child: LocalizedApp(
+          delegate,
+          MyApp(),
         ),
       ),
-    );
+    ));
   });
 }
 
@@ -85,9 +92,12 @@ class InitPage extends StatefulWidget {
 
 class _InitPageState extends State<InitPage> {
   List<ScreenHiddenDrawer> items = new List();
+  FetchData fetchData = FetchData();
 
   @override
   void initState() {
+    fetchData.getCategory(context);
+
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           icon: Icon(
@@ -218,6 +228,7 @@ class _InitPageState extends State<InitPage> {
       //    enableCornerAnimin: true,
       slidePercent: 70.0,
       verticalScalePercent: 90.0,
+
       contentCornerRadius: 16.0,
       //    iconMenuAppBar: Icon(Icons.menu),
       //    backgroundContent: DecorationImage((image: ExactAssetImage('assets/bg_news.jpg'),fit: BoxFit.cover),

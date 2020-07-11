@@ -1,5 +1,8 @@
 import 'dart:convert';
-
+import 'package:flutter/cupertino.dart';
+import 'package:khulnaservice/models/CategoryModel.dart';
+import 'package:khulnaservice/provider/category_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:khulnaservice/api/repositories.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -37,12 +40,14 @@ class FetchData {
     }
   }
 
-
-  Future getCategory(email, password) async {
-    final catRep = repositories.getCategoryHttp("login");
+  Future getCategory(BuildContext context) async {
+    final catRep = repositories.getCategoryHttp("allCategories");
     var results = await Future.wait([catRep]);
     if (results[0].statusCode == 200) {
-      print(results[0].body);
+      Provider.of<CategoryProvider>(context, listen: false)
+          .addCatData(categoryModelFromJson(results[0].body));
+
+
       return results[0].body;
     } else {
       throw results[0].body;

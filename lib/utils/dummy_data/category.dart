@@ -4,8 +4,8 @@ const List<String> categories = [
   'Computers',
   'Travel',
   'Sports',
-  'Home & Garden',
-  'ff',
+  '',
+  '',
 ];
 
 const List<String> subCategories = [

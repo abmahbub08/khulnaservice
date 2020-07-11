@@ -4,12 +4,14 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:khulnaservice/api/api.dart';
+import 'package:khulnaservice/api/fetchdata.dart';
+import 'package:khulnaservice/provider/category_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/utils/commons/colors.dart';
 import 'package:khulnaservice/utils/dummy_data/category.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
 import 'package:khulnaservice/utils/vertical_tab/vertical_tab.dart';
+import 'package:provider/provider.dart';
 
 class CategoryPage extends StatefulWidget {
   @override
@@ -17,120 +19,59 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
-  Map<String, dynamic> ls;
+  FetchData fetchData = FetchData();
 
-  Future<void> _getCategory() async {
-    var res = await CallApi().getData('allCategories');
-    ls = json.decode(res.body);
-
-    print(ls['category']);
+  getCategory() async {
+//    var res = await CallApi().getData('allCategories');
   }
+
+  var indexTab = 0;
 
   @override
-  void initState() {
-    _getCategory();
-  }
+  void initState() {}
 
   @override
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
     return Scaffold(
       backgroundColor: greyBackground,
-      body: VerticalTabs(
-        indicatorColor: themeColor.getColor(),
-        selectedTabBackgroundColor: whiteColor,
-        tabBackgroundColor: themeColor.getColor(),
-        backgroundColor: greyBackground,
-        direction: TextDirection.rtl,
-        tabsWidth: 48,
-        tabsTitle: categories,
-        tabs: <Tab>[
-          Tab(
-              child: RotatedBox(
-                quarterTurns: 1,
-                child: RichText(
-                  text: TextSpan(
-                    text: 'Flutter',
-                    style: DefaultTextStyle.of(context).style.copyWith(),
-                  ),
-                ),
-              ),
-              icon: Icon(Icons.phone)),
-          Tab(
-              child: RotatedBox(
-            quarterTurns: 1,
-            child: RichText(
-              text: TextSpan(
-                text: 'Flutter',
-                style: DefaultTextStyle.of(context).style,
-              ),
+      body: context.watch<CategoryProvider>().tabName.length == 0
+          ? Center(
+              child: CircularProgressIndicator(
+              backgroundColor: Colors.red,
+            ))
+          : VerticalTabs(
+              indicatorColor: themeColor.getColor(),
+              selectedTabBackgroundColor: whiteColor,
+              tabBackgroundColor: themeColor.getColor(),
+              backgroundColor: greyBackground,
+              direction: TextDirection.rtl,
+              tabsWidth: 48,
+              onSelect: (data) {
+                Future.delayed(Duration(microseconds: 10), () {
+                  print(data);
+                  setState(() {
+                    indexTab = data;
+                  });
+                });
+              },
+              tabsTitle: context.watch<CategoryProvider>().tabName,
+              tabs: [1, 2, 3, 4, 5, 6, 7]
+                  .map((e) => Tab(
+                        icon: Icon(Icons.add),
+                      ))
+                  .toList(),
+              contents: <Widget>[
+                tabsContent(themeColor, 'Flutter',
+                    'Change page by scrolling content is disabled in settings. Changing contents pages is only available via tapping on tabs'),
+                tabsContent(themeColor, 'Dart'),
+                tabsContent(themeColor, 'Javascript'),
+                tabsContent(themeColor, 'NodeJS'),
+                tabsContent(themeColor, 'HTML 5'),
+                tabsContent(themeColor, 'HTML 5'),
+                tabsContent(themeColor, 'HTML 5'),
+              ],
             ),
-          )),
-          Tab(
-            child: Container(
-                margin: EdgeInsets.only(bottom: 1),
-                child: RotatedBox(
-                  quarterTurns: 1,
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Flutter',
-                      style: DefaultTextStyle.of(context).style,
-                    ),
-                  ),
-                )),
-          ),
-          Tab(
-              child: RotatedBox(
-            quarterTurns: 1,
-            child: RichText(
-              text: TextSpan(
-                text: 'Flutter',
-                style: DefaultTextStyle.of(context).style,
-              ),
-            ),
-          )),
-          Tab(
-              child: RotatedBox(
-            quarterTurns: 1,
-            child: RichText(
-              text: TextSpan(
-                text: 'Flutter',
-                style: DefaultTextStyle.of(context).style,
-              ),
-            ),
-          )),
-          Tab(
-              child: RotatedBox(
-            quarterTurns: 1,
-            child: RichText(
-              text: TextSpan(
-                text: 'Flutter',
-                style: DefaultTextStyle.of(context).style,
-              ),
-            ),
-          )),
-          Tab(
-              child: RotatedBox(
-            quarterTurns: 1,
-            child: RichText(
-              text: TextSpan(
-                text: 'Flutter',
-                style: DefaultTextStyle.of(context).style,
-              ),
-            ),
-          )),
-        ],
-        contents: <Widget>[
-          tabsContent(themeColor, 'Flutter',
-              'Change page by scrolling content is disabled in settings. Changing contents pages is only available via tapping on tabs'),
-          tabsContent(themeColor, 'Dart'),
-          tabsContent(themeColor, 'Javascript'),
-          tabsContent(themeColor, 'NodeJS'),
-          tabsContent(themeColor, 'HTML 5'),
-          tabsContent(themeColor, 'HTML 5'),
-          tabsContent(themeColor, 'HTML 5'),
-        ],
-      ),
     );
   }
 
@@ -140,18 +81,33 @@ class _CategoryPageState extends State<CategoryPage> {
       padding: EdgeInsets.only(left: 5, right: 5),
       color: greyBackground,
       child: ListView.builder(
-        itemCount: subCategories.length,
+        itemCount: context
+            .watch<CategoryProvider>()
+            .myCategory
+            .category[indexTab]
+            .children
+            .length,
         itemBuilder: (context, index) {
-          return expansionTile(themeColor, subCategories[index]);
+          return expansionTile(
+              themeColor,
+              context
+                  .watch<CategoryProvider>()
+                  .myCategory
+                  .category[indexTab]
+                  .children[index]
+                  .name
+                  .toString(),
+              index);
         },
       ),
     );
   }
 
-  Widget expansionTile(themeColor, String title) {
+  Widget expansionTile(themeColor, String title, indexThird) {
     return Theme(
       data: ThemeData(accentColor: themeColor.getColor()),
       child: ExpansionTile(
+        onExpansionChanged: (ss) {},
         title: Text(
           title,
           style: GoogleFonts.poppins(color: Color(0xFF5D6A78)),
@@ -176,7 +132,7 @@ class _CategoryPageState extends State<CategoryPage> {
                 crossAxisCount: 3,
                 mainAxisSpacing: 16,
                 // Generate 100 widgets that display their index in the List.
-                children: List.generate(subCategoriesImages.length, (index) {
+                children: List.generate(Provider.of<CategoryProvider>(context,listen: false).myCategory.category[indexTab].children[indexThird].children.length, (index) {
                   return Center(
                     child: Container(
                       child: Column(
@@ -194,7 +150,7 @@ class _CategoryPageState extends State<CategoryPage> {
                             padding:
                                 const EdgeInsets.only(top: 2.0, bottom: 1.0),
                             child: AutoSizeText(
-                              subCategoriesTitle[index],
+                              Provider.of<CategoryProvider>(context,listen: false).myCategory.category[indexTab].children[indexThird].children[index].name,
                               maxLines: 2,
                               minFontSize: 7,
                               style: GoogleFonts.poppins(
