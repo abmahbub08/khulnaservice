@@ -13,6 +13,8 @@ import 'package:khulnaservice/utils/theme_notifier.dart';
 import 'package:khulnaservice/utils/vertical_tab/vertical_tab.dart';
 import 'package:provider/provider.dart';
 
+import '../testProduct.dart';
+
 class CategoryPage extends StatefulWidget {
   @override
   _CategoryPageState createState() => _CategoryPageState();
@@ -49,7 +51,6 @@ class _CategoryPageState extends State<CategoryPage> {
               tabsWidth: 48,
               onSelect: (data) {
                 Future.delayed(Duration(microseconds: 10), () {
-                  print(data);
                   setState(() {
                     indexTab = data;
                   });
@@ -107,7 +108,31 @@ class _CategoryPageState extends State<CategoryPage> {
     return Theme(
       data: ThemeData(accentColor: themeColor.getColor()),
       child: ExpansionTile(
-        onExpansionChanged: (ss) {},
+        onExpansionChanged: (ss) {
+          if (Provider.of<CategoryProvider>(context, listen: false)
+                  .myCategory
+                  .category[indexTab]
+                  .children[indexThird]
+                  .children
+                  .length ==
+              0) {
+            Provider.of<CategoryProvider>(context, listen: false).addCatSlug(
+                Provider.of<CategoryProvider>(context, listen: false)
+                    .myCategory
+                    .category[indexTab]
+                    .children[indexThird]
+                    .slug);
+
+            Route route =
+                MaterialPageRoute(builder: (context) => testProduct());
+            Navigator.push(context, route);
+            print(Provider.of<CategoryProvider>(context, listen: false)
+                .myCategory
+                .category[indexTab]
+                .children[indexThird]
+                .slug);
+          }
+        },
         title: Text(
           title,
           style: GoogleFonts.poppins(color: Color(0xFF5D6A78)),
@@ -132,35 +157,71 @@ class _CategoryPageState extends State<CategoryPage> {
                 crossAxisCount: 3,
                 mainAxisSpacing: 16,
                 // Generate 100 widgets that display their index in the List.
-                children: List.generate(Provider.of<CategoryProvider>(context,listen: false).myCategory.category[indexTab].children[indexThird].children.length, (index) {
-                  return Center(
-                    child: Container(
-                      child: Column(
-                        children: <Widget>[
-                          ClipRRect(
-                            child: Image.asset(
-                              "assets/images/${subCategoriesImages[index]}.png",
-                              height: 75,
-                              width: 84,
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(top: 2.0, bottom: 1.0),
-                            child: AutoSizeText(
-                              Provider.of<CategoryProvider>(context,listen: false).myCategory.category[indexTab].children[indexThird].children[index].name,
-                              maxLines: 2,
-                              minFontSize: 7,
-                              style: GoogleFonts.poppins(
-                                fontSize: 10,
-                                color: Color(0xFF5D6A78),
-                                fontWeight: FontWeight.w400,
+                children: List.generate(
+                    Provider.of<CategoryProvider>(context, listen: false)
+                        .myCategory
+                        .category[indexTab]
+                        .children[indexThird]
+                        .children
+                        .length, (index) {
+                  return GestureDetector(
+                    onTap: () {
+                      print(
+                          Provider.of<CategoryProvider>(context, listen: false)
+                              .myCategory
+                              .category[indexTab]
+                              .children[indexThird]
+                              .children[index]
+                              .slug);
+
+                      Provider.of<CategoryProvider>(context, listen: false)
+                          .addCatSlug(Provider.of<CategoryProvider>(context,
+                                  listen: false)
+                              .myCategory
+                              .category[indexTab]
+                              .children[indexThird]
+                              .children[index]
+                              .slug);
+
+                      Route route = MaterialPageRoute(
+                          builder: (context) => testProduct());
+                      Navigator.push(context, route);
+                    },
+                    child: Center(
+                      child: Container(
+                        child: Column(
+                          children: <Widget>[
+                            ClipRRect(
+                              child: Image.asset(
+                                "assets/images/${subCategoriesImages[index]}.png",
+                                height: 75,
+                                width: 84,
+                                fit: BoxFit.cover,
                               ),
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                          )
-                        ],
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 2.0, bottom: 1.0),
+                              child: AutoSizeText(
+                                Provider.of<CategoryProvider>(context,
+                                        listen: false)
+                                    .myCategory
+                                    .category[indexTab]
+                                    .children[indexThird]
+                                    .children[index]
+                                    .name,
+                                maxLines: 2,
+                                minFontSize: 7,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 10,
+                                  color: Color(0xFF5D6A78),
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   );
@@ -172,5 +233,8 @@ class _CategoryPageState extends State<CategoryPage> {
       ),
     );
   }
+
 //
+
+
 }

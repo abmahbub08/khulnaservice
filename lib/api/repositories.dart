@@ -27,4 +27,12 @@ class Repositories {
       throw Exception();
     }
   }
+
+  Future<http.Response> getCatPageHttp(String param) {
+    try {
+      return apiService.categoryPage(param);
+    } catch (e) {
+      throw Exception();
+    }
+  }
 }

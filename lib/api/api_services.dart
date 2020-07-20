@@ -45,4 +45,19 @@ class ApiServices {
       throw Exception();
     }
   }
+
+  Future<http.Response> categoryPage(String param) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.get(Base + '$param', headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+        "content-type": "application/json",
+        "Accept": "application/json"
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:khulnaservice/models/CategoryModel.dart';
+import 'package:khulnaservice/models/CategoryPageModel.dart';
 import 'package:khulnaservice/provider/category_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/api/repositories.dart';
@@ -17,7 +18,7 @@ class FetchData {
       var data = jsonDecode(results[0].body);
       Sp.setString('token', data['access_token']);
       Sp.setString('user', data['user']);
-      print(results[0].body);
+
       return results[0].body;
     } else {
       throw results[0].body;
@@ -33,7 +34,7 @@ class FetchData {
 
       Sp.setString('token', data['access_token']);
       Sp.setString('user', json.encode(['user']));
-      print(results[0].body);
+
       return results[0].body;
     } else {
       throw results[0].body;
@@ -47,6 +48,19 @@ class FetchData {
       Provider.of<CategoryProvider>(context, listen: false)
           .addCatData(categoryModelFromJson(results[0].body));
 
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future getCatPage(BuildContext context, slug) async {
+    final catRep = repositories.getCatPageHttp("cat-products/$slug");
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+
+      Provider.of<CategoryProvider>(context, listen: false)
+          .addCatPageProd(categoryPageModelFromJson(results[0].body));
 
       return results[0].body;
     } else {
