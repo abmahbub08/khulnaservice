@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 const List<String> discountImageList = [
+//  'assets/images/produload.jpg',
+//  'assets/images/prodcut2.png',
   'assets/images/prodcut1.png',
-  'assets/images/prodcut2.png',
-  'assets/images/prodcut3.png',
-  'assets/images/prodcut4.png',
-  'assets/images/prodcut5.png',
-  'assets/images/prodcut1.png',
-  'assets/images/prodcut7.png',
-  'assets/images/prodcut8.png',
-  'assets/images/prodcut9.png',
+//  'assets/images/prodcut4.png',
+//  'assets/images/prodcut5.png',
+//  'assets/images/prodcut1.png',
+//  'assets/images/prodcut7.png',
+//  'assets/images/prodcut8.png',
+//  'assets/images/prodcut9.png',
 ];
 
 List<Widget> imageSliders = discountImageList
@@ -35,8 +35,12 @@ List<Widget> imageSliders = discountImageList
                       child: Container(
                           color: Colors.red,
                           width: 230,
-                          child: Image.asset(item,
-                              fit: BoxFit.cover, width: 220.0))),
+                          child: Image.asset(
+                            item,
+                            fit: BoxFit.cover,
+                            width: 220.0,
+
+                          ))),
                   Align(
                     alignment: Alignment.centerLeft,
 //                    child:Point(

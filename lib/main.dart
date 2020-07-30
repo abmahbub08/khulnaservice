@@ -9,6 +9,7 @@ import 'package:flutter_translate/localization_delegate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/provider/category_provider.dart';
+import 'package:khulnaservice/provider/homepage_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:khulnaservice/pages/category_page.dart';
@@ -43,6 +44,9 @@ void main() async {
         ),
         ChangeNotifierProvider<CategoryProvider>(
           create: (_) => CategoryProvider(),
+        ),
+        ChangeNotifierProvider<HomePageProvider>(
+          create: (_) => HomePageProvider(),
         ),
       ],
       child: Phoenix(

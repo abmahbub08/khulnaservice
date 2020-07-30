@@ -9,6 +9,8 @@ class CategoryProvider extends ChangeNotifier {
   CategoryPageModel categoryPage = CategoryPageModel();
   CategoryPageModel categoryPageBlank = CategoryPageModel();
   var catSlug;
+  String maxPrice = "";
+  String minPrice = "";
 
   void addCatData(value) {
     myCategory = value;
@@ -17,7 +19,6 @@ class CategoryProvider extends ChangeNotifier {
   }
 
   void addCatPageProd(value) {
-
     categoryPage = value;
 
     notifyListeners();
@@ -40,11 +41,15 @@ class CategoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  addMinAndMaxPrice(min, max) {
+    minPrice = min;
+    maxPrice = max;
+    notifyListeners();
+  }
+
   getTab() {
     return tabName;
   }
-
-
 
   CategoryPageModel getPage() {
     return categoryPage;

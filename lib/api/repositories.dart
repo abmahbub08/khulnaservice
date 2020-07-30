@@ -35,4 +35,12 @@ class Repositories {
       throw Exception();
     }
   }
+//  HomePage
+  Future<http.Response> getHomePageHttp(String param) {
+    try {
+      return apiService.homepageRes(param);
+    } catch (e) {
+      throw Exception();
+    }
+  }
 }

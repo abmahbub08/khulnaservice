@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/models/CategoryPageModel.dart';
 import 'package:khulnaservice/provider/category_provider.dart';
+import 'package:khulnaservice/testFilter.dart';
 import 'package:khulnaservice/testPrDEtails.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/pages/filter_page.dart';
@@ -16,6 +17,8 @@ import 'package:khulnaservice/pages/shopping_cart_page.dart';
 import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/screen.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class testProduct extends StatefulWidget {
   @override
@@ -26,23 +29,87 @@ class _testProductState extends State<testProduct> {
   String deneme = "Dursun";
   FetchData fetchData = FetchData();
   bool isLoading = true;
+  var ProductLoading = "Loading";
+  List<Datum> FirstList;
+  List<Datum> SecondList = List<Datum>();
+
+  getList() {
+    FirstList = Provider.of<CategoryProvider>(context, listen: false)
+        .getPage()
+        .products
+        .data;
+
+    for (int i = 0; i < FirstList.length; i++) {
+      SecondList.add(FirstList[i]);
+    }
+
+    setState(() {
+      if (FirstList.length == 0) {
+        ProductLoading = "No more data";
+      } else {
+        ProductLoading = "";
+      }
+    });
+  }
 
   @override
   void initState() {
+    getData();
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _getMoreData();
+      }
+    });
     fetchData
-        .getCatPage(context,
-            Provider.of<CategoryProvider>(context, listen: false).catSlug)
+        .getCatPage(
+            context,
+            Provider.of<CategoryProvider>(context, listen: false).catSlug,
+            Provider.of<CategoryProvider>(context, listen: false).minPrice,
+            Provider.of<CategoryProvider>(context, listen: false).maxPrice,
+            indexNUm,
+            "")
         .then((value) {
+      getList();
       isLoading = false;
+
       setState(() {});
     });
+
     super.initState();
   }
+
+  _getMoreData() {
+    setState(() {
+      ProductLoading = "Loading";
+    });
+    indexNUm++;
+
+    fetchData
+        .getCatPage(
+            context,
+            Provider.of<CategoryProvider>(context, listen: false).catSlug,
+            Provider.of<CategoryProvider>(context, listen: false).minPrice,
+            Provider.of<CategoryProvider>(context, listen: false).maxPrice,
+            indexNUm,
+            "")
+        .then((value) {
+      getList();
+//      isLoading = false;
+
+      setState(() {});
+    });
+  }
+
+  int indexNUm = 1;
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  ScrollController _scrollController = ScrollController();
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
-    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Color.fromARGB(255, 252, 252, 252),
@@ -60,88 +127,35 @@ class _testProductState extends State<testProduct> {
       'The most recent',
     ];
     GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
-    var myData =
-        Provider.of<CategoryProvider>(context, listen: false).getPage();
 
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color.fromARGB(255, 252, 252, 252),
-        key: _drawerKey, // assign key to Scaffold
-
-        body: Stack(
-          children: <Widget>[
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+        body: SingleChildScrollView(
+          controller: _scrollController,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Row(
                 children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: 32,
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.chevron_left,
-                            color: themeColor.getColor(),
-                            size: 32,
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
+                  Container(
+                    width: 32,
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.chevron_left,
+                        color: themeColor.getColor(),
+                        size: 32,
                       ),
-                      Container(
-                        width: ScreenUtil.getWidth(context) - 80,
-                        margin: EdgeInsets.only(left: 22, top: 14),
-                        padding: EdgeInsets.only(left: 18, right: 18),
-                        height: 44,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey[200],
-                                blurRadius: 8.0,
-                                spreadRadius: 1,
-                                offset: Offset(0.0, 3))
-                          ],
-                          color: Theme.of(context).bottomAppBarColor,
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            SvgPicture.asset(
-                              "assets/icons/ic_search.svg",
-                              color: Colors.black45,
-                              height: 12,
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.only(bottom: 4),
-                                height: 72,
-                                child: TextFormField(
-                                  key: _formKey,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: "Brand Search",
-                                      hintStyle: GoogleFonts.poppins(
-                                        fontSize: 13,
-                                        color: Color(0xFF5D6A78),
-                                        fontWeight: FontWeight.w400,
-                                      )),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
                   ),
                   Container(
-                    width: ScreenUtil.getWidth(context) - 20,
-                    margin: EdgeInsets.only(top: 24, left: 8),
-                    padding: EdgeInsets.only(left: 18, right: 22),
+                    width: ScreenUtil.getWidth(context) - 80,
+                    margin: EdgeInsets.only(left: 22, top: 14),
+                    padding: EdgeInsets.only(left: 18, right: 18),
                     height: 44,
                     decoration: BoxDecoration(
                       boxShadow: [
@@ -155,64 +169,179 @@ class _testProductState extends State<testProduct> {
                       borderRadius: BorderRadius.circular(24),
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Material(
-                          color: Colors.white,
-                          child: InkWell(
-                            onTap: () {
-                              _sortingBottomSheet(myData.products.data);
-                            },
-                            child: Container(
-                              margin: EdgeInsets.all(12),
-                              child: Row(children: <Widget>[
-                                RotatedBox(
-                                    quarterTurns: 3,
-                                    child: Icon(
-                                      Ionicons.ios_swap,
-                                      size: 16,
-                                    )),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Text(
-                                  "Sort",
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 13, color: Color(0xFF5D6A78)),
-                                ),
-                              ]),
+                        SvgPicture.asset(
+                          "assets/icons/ic_search.svg",
+                          color: Colors.black45,
+                          height: 12,
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.only(bottom: 4),
+                            height: 72,
+                            child: TextFormField(
+//                              onEditingComplete: () {
+//                                print("asg");
+//                              },
+                              onFieldSubmitted: (v) {
+                                setState(() {
+                                  SecondList = List<Datum>();
+                                  ProductLoading = "Loading";
+                                });
+
+                                fetchData
+                                    .getCatPage(
+                                        context,
+                                        Provider.of<CategoryProvider>(context,
+                                                listen: false)
+                                            .catSlug,
+                                        Provider.of<CategoryProvider>(context,
+                                                listen: false)
+                                            .minPrice,
+                                        Provider.of<CategoryProvider>(context,
+                                                listen: false)
+                                            .maxPrice,
+                                        indexNUm,
+                                        v.length == 0 ? "" : v)
+                                    .then((value) {
+                                  getList();
+                                });
+                              },
+
+                              controller: searchController,
+                              key: _formKey,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "Brand Search",
+                                  hintStyle: GoogleFonts.poppins(
+                                    fontSize: 13,
+                                    color: Color(0xFF5D6A78),
+                                    fontWeight: FontWeight.w400,
+                                  )),
                             ),
                           ),
                         ),
-                        Material(
-                          color: Colors.white,
-                          child: InkWell(
-                            onTap: () {
-                              Nav.route(context, FilterPage());
-                            },
-                            child: Container(
-                              margin: EdgeInsets.all(12),
-                              child: Row(children: <Widget>[
-                                SvgPicture.asset(
-                                  "assets/icons/funnel.svg",
-                                  height: 14,
-                                  color: Color(0xFF5D6A78),
-                                ),
-                                SizedBox(
-                                  width: 3,
-                                ),
-                                Text(
-                                  "Filter",
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 13, color: Color(0xFF5D6A78)),
-                                )
-                              ]),
-                            ),
-                          ),
-                        )
                       ],
                     ),
                   ),
+                ],
+              ),
+              Container(
+                width: ScreenUtil.getWidth(context) - 20,
+                margin: EdgeInsets.only(top: 24, left: 8),
+                padding: EdgeInsets.only(left: 18, right: 22),
+                height: 44,
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey[200],
+                        blurRadius: 8.0,
+                        spreadRadius: 1,
+                        offset: Offset(0.0, 3))
+                  ],
+                  color: Theme.of(context).bottomAppBarColor,
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Material(
+                      color: Colors.white,
+                      child: InkWell(
+                        onTap: () {
+                          _sortingBottomSheet(SecondList);
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(12),
+                          child: Row(children: <Widget>[
+                            RotatedBox(
+                                quarterTurns: 3,
+                                child: Icon(
+                                  Ionicons.ios_swap,
+                                  size: 16,
+                                )),
+                            SizedBox(
+                              width: 3,
+                            ),
+                            Text(
+                              "Sort",
+                              style: GoogleFonts.poppins(
+                                  fontSize: 13, color: Color(0xFF5D6A78)),
+                            ),
+                          ]),
+                        ),
+                      ),
+                    ),
+                    Material(
+                      color: Colors.white,
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            isLoading = true;
+                            SecondList = List<Datum>();
+                          });
+
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (c, a1, a2) => TestFilter(),
+                              transitionsBuilder: (c, anim, a2, child) =>
+                                  FadeTransition(opacity: anim, child: child),
+                              transitionDuration: Duration(milliseconds: 280),
+                            ),
+                          ).then((value) {
+                            indexNUm = 1;
+                            print(Provider.of<CategoryProvider>(context,
+                                    listen: false)
+                                .maxPrice);
+                            fetchData
+                                .getCatPage(
+                                    context,
+                                    Provider.of<CategoryProvider>(context,
+                                            listen: false)
+                                        .catSlug,
+                                    Provider.of<CategoryProvider>(context,
+                                            listen: false)
+                                        .minPrice,
+                                    Provider.of<CategoryProvider>(context,
+                                            listen: false)
+                                        .maxPrice,
+                                    indexNUm,
+                                    "")
+                                .then((value) {
+                              getList();
+                              isLoading = false;
+
+                              setState(() {});
+                            });
+                          });
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(12),
+                          child: Row(children: <Widget>[
+                            SvgPicture.asset(
+                              "assets/icons/funnel.svg",
+                              height: 14,
+                              color: Color(0xFF5D6A78),
+                            ),
+                            SizedBox(
+                              width: 3,
+                            ),
+                            Text(
+                              "Filter",
+                              style: GoogleFonts.poppins(
+                                  fontSize: 13, color: Color(0xFF5D6A78)),
+                            )
+                          ]),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
 //                  Container(
 //                    margin: EdgeInsets.only(top: 18, left: 16),
 //                    height: 42,
@@ -248,59 +377,62 @@ class _testProductState extends State<testProduct> {
 //                      },
 //                    ),
 //                  ),
-                  SizedBox(
-                    height: 32,
-                  ),
+              SizedBox(
+                height: 32,
+              ),
 //                  productSearchItem(context, themeColor),
-                  isLoading
-                      ? Center(
-                          child: Container(
-                            height: 350,
-                            width: double.infinity,
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          ),
-                        )
-                      : GridView.builder(
-                          itemCount: myData.products.data.length,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              new SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2, childAspectRatio: 0.8),
-                          itemBuilder: (BuildContext context, index) {
-                            return productSearchItem(
-                                context,
-                                myData.products.data[index],
-                                themeColor,
-                                myData.products.data[index].name,
-                                myData.products.data[index].price,
-                                myData.products.data[index].discountedPrice,
-                                myData.products.data[index].id,
-                                myData.products.data[index].image);
-                          },
+              isLoading
+                  ? Center(
+                      child: Container(
+                        height: 350,
+                        width: double.infinity,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    )
+                  : GridView.builder(
+                      itemCount: SecondList.length + 1,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          new SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2, childAspectRatio: 0.8),
+                      itemBuilder: (BuildContext context, index) {
+                        if (index == SecondList.length) {
+                          return Center(
+                            child: Text(ProductLoading),
+                          );
+                        }
+                        return productSearchItem(
+                            context,
+                            SecondList[index],
+                            themeColor,
+                            SecondList[index].name,
+                            SecondList[index].price,
+                            SecondList[index].discountedPrice,
+                            SecondList[index].id,
+                            SecondList[index].image);
+                      },
 //                    crossAxisCount: 2,
 //                    childAspectRatio: 0.7,
 //                    children: <Widget>[
 //                      productSearchItem(context, themeColor),
 //
 //                    ],
-                        ),
-                ],
-              ),
-            ),
-          ],
+                    ),
+            ],
+          ),
         ),
       ),
     );
   }
+
   var first = 1;
   var second = 1;
   var third = 1;
+
   void _sortingBottomSheet(data) {
-
-
     showModalBottomSheet(
         backgroundColor: Colors.white,
         context: context,
@@ -356,7 +488,6 @@ class _testProductState extends State<testProduct> {
                       first = 1;
                       second = 2;
                       third = 1;
-
                     });
                     Navigator.pop(context);
                   },
@@ -613,5 +744,20 @@ class _testProductState extends State<testProduct> {
         )
       ],
     );
+  }
+
+  getData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var url = "http://home2globe.com/ks/public/api/homeProducts";
+    http.Response response = await http.get(url, headers: {
+      "Authorization": "Bearer ${sharedPreferences.get("token")}",
+      "content-type": "application/json",
+      "Accept": "application/json"
+    });
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else {
+      print(response.statusCode);
+    }
   }
 }

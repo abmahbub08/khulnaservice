@@ -112,24 +112,32 @@ class _testPrDetailsState extends State<testPrDetails>
 //              ),
 //            ))
 //        .toList();
+
+    print(widget.data.name);
+
     return Scaffold(
       body: SafeArea(
-
         child: Container(
+          color: Colors.white,
           child: Stack(
             children: <Widget>[
-              CarouselSlider(
-                items: imageSliders,
-                options: CarouselOptions(
-                    autoPlay: false,
-                    height: ScreenUtil.getHeight(context) / 1.9,
-                    viewportFraction: 1.0,
-                    enlargeCenterPage: false,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        _carouselCurrentPage = index;
-                      });
-                    }),
+//              CarouselSlider(
+//                items: imageSliders,
+//                options: CarouselOptions(
+//                    autoPlay: false,
+//                    height: ScreenUtil.getHeight(context) / 1.9,
+//                    viewportFraction: 1.0,
+//                    enlargeCenterPage: false,
+//                    onPageChanged: (index, reason) {
+//                      setState(() {
+//                        _carouselCurrentPage = index;
+//                      });
+//                    }),
+//              ),
+
+              Image.network(
+                "https://khulnaservice.com/ims/?src=/uploads/product/${widget.data.id}/front/cropped/${widget.data.image}&p=small",
+                height: ScreenUtil.getHeight(context) / 1.9,
               ),
               Positioned(
                 left: 9,
@@ -143,7 +151,7 @@ class _testPrDetailsState extends State<testPrDetails>
                     width: 32,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: Colors.white,
+                      color: Colors.grey[300],
                     ),
                     child: Icon(
                       Icons.chevron_left,
@@ -162,7 +170,7 @@ class _testPrDetailsState extends State<testPrDetails>
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(8),
                         bottomRight: Radius.circular(8)),
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.grey[300],
                   ),
                   child: Badge(
                     animationDuration: Duration(milliseconds: 1500),
@@ -176,7 +184,7 @@ class _testPrDetailsState extends State<testPrDetails>
                     ),
                     child: SvgPicture.asset(
                       "assets/icons/ic_shopping_cart.svg",
-                      color: Colors.white,
+                      color: Colors.grey[400],
                       height: 26,
                     ),
                   ),
@@ -283,12 +291,13 @@ class _testPrDetailsState extends State<testPrDetails>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.max,
                               children: <Widget>[
-                                SliderDotProductDetail(
-                                    current: _carouselCurrentPage),
+//                                SliderDotProductDetail(
+//                                    current: _carouselCurrentPage),
                                 Container(
                                   margin: EdgeInsets.only(top: 14),
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
@@ -297,11 +306,10 @@ class _testPrDetailsState extends State<testPrDetails>
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
                                           SizedBox(
-                                            height:80,
+                                            height: 80,
                                             width: 300,
                                             child: Text(widget.data.name,
                                                 style: GoogleFonts.poppins(
-
                                                     fontSize: 19,
                                                     fontWeight: FontWeight.w400,
                                                     color: Color(0xFF5D6A78))),
@@ -318,6 +326,7 @@ class _testPrDetailsState extends State<testPrDetails>
 //                                                itemBuilder: (context, _) =>
 //                                                    Container(
 //                                                  height: 12,
+//                                                  child: SvgPicture.asset(
 //                                                  child: SvgPicture.asset(
 //                                                    "assets/icons/ic_star.svg",
 //                                                    color: themeColor.getColor(),
@@ -341,27 +350,27 @@ class _testPrDetailsState extends State<testPrDetails>
 //                                          ),
                                         ],
                                       ),
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Container(
-                                          height: 48,
-                                          child: FloatingActionButton(
-                                            heroTag: null,
-                                            elevation: 0,
-                                            onPressed: () {
-                                              setState(() {
-                                                isLiked = !isLiked;
-                                              });
-                                            },
-                                            backgroundColor:
-                                                themeColor.getColor(),
-                                            child: Icon(Icons.favorite,
-                                                color: Theme.of(context)
-                                                    .floatingActionButtonTheme
-                                                    .backgroundColor),
-                                          ),
-                                        ),
-                                      )
+//                                      Align(
+//                                        alignment: Alignment.centerRight,
+//                                        child: Container(
+//                                          height: 48,
+//                                          child: FloatingActionButton(
+//                                            heroTag: null,
+//                                            elevation: 0,
+//                                            onPressed: () {
+//                                              setState(() {
+//                                                isLiked = !isLiked;
+//                                              });
+//                                            },
+//                                            backgroundColor:
+//                                                themeColor.getColor(),
+//                                            child: Icon(Icons.favorite,
+//                                                color: Theme.of(context)
+//                                                    .floatingActionButtonTheme
+//                                                    .backgroundColor),
+//                                          ),
+//                                        ),
+//                                      )
                                     ],
                                   ),
                                 ),
@@ -418,7 +427,7 @@ class _testPrDetailsState extends State<testPrDetails>
                                                   fontSize: 18),
                                             ),
                                             Text(
-                                              "\$ ${widget.data.price}",
+                                              "\$ ${double.parse(widget.data.price).toStringAsFixed(1)}",
                                               style: GoogleFonts.poppins(
                                                   color: themeColor.getColor(),
                                                   fontSize: 18),
@@ -428,22 +437,58 @@ class _testPrDetailsState extends State<testPrDetails>
                                         SizedBox(
                                           height: 6,
                                         ),
-                                        Text(
-                                          "Last 26 Items",
-                                          style: GoogleFonts.poppins(
-                                              color: themeColor.getColor(),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w300),
-                                        ),
+//                                        Text(
+//                                          "Last 26 Items",
+//                                          style: GoogleFonts.poppins(
+//                                              color: themeColor.getColor(),
+//                                              fontSize: 12,
+//                                              fontWeight: FontWeight.w300),
+//                                        ),
                                         SizedBox(
                                           height: 6,
                                         ),
-                                        Text(
-                                          "Free cargo",
-                                          style: GoogleFonts.poppins(
-                                              color: Color(0xFF5D6A78),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400),
+                                        Row(
+                                          children: <Widget>[
+                                            Text(
+                                              "Additional Shipping Cost : ",
+                                              style: GoogleFonts.poppins(
+                                                  color: Color(0xFF5D6A78),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              widget.data.shipping,
+                                              style: GoogleFonts.poppins(
+                                                  color: Color(0xFF5D6A78),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          children: <Widget>[
+                                            Text(
+                                              "Brand : ",
+                                              style: GoogleFonts.poppins(
+                                                  color: Color(0xFF5D6A78),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              widget.data.manufacturer.name ==
+                                                      null
+                                                  ? "Khulna Service"
+                                                  : widget
+                                                      .data.manufacturer.name,
+                                              style: GoogleFonts.poppins(
+                                                  color: Color(0xFF5D6A78),
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -521,12 +566,17 @@ class _testPrDetailsState extends State<testPrDetails>
                                         MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Container(
-                                        width: 140,
+                                        width: 150,
                                         child: GFButton(
+                                          icon: Icon(
+                                            Icons.shopping_cart,
+                                            color: Colors.white,
+                                            size: 16,
+                                          ),
                                           onPressed: () {
                                             Nav.route(context, OrderPage());
                                           },
-                                          child: Text("Buy",
+                                          child: Text("Add to Basket",
                                               style: GoogleFonts.poppins(
                                                   fontWeight: FontWeight.w400)),
                                           shape: GFButtonShape.pills,
@@ -534,48 +584,48 @@ class _testPrDetailsState extends State<testPrDetails>
                                           color: themeColor.getColor(),
                                         ),
                                       ),
-                                      Container(
-                                        width: 140,
-                                        child: GFButton(
-                                          onPressed: () {
-                                            Nav.route(context, OrderPage());
-                                            setState(() {
-                                              isLiked = !isLiked;
-                                            });
-                                          },
-                                          icon: Icon(
-                                            Icons.shopping_cart,
-                                            color: themeColor.getColor(),
-                                            size: 16,
-                                          ),
-                                          child: Text("Add to Cart",
-                                              style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.w400)),
-                                          type: GFButtonType.outline2x,
-                                          shape: GFButtonShape.pills,
-                                          color: themeColor.getColor(),
-                                        ),
-                                      )
+//                                      Container(
+//                                        width: 140,
+//                                        child: GFButton(
+//                                          onPressed: () {
+//                                            Nav.route(context, OrderPage());
+//                                            setState(() {
+//                                              isLiked = !isLiked;
+//                                            });
+//                                          },
+//                                          icon: Icon(
+//                                            Icons.shopping_cart,
+//                                            color: themeColor.getColor(),
+//                                            size: 16,
+//                                          ),
+//                                          child: Text("Add to Basket",
+//                                              style: GoogleFonts.poppins(
+//                                                  fontWeight: FontWeight.w400)),
+//                                          type: GFButtonType.outline2x,
+//                                          shape: GFButtonShape.pills,
+//                                          color: themeColor.getColor(),
+//                                        ),
+//                                      )
                                     ],
                                   ),
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
-                                    GFButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.notifications,
-                                        color: Color(0xFFB3C0C8),
-                                        size: 16,
-                                      ),
-                                      child: Text("Add to Cart",
-                                          style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w400)),
-                                      type: GFButtonType.transparent,
-                                      shape: GFButtonShape.pills,
-                                      color: Color(0xFFB3C0C8),
-                                    ),
+//                                    GFButton(
+//                                      onPressed: () {},
+//                                      icon: Icon(
+//                                        Icons.notifications,
+//                                        color: Color(0xFFB3C0C8),
+//                                        size: 16,
+//                                      ),
+//                                      child: Text("Add to Cart",
+//                                          style: GoogleFonts.poppins(
+//                                              fontWeight: FontWeight.w400)),
+//                                      type: GFButtonType.transparent,
+//                                      shape: GFButtonShape.pills,
+//                                      color: Color(0xFFB3C0C8),
+//                                    ),
                                     GFButton(
                                       onPressed: () {},
                                       icon: Icon(
@@ -619,7 +669,7 @@ class _testPrDetailsState extends State<testPrDetails>
                                 Row(
                                   children: <Widget>[
                                     RatingBar(
-                                      initialRating: 3,
+                                      initialRating: 0,
                                       itemSize: 16.0,
                                       minRating: 1,
                                       direction: Axis.horizontal,
@@ -641,7 +691,7 @@ class _testPrDetailsState extends State<testPrDetails>
                                       width: 12,
                                     ),
                                     Text(
-                                      "4.5",
+                                      "0",
                                       style: GoogleFonts.poppins(
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400),
@@ -661,7 +711,7 @@ class _testPrDetailsState extends State<testPrDetails>
                                         height: 4,
                                       ),
                                       RatingBar(
-                                        initialRating: 3,
+                                        initialRating: 0,
                                         itemSize: 20.0,
                                         minRating: 1,
                                         direction: Axis.horizontal,
@@ -682,7 +732,7 @@ class _testPrDetailsState extends State<testPrDetails>
                                       SizedBox(
                                         height: 4,
                                       ),
-                                      Text("4 star",
+                                      Text("0 star",
                                           style: GoogleFonts.poppins(
                                               fontSize: 13,
                                               fontWeight: FontWeight.w300,
@@ -693,350 +743,366 @@ class _testPrDetailsState extends State<testPrDetails>
                                 SizedBox(
                                   height: 16,
                                 ),
-                                Row(
-                                  children: <Widget>[
-                                    CircleAvatar(
-                                      backgroundImage: AssetImage(
-                                          "assets/images/category_image1.png"),
-                                    ),
-                                    SizedBox(
-                                      width: 12,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text("John Doe",
-                                            style: GoogleFonts.poppins(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                                color: Color(0xFF5D6A78))),
-                                        SizedBox(
-                                          height: 8,
-                                        ),
-                                        InkWell(
-                                          onTap: () {
-                                            _displayDialog(context, themeColor);
-                                          },
-                                          child: Container(
-                                            child: Column(
-                                              children: <Widget>[
-                                                Text("Add Comment",
-                                                    style: GoogleFonts.poppins(
-                                                        fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                        color:
-                                                            Color(0xFF5D6A78))),
-                                                Container(
-                                                  color: Colors.grey,
-                                                  height: 0.7,
-                                                  width: ScreenUtil.getWidth(
-                                                          context) /
-                                                      1.5,
-                                                )
-                                              ],
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                ListView(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.symmetric(vertical: 5),
-                                      padding: EdgeInsets.all(12),
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xFFEEEEF3),
-                                          borderRadius:
-                                              BorderRadius.circular(12)),
-                                      child: Row(
-                                        children: <Widget>[
-                                          CircleAvatar(
-                                            backgroundImage: AssetImage(
-                                                "assets/images/category_image1.png"),
-                                          ),
-                                          SizedBox(
-                                            width: 12,
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              RatingBar(
-                                                initialRating: 3,
-                                                itemSize: 14.0,
-                                                minRating: 1,
-                                                direction: Axis.horizontal,
-                                                allowHalfRating: true,
-                                                itemCount: 5,
-                                                itemBuilder: (context, _) =>
-                                                    Container(
-                                                  height: 12,
-                                                  child: SvgPicture.asset(
-                                                    "assets/icons/ic_star.svg",
-                                                    color: themeColor.getColor(),
-                                                    width: 9,
-                                                  ),
-                                                ),
-                                                onRatingUpdate: (rating) {
-                                                  print(rating);
-                                                },
-                                              ),
-                                              SizedBox(
-                                                height: 8,
-                                              ),
-                                              Text("John Doe",
-                                                  style: GoogleFonts.poppins(
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w300,
-                                                      color: Color(0xFF5D6A78))),
-                                              Text(
-                                                  "I am very pleased for this product",
-                                                  style: GoogleFonts.poppins(
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w300,
-                                                      color: Color(0xFF5D6A78)))
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.symmetric(vertical: 5),
-                                      padding: EdgeInsets.all(12),
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xFFEEEEF3),
-                                          borderRadius:
-                                              BorderRadius.circular(12)),
-                                      child: Row(
-                                        children: <Widget>[
-                                          CircleAvatar(
-                                            backgroundImage: AssetImage(
-                                                "assets/images/category_image1.png"),
-                                          ),
-                                          SizedBox(
-                                            width: 12,
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              RatingBar(
-                                                initialRating: 3,
-                                                itemSize: 14.0,
-                                                minRating: 1,
-                                                direction: Axis.horizontal,
-                                                allowHalfRating: true,
-                                                itemCount: 5,
-                                                itemBuilder: (context, _) =>
-                                                    Container(
-                                                  height: 12,
-                                                  child: SvgPicture.asset(
-                                                    "assets/icons/ic_star.svg",
-                                                    color: themeColor.getColor(),
-                                                    width: 9,
-                                                  ),
-                                                ),
-                                                onRatingUpdate: (rating) {
-                                                  print(rating);
-                                                },
-                                              ),
-                                              SizedBox(
-                                                height: 8,
-                                              ),
-                                              Text("John Doe",
-                                                  style: GoogleFonts.poppins(
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w300,
-                                                      color: Color(0xFF5D6A78))),
-                                              Text(
-                                                  "I am very pleased for this product",
-                                                  style: GoogleFonts.poppins(
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w300,
-                                                      color: Color(0xFF5D6A78)))
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.symmetric(vertical: 5),
-                                      padding: EdgeInsets.all(12),
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xFFEEEEF3),
-                                          borderRadius:
-                                              BorderRadius.circular(12)),
-                                      child: Row(
-                                        children: <Widget>[
-                                          CircleAvatar(
-                                            backgroundImage: AssetImage(
-                                                "assets/images/category_image1.png"),
-                                          ),
-                                          SizedBox(
-                                            width: 12,
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              RatingBar(
-                                                initialRating: 3,
-                                                itemSize: 14.0,
-                                                minRating: 1,
-                                                direction: Axis.horizontal,
-                                                allowHalfRating: true,
-                                                itemCount: 5,
-                                                itemBuilder: (context, _) =>
-                                                    Container(
-                                                  height: 12,
-                                                  child: SvgPicture.asset(
-                                                    "assets/icons/ic_star.svg",
-                                                    color: themeColor.getColor(),
-                                                    width: 9,
-                                                  ),
-                                                ),
-                                                onRatingUpdate: (rating) {
-                                                  print(rating);
-                                                },
-                                              ),
-                                              SizedBox(
-                                                height: 8,
-                                              ),
-                                              Text("John Doe",
-                                                  style: GoogleFonts.poppins(
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w300,
-                                                      color: Color(0xFF5D6A78))),
-                                              Text(
-                                                  "I am very pleased for this product",
-                                                  style: GoogleFonts.poppins(
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w300,
-                                                      color: Color(0xFF5D6A78)))
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.symmetric(vertical: 5),
-                                      padding: EdgeInsets.all(12),
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xFFEEEEF3),
-                                          borderRadius:
-                                              BorderRadius.circular(12)),
-                                      child: Row(
-                                        children: <Widget>[
-                                          CircleAvatar(
-                                            backgroundImage: AssetImage(
-                                                "assets/images/category_image1.png"),
-                                          ),
-                                          SizedBox(
-                                            width: 12,
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              RatingBar(
-                                                initialRating: 3,
-                                                itemSize: 14.0,
-                                                minRating: 1,
-                                                direction: Axis.horizontal,
-                                                allowHalfRating: true,
-                                                itemCount: 5,
-                                                itemBuilder: (context, _) =>
-                                                    Container(
-                                                  height: 12,
-                                                  child: SvgPicture.asset(
-                                                    "assets/icons/ic_star.svg",
-                                                    color: themeColor.getColor(),
-                                                    width: 9,
-                                                  ),
-                                                ),
-                                                onRatingUpdate: (rating) {
-                                                  print(rating);
-                                                },
-                                              ),
-                                              SizedBox(
-                                                height: 8,
-                                              ),
-                                              Text("John Doe",
-                                                  style: GoogleFonts.poppins(
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w300,
-                                                      color: Color(0xFF5D6A78))),
-                                              Text(
-                                                  "I am very pleased for this product",
-                                                  style: GoogleFonts.poppins(
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w300,
-                                                      color: Color(0xFF5D6A78)))
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical: 10),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "See All Comments",
-                                    style: GoogleFonts.poppins(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w300,
-                                        color: themeColor.getColor()),
-                                  ),
-                                ),
+//                                Row(
+//                                  children: <Widget>[
+//                                    CircleAvatar(
+//                                      backgroundImage: AssetImage(
+//                                          "assets/images/category_image1.png"),
+//                                    ),
+//                                    SizedBox(
+//                                      width: 12,
+//                                    ),
+//                                    Column(
+//                                      crossAxisAlignment:
+//                                          CrossAxisAlignment.start,
+//                                      children: <Widget>[
+//                                        Text("John Doe",
+//                                            style: GoogleFonts.poppins(
+//                                                fontSize: 14,
+//                                                fontWeight: FontWeight.w400,
+//                                                color: Color(0xFF5D6A78))),
+//                                        SizedBox(
+//                                          height: 8,
+//                                        ),
+//                                        InkWell(
+//                                          onTap: () {
+//                                            _displayDialog(context, themeColor);
+//                                          },
+//                                          child: Container(
+//                                            child: Column(
+//                                              children: <Widget>[
+//                                                Text("Add Comment",
+//                                                    style: GoogleFonts.poppins(
+//                                                        fontSize: 12,
+//                                                        fontWeight:
+//                                                            FontWeight.w300,
+//                                                        color:
+//                                                            Color(0xFF5D6A78))),
+//                                                Container(
+//                                                  color: Colors.grey,
+//                                                  height: 0.7,
+//                                                  width: ScreenUtil.getWidth(
+//                                                          context) /
+//                                                      1.5,
+//                                                )
+//                                              ],
+//                                              crossAxisAlignment:
+//                                                  CrossAxisAlignment.start,
+//                                            ),
+//                                          ),
+//                                        )
+//                                      ],
+//                                    )
+//                                  ],
+//                                ),
+//                                ListView(
+//                                  shrinkWrap: true,
+//                                  physics: NeverScrollableScrollPhysics(),
+//                                  children: <Widget>[
+//                                    Container(
+//                                      margin: EdgeInsets.symmetric(vertical: 5),
+//                                      padding: EdgeInsets.all(12),
+//                                      alignment: Alignment.center,
+//                                      decoration: BoxDecoration(
+//                                          color: Color(0xFFEEEEF3),
+//                                          borderRadius:
+//                                              BorderRadius.circular(12)),
+//                                      child: Row(
+//                                        children: <Widget>[
+//                                          CircleAvatar(
+//                                            backgroundImage: AssetImage(
+//                                                "assets/images/category_image1.png"),
+//                                          ),
+//                                          SizedBox(
+//                                            width: 12,
+//                                          ),
+//                                          Column(
+//                                            crossAxisAlignment:
+//                                                CrossAxisAlignment.start,
+//                                            children: <Widget>[
+//                                              RatingBar(
+//                                                initialRating: 3,
+//                                                itemSize: 14.0,
+//                                                minRating: 1,
+//                                                direction: Axis.horizontal,
+//                                                allowHalfRating: true,
+//                                                itemCount: 5,
+//                                                itemBuilder: (context, _) =>
+//                                                    Container(
+//                                                  height: 12,
+//                                                  child: SvgPicture.asset(
+//                                                    "assets/icons/ic_star.svg",
+//                                                    color:
+//                                                        themeColor.getColor(),
+//                                                    width: 9,
+//                                                  ),
+//                                                ),
+//                                                onRatingUpdate: (rating) {
+//                                                  print(rating);
+//                                                },
+//                                              ),
+//                                              SizedBox(
+//                                                height: 8,
+//                                              ),
+//                                              Text("John Doe",
+//                                                  style: GoogleFonts.poppins(
+//                                                      fontSize: 12,
+//                                                      fontWeight:
+//                                                          FontWeight.w300,
+//                                                      color:
+//                                                          Color(0xFF5D6A78))),
+//                                              Text(
+//                                                  "I am very pleased for this product",
+//                                                  style: GoogleFonts.poppins(
+//                                                      fontSize: 12,
+//                                                      fontWeight:
+//                                                          FontWeight.w300,
+//                                                      color: Color(0xFF5D6A78)))
+//                                            ],
+//                                          )
+//                                        ],
+//                                      ),
+//                                    ),
+//                                    Container(
+//                                      margin: EdgeInsets.symmetric(vertical: 5),
+//                                      padding: EdgeInsets.all(12),
+//                                      alignment: Alignment.center,
+//                                      decoration: BoxDecoration(
+//                                          color: Color(0xFFEEEEF3),
+//                                          borderRadius:
+//                                              BorderRadius.circular(12)),
+//                                      child: Row(
+//                                        children: <Widget>[
+//                                          CircleAvatar(
+//                                            backgroundImage: AssetImage(
+//                                                "assets/images/category_image1.png"),
+//                                          ),
+//                                          SizedBox(
+//                                            width: 12,
+//                                          ),
+//                                          Column(
+//                                            crossAxisAlignment:
+//                                                CrossAxisAlignment.start,
+//                                            children: <Widget>[
+//                                              RatingBar(
+//                                                initialRating: 3,
+//                                                itemSize: 14.0,
+//                                                minRating: 1,
+//                                                direction: Axis.horizontal,
+//                                                allowHalfRating: true,
+//                                                itemCount: 5,
+//                                                itemBuilder: (context, _) =>
+//                                                    Container(
+//                                                  height: 12,
+//                                                  child: SvgPicture.asset(
+//                                                    "assets/icons/ic_star.svg",
+//                                                    color:
+//                                                        themeColor.getColor(),
+//                                                    width: 9,
+//                                                  ),
+//                                                ),
+//                                                onRatingUpdate: (rating) {
+//                                                  print(rating);
+//                                                },
+//                                              ),
+//                                              SizedBox(
+//                                                height: 8,
+//                                              ),
+//                                              Text("John Doe",
+//                                                  style: GoogleFonts.poppins(
+//                                                      fontSize: 12,
+//                                                      fontWeight:
+//                                                          FontWeight.w300,
+//                                                      color:
+//                                                          Color(0xFF5D6A78))),
+//                                              Text(
+//                                                  "I am very pleased for this product",
+//                                                  style: GoogleFonts.poppins(
+//                                                      fontSize: 12,
+//                                                      fontWeight:
+//                                                          FontWeight.w300,
+//                                                      color: Color(0xFF5D6A78)))
+//                                            ],
+//                                          )
+//                                        ],
+//                                      ),
+//                                    ),
+//                                    Container(
+//                                      margin: EdgeInsets.symmetric(vertical: 5),
+//                                      padding: EdgeInsets.all(12),
+//                                      alignment: Alignment.center,
+//                                      decoration: BoxDecoration(
+//                                          color: Color(0xFFEEEEF3),
+//                                          borderRadius:
+//                                              BorderRadius.circular(12)),
+//                                      child: Row(
+//                                        children: <Widget>[
+//                                          CircleAvatar(
+//                                            backgroundImage: AssetImage(
+//                                                "assets/images/category_image1.png"),
+//                                          ),
+//                                          SizedBox(
+//                                            width: 12,
+//                                          ),
+//                                          Column(
+//                                            crossAxisAlignment:
+//                                                CrossAxisAlignment.start,
+//                                            children: <Widget>[
+//                                              RatingBar(
+//                                                initialRating: 3,
+//                                                itemSize: 14.0,
+//                                                minRating: 1,
+//                                                direction: Axis.horizontal,
+//                                                allowHalfRating: true,
+//                                                itemCount: 5,
+//                                                itemBuilder: (context, _) =>
+//                                                    Container(
+//                                                  height: 12,
+//                                                  child: SvgPicture.asset(
+//                                                    "assets/icons/ic_star.svg",
+//                                                    color:
+//                                                        themeColor.getColor(),
+//                                                    width: 9,
+//                                                  ),
+//                                                ),
+//                                                onRatingUpdate: (rating) {
+//                                                  print(rating);
+//                                                },
+//                                              ),
+//                                              SizedBox(
+//                                                height: 8,
+//                                              ),
+//                                              Text("John Doe",
+//                                                  style: GoogleFonts.poppins(
+//                                                      fontSize: 12,
+//                                                      fontWeight:
+//                                                          FontWeight.w300,
+//                                                      color:
+//                                                          Color(0xFF5D6A78))),
+//                                              Text(
+//                                                  "I am very pleased for this product",
+//                                                  style: GoogleFonts.poppins(
+//                                                      fontSize: 12,
+//                                                      fontWeight:
+//                                                          FontWeight.w300,
+//                                                      color: Color(0xFF5D6A78)))
+//                                            ],
+//                                          )
+//                                        ],
+//                                      ),
+//                                    ),
+//                                    Container(
+//                                      margin: EdgeInsets.symmetric(vertical: 5),
+//                                      padding: EdgeInsets.all(12),
+//                                      alignment: Alignment.center,
+//                                      decoration: BoxDecoration(
+//                                          color: Color(0xFFEEEEF3),
+//                                          borderRadius:
+//                                              BorderRadius.circular(12)),
+//                                      child: Row(
+//                                        children: <Widget>[
+//                                          CircleAvatar(
+//                                            backgroundImage: AssetImage(
+//                                                "assets/images/category_image1.png"),
+//                                          ),
+//                                          SizedBox(
+//                                            width: 12,
+//                                          ),
+//                                          Column(
+//                                            crossAxisAlignment:
+//                                                CrossAxisAlignment.start,
+//                                            children: <Widget>[
+//                                              RatingBar(
+//                                                initialRating: 3,
+//                                                itemSize: 14.0,
+//                                                minRating: 1,
+//                                                direction: Axis.horizontal,
+//                                                allowHalfRating: true,
+//                                                itemCount: 5,
+//                                                itemBuilder: (context, _) =>
+//                                                    Container(
+//                                                  height: 12,
+//                                                  child: SvgPicture.asset(
+//                                                    "assets/icons/ic_star.svg",
+//                                                    color:
+//                                                        themeColor.getColor(),
+//                                                    width: 9,
+//                                                  ),
+//                                                ),
+//                                                onRatingUpdate: (rating) {
+//                                                  print(rating);
+//                                                },
+//                                              ),
+//                                              SizedBox(
+//                                                height: 8,
+//                                              ),
+//                                              Text("John Doe",
+//                                                  style: GoogleFonts.poppins(
+//                                                      fontSize: 12,
+//                                                      fontWeight:
+//                                                          FontWeight.w300,
+//                                                      color:
+//                                                          Color(0xFF5D6A78))),
+//                                              Text(
+//                                                  "I am very pleased for this product",
+//                                                  style: GoogleFonts.poppins(
+//                                                      fontSize: 12,
+//                                                      fontWeight:
+//                                                          FontWeight.w300,
+//                                                      color: Color(0xFF5D6A78)))
+//                                            ],
+//                                          )
+//                                        ],
+//                                      ),
+//                                    )
+//                                  ],
+//                                ),
+//                                Container(
+//                                  margin: EdgeInsets.symmetric(vertical: 10),
+//                                  alignment: Alignment.center,
+//                                  child: Text(
+//                                    "See All Comments",
+//                                    style: GoogleFonts.poppins(
+//                                        fontSize: 12,
+//                                        fontWeight: FontWeight.w300,
+//                                        color: themeColor.getColor()),
+//                                  ),
+//                                ),
                               ],
                             ),
                           ),
-                          Container(
-                            margin: EdgeInsets.only(top: 16),
-                            padding: AppTheme.padding.copyWith(),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(.2),
-                                    blurRadius: 6.0, // soften the shadow
-                                    spreadRadius: 0.0, //extend the shadow
-                                    offset: Offset(
-                                      0.0, // Move to right 10  horizontally
-                                      1.0, // Move to bottom 10 Vertically
-                                    ),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(26)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.max,
-                              children: <Widget>[
-                                ProductList(
-                                  themeColor: themeColor,
-                                  productListTitleBar: ProductListTitleBar(
-                                    themeColor: themeColor,
-                                    title: "Similar Products",
-                                    isCountShow: false,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
+//                          Container(
+//                            margin: EdgeInsets.only(top: 16),
+//                            padding: AppTheme.padding.copyWith(),
+//                            decoration: BoxDecoration(
+//                                color: Colors.white,
+//                                boxShadow: [
+//                                  BoxShadow(
+//                                    color: Colors.grey.withOpacity(.2),
+//                                    blurRadius: 6.0, // soften the shadow
+//                                    spreadRadius: 0.0, //extend the shadow
+//                                    offset: Offset(
+//                                      0.0, // Move to right 10  horizontally
+//                                      1.0, // Move to bottom 10 Vertically
+//                                    ),
+//                                  )
+//                                ],
+//                                borderRadius: BorderRadius.circular(26)),
+//                            child: Column(
+//                              crossAxisAlignment: CrossAxisAlignment.start,
+//                              mainAxisSize: MainAxisSize.max,
+//                              children: <Widget>[
+//                                ProductList(
+//                                  themeColor: themeColor,
+//                                  productListTitleBar: ProductListTitleBar(
+//                                    themeColor: themeColor,
+//                                    title: "Similar Products",
+//                                    isCountShow: false,
+//                                  ),
+//                                ),
+//                              ],
+//                            ),
+//                          )
                         ],
                       ),
                     ),

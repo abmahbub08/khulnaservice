@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config.dart';
+import '../main.dart';
 import 'onboarding_page.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -16,10 +19,20 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(
-        Duration(seconds: 3),
-        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => OnboardingPage())));
+    Future.delayed(Duration(seconds: 1), () {
+      _getUser();
+    });
+  }
+
+  void _getUser() async {
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    var token = sp.getString('token');
+    if (token != null) {
+      Nav.routeReplacement(context, InitPage());
+    } else {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (BuildContext context) => OnboardingPage()));
+    }
   }
 
   @override
