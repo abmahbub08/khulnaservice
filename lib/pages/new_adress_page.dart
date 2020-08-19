@@ -1,17 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:getflutter/components/button/gf_button.dart';
-import 'package:getflutter/getflutter.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:khulnaservice/api/fetchdata.dart';
+import 'package:khulnaservice/provider/place_order_provider.dart';
+import 'package:khulnaservice/widgets/customWdiget.dart';
 import 'package:provider/provider.dart';
-import 'package:khulnaservice/pages/credit_cart_page.dart';
 import 'package:khulnaservice/utils/drop_down_menu/find_dropdown.dart';
-import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
 import 'package:khulnaservice/widgets/new_adress_input.dart';
 
 class NewAddressPage extends StatefulWidget {
+  var method;
+
+  NewAddressPage(this.method);
+
   @override
   _NewAddressPageState createState() => _NewAddressPageState();
 }
@@ -20,11 +24,16 @@ class _NewAddressPageState extends State<NewAddressPage> {
   bool asTabs = false;
   String selectedValue;
   String preselectedValue = "dolor sit";
+  bool same = false;
   List<int> selectedItems = [];
   final List<DropdownMenuItem> items = [];
-
+  FetchData fetchData = FetchData();
   final String loremIpsum =
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqu";
+
+  TextEditingController phoneCont = TextEditingController();
+  TextEditingController address1 = TextEditingController();
+  TextEditingController address2 = TextEditingController();
 
   @override
   void initState() {
@@ -52,9 +61,36 @@ class _NewAddressPageState extends State<NewAddressPage> {
         wordPair = "";
       }
     });
+    getData();
     super.initState();
 
     super.initState();
+  }
+
+  getData() {
+    var data =
+        Provider.of<placeOrderProvider>(context, listen: false).searchData;
+    if (widget.method == 2) {
+      try {
+        phoneCont.text = data.billingAddress.phone;
+        address1.text = data.billingAddress.address1;
+        address2.text = data.billingAddress.address2;
+        Division = data.billingAddress.city.name;
+        District = data.billingAddress.state.name;
+
+        setState(() {});
+      } catch (e) {}
+    } else {
+      try {
+        phoneCont.text = data.shippingAddress.phone;
+        address1.text = data.shippingAddress.address1;
+        address2.text = data.shippingAddress.address2;
+        Division = data.shippingAddress.city.name;
+        District = data.shippingAddress.state.name;
+
+        setState(() {});
+      } catch (e) {}
+    }
   }
 
   @override
@@ -68,11 +104,34 @@ class _NewAddressPageState extends State<NewAddressPage> {
           statusBarBrightness: Brightness.dark,
           statusBarIconBrightness: Brightness.dark),
     );
+    var data = Provider.of<placeOrderProvider>(context, listen: false)
+        .searchData
+        .divisions;
     return SafeArea(
       child: Scaffold(
         bottomNavigationBar: InkWell(
           onTap: () {
-            Nav.routeReplacement(context, CreditCartPage());
+//            Nav.routeReplacement(context, CreditCartPage());
+            Customwidget.myDiaglog(context);
+            fetchData
+                .addressUpdate(
+                    context,
+                    phoneCont.text,
+                    address1.text,
+                    address2.text,
+                    StateId.toString(),
+                    CityId.toString(),
+                    widget.method.toString(),
+                    same == false ? 0.toString() : 1.toString())
+                .then((value) {
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }).catchError((onError) {
+              Scaffold.of(context).showSnackBar(SnackBar(
+                  duration: Duration(seconds: 2),
+                  backgroundColor: themeColor.getColor(),
+                  content: Text('Something went wrong')));
+            });
           },
           child: Container(
             margin: EdgeInsets.only(left: 14, right: 14),
@@ -99,7 +158,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "My address",
+                  "Provide ${widget.method == 2 ? "Billing" : "Shipping"} Address",
                   style: GoogleFonts.poppins(
                       fontSize: 18, color: Color(0xFF5D6A78)),
                 ),
@@ -116,7 +175,8 @@ class _NewAddressPageState extends State<NewAddressPage> {
                 Column(
                   children: <Widget>[
                     NewAddressInput(
-                      labelText: "Address Title",
+                      textEditing: phoneCont,
+                      labelText: "Phone",
                       hintText: '',
                       isEmail: true,
                       validator: (String value) {},
@@ -127,8 +187,25 @@ class _NewAddressPageState extends State<NewAddressPage> {
                     SizedBox(
                       height: 16,
                     ),
+
                     NewAddressInput(
-                      labelText: "Name Surname",
+                      textEditing: address1,
+                      labelText: "Address Line 1",
+                      hintText: '',
+                      isEmail: true,
+                      validator: (String value) {},
+                      onSaved: (String value) {
+//                        model.email = value;
+                      },
+                    ),
+
+//
+                    SizedBox(
+                      height: 16,
+                    ),
+                    NewAddressInput(
+                      textEditing: address2,
+                      labelText: "Address Line 2",
                       hintText: '',
                       isEmail: true,
                       validator: (String value) {},
@@ -140,104 +217,50 @@ class _NewAddressPageState extends State<NewAddressPage> {
                       height: 32,
                     ),
                     FindDropdown(
-                        items: ["Heu", "Medicina", "Byssus", "Locus"],
-                        onChanged: (String item) => print(item),
-                        selectedItem: "City",
+                        items: data.map((e) {
+                          return e.name;
+                        }).toList(),
+                        onChanged: (String item) {
+                          setState(() {
+                            StateId = data
+                                .firstWhere((element) => element.name == item)
+                                .id;
+                          });
+                        },
+                        selectedItem: Division,
                         isUnderLine: true),
                     SizedBox(
                       height: 32,
                     ),
                     FindDropdown(
-                        items: ["Heu", "Medicina", "Byssus", "Locus"],
-                        onChanged: (String item) => print(item),
-                        selectedItem: "District",
+                        items: data[StateId - 1]
+                            .districts
+                            .map((e) => e.name)
+                            .toList(),
+                        onChanged: (String item) {
+                          setState(() {
+                            CityId = data[StateId - 1]
+                                .districts
+                                .firstWhere((element) => element.name == item)
+                                .id;
+                          });
+                        },
+                        selectedItem: District,
                         isUnderLine: true),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    FindDropdown(
-                        items: ["Heu", "Medicina", "Byssus", "Locus"],
-                        onChanged: (String item) => print(item),
-                        selectedItem: "Neighborhood",
-                        isUnderLine: true),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    NewAddressInput(
-                      labelText: "Address",
-                      hintText: '',
-                      isEmail: true,
-                      validator: (String value) {},
-                      onSaved: (String value) {
-//                        model.email = value;
-                      },
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    NewAddressInput(
-                      labelText: "Invoice Code",
-                      hintText: '',
-                      isEmail: true,
-                      validator: (String value) {},
-                      onSaved: (String value) {
-//                        model.email = value;
-                      },
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    NewAddressInput(
-                      labelText: "Mobile Phone",
-                      hintText: '',
-                      isEmail: true,
-                      validator: (String value) {},
-                      onSaved: (String value) {
-//                        model.email = value;
-                      },
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
+
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "Invoice Type",
-                          style: GoogleFonts.poppins(
-                              fontSize: 14, color: Color(0xFF5D6A78)),
-                        ),
-                        Row(
-                          children: <Widget>[
-                            GFButton(
-                              child: Text(
-                                "Individual",
-                                style: GoogleFonts.poppins(fontSize: 12),
-                              ),
-                              type: GFButtonType.solid,
-                              color: themeColor.getColor(),
-                              onPressed: () {},
-                            ),
-                            SizedBox(
-                              width: 14,
-                            ),
-                            GFButton(
-                              child: Text(
-                                "Enterprise",
-                                style: GoogleFonts.poppins(
-                                    fontSize: 12, color: Color(0xFF5D6A78)),
-                              ),
-                              type: GFButtonType.outline,
-                              color: Color(0xFF5D6A78),
-                              onPressed: () {},
-                            )
-                          ],
-                        ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Checkbox(
+                            value: same,
+                            onChanged: (v) {
+                              setState(() {
+                                same = v;
+                              });
+                            }),
+                        Text("Make shipping and billing address same")
                       ],
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
+                    )
                   ],
                 )
               ],
@@ -247,4 +270,10 @@ class _NewAddressPageState extends State<NewAddressPage> {
       ),
     );
   }
+
+  int StateId = 2;
+  int CityId = 0;
+  var Division = "Division";
+  var District = "District";
+  customWidget Customwidget = customWidget();
 }

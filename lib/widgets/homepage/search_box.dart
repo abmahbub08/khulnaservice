@@ -5,9 +5,13 @@ import 'package:khulnaservice/pages/search_page.dart';
 import 'package:khulnaservice/utils/navigator.dart';
 
 class SearchBox extends StatelessWidget {
-  const SearchBox({
+   SearchBox({
     Key key,
   }) : super(key: key);
+
+
+  ScrollController _scrollController = ScrollController();
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

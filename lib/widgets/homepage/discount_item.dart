@@ -7,15 +7,20 @@ import 'package:flutter_svg/svg.dart';
 import 'package:getflutter/components/button/gf_button.dart';
 import 'package:getflutter/types/gf_button_type.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
+import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/models/CategoryPageModel.dart';
 import 'package:khulnaservice/models/homePageDataModel.dart';
+import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:khulnaservice/testPrDEtails.dart';
+import 'package:khulnaservice/widgets/customWdiget.dart';
 import 'package:like_button/like_button.dart';
 import 'package:khulnaservice/pages/product_detail.dart';
 import 'package:khulnaservice/pages/shopping_cart_page.dart';
 import 'package:khulnaservice/utils/commons/colors.dart';
 import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/screen.dart';
+import 'package:provider/provider.dart';
 
 import '../../config.dart';
 
@@ -23,6 +28,8 @@ class DiscountItem extends StatelessWidget {
   final themeColor;
   final String imageUrl;
   Product product;
+  FetchData fetchData = FetchData();
+  customWidget CustomWidget = customWidget();
 
   DiscountItem({Key key, this.themeColor, this.imageUrl, this.product})
       : super(key: key);
@@ -148,18 +155,20 @@ class DiscountItem extends StatelessWidget {
                       ),
                       Row(
                         children: <Widget>[
-//                          Text(
-//                            "${product.price}",
-//                            style: GoogleFonts.poppins(
-//                                decoration: TextDecoration.lineThrough,
-//                                fontSize: 14,
-//                                fontWeight: FontWeight.w300),
-//                          ),
-//                          SizedBox(
-//                            width: 4,
-//                          ),
+                          double.parse(product.discountedPrice) != 0
+                              ? Text(
+                                  "${product.price}",
+                                  style: GoogleFonts.poppins(
+                                      decoration: TextDecoration.lineThrough,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w300),
+                                )
+                              : Container(),
+                          SizedBox(
+                            width: 4,
+                          ),
                           Text(
-                            "৳ ${product.price}",
+                            "৳ ${double.parse(product.discountedPrice) == 0 ? product.price : product.discountedPrice}",
                             style: GoogleFonts.poppins(
                                 color: themeColor.getColor(),
                                 fontSize: 18,
@@ -167,13 +176,13 @@ class DiscountItem extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Text(
-                        "Free Cargo",
-                        style: GoogleFonts.poppins(
-                            color: themeColor.getColor(),
-                            fontSize: 10,
-                            fontWeight: FontWeight.w300),
-                      ),
+//                      Text(
+//                        "Free Cargo",
+//                        style: GoogleFonts.poppins(
+//                            color: themeColor.getColor(),
+//                            fontSize: 10,
+//                            fontWeight: FontWeight.w300),
+//                      ),
                       Container(
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
@@ -183,10 +192,14 @@ class DiscountItem extends StatelessWidget {
                               width: 150,
                               child: GFButton(
                                 onPressed: () {
-                                  Scaffold.of(context).showSnackBar(SnackBar(
-                                      backgroundColor: mainColor,
-                                      content: Text('Product added to cart')));
-                                  Nav.route(context, ShoppingCartPage());
+                                  CustomWidget.myDiaglog(context);
+                                  fetchData
+                                      .getAddToCart(product.id.toString(), "1")
+                                      .then((value) {
+                                    fetchData.getCart(context).then((value) {
+                                      Navigator.pop(context);
+                                    });
+                                  });
                                 },
                                 icon: SvgPicture.asset(
                                   "assets/icons/ic_product_shopping_cart.svg",

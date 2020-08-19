@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:khulnaservice/main.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/pages/about_page.dart';
 import 'package:khulnaservice/pages/change_password_page.dart';
@@ -11,6 +12,7 @@ import 'package:khulnaservice/utils/drawer_menu/simple_hidden_drawer/provider/si
 import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/screen.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../theme_change.dart';
 import 'item_hidden_menu.dart';
@@ -183,18 +185,18 @@ class _HiddenMenuState extends State<HiddenMenu> {
                     shrinkWrap: true,
                     padding: EdgeInsets.all(0.0),
                     children: <Widget>[
-                      ItemHiddenMenu(
-                        icon: Icon(
-                          Feather.type,
-                          size: 19,
-                          color: Colors.white,
-                        ),
-                        name: 'Language',
-                        baseStyle: GoogleFonts.poppins(
-                            color: Colors.white.withOpacity(0.6),
-                            fontSize: 19.0),
-                        colorLineSelected: Colors.orange,
-                      ),
+//                      ItemHiddenMenu(
+//                        icon: Icon(
+//                          Feather.type,
+//                          size: 19,
+//                          color: Colors.white,
+//                        ),
+//                        name: 'Language',
+//                        baseStyle: GoogleFonts.poppins(
+//                            color: Colors.white.withOpacity(0.6),
+//                            fontSize: 19.0),
+//                        colorLineSelected: Colors.orange,
+//                      ),
                       InkWell(
                         onTap: () {
                           _themeChanger.openFullMaterialColorPicker(themeColor);
@@ -212,23 +214,23 @@ class _HiddenMenuState extends State<HiddenMenu> {
                           colorLineSelected: Colors.orange,
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          Nav.route(context, ChangePasswordPage());
-                        },
-                        child: ItemHiddenMenu(
-                          icon: Icon(
-                            Feather.lock,
-                            size: 19,
-                            color: Colors.white,
-                          ),
-                          name: 'Reset Password',
-                          baseStyle: GoogleFonts.poppins(
-                              color: Colors.white.withOpacity(0.6),
-                              fontSize: 19.0),
-                          colorLineSelected: Colors.orange,
-                        ),
-                      ),
+//                      InkWell(
+//                        onTap: () {
+//                          Nav.route(context, ChangePasswordPage());
+//                        },
+//                        child: ItemHiddenMenu(
+//                          icon: Icon(
+//                            Feather.lock,
+//                            size: 19,
+//                            color: Colors.white,
+//                          ),
+//                          name: 'Reset Password',
+//                          baseStyle: GoogleFonts.poppins(
+//                              color: Colors.white.withOpacity(0.6),
+//                              fontSize: 19.0),
+//                          colorLineSelected: Colors.orange,
+//                        ),
+//                      ),
                       InkWell(
                         onTap: () {
                           Nav.route(context, MyProfileSettings());
@@ -277,23 +279,23 @@ class _HiddenMenuState extends State<HiddenMenu> {
                     shrinkWrap: true,
                     padding: EdgeInsets.all(0.0),
                     children: <Widget>[
-                      InkWell(
-                        child: ItemHiddenMenu(
-                          icon: Icon(
-                            Feather.list,
-                            size: 19,
-                            color: Colors.white,
-                          ),
-                          name: 'F.A.Q',
-                          baseStyle: GoogleFonts.poppins(
-                              color: Colors.white.withOpacity(0.6),
-                              fontSize: 19.0),
-                          colorLineSelected: Colors.orange,
-                        ),
-                        onTap: () {
-                          Nav.route(context, AboutPage());
-                        },
-                      ),
+//                      InkWell(
+//                        child: ItemHiddenMenu(
+//                          icon: Icon(
+//                            Feather.list,
+//                            size: 19,
+//                            color: Colors.white,
+//                          ),
+//                          name: 'F.A.Q',
+//                          baseStyle: GoogleFonts.poppins(
+//                              color: Colors.white.withOpacity(0.6),
+//                              fontSize: 19.0),
+//                          colorLineSelected: Colors.orange,
+//                        ),
+//                        onTap: () {
+//                          Nav.route(context, AboutPage());
+//                        },
+//                      ),
                       InkWell(
                         onTap: () {
                           Nav.route(context, ContactPage());
@@ -305,6 +307,29 @@ class _HiddenMenuState extends State<HiddenMenu> {
                             color: Colors.white,
                           ),
                           name: 'Contact',
+                          baseStyle: GoogleFonts.poppins(
+                              color: Colors.white.withOpacity(0.6),
+                              fontSize: 19.0,
+                              fontWeight: FontWeight.w200),
+                          colorLineSelected: Colors.orange,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () async {
+//                          Nav.route(context, ContactPage());
+                          SharedPreferences sp =
+                              await SharedPreferences.getInstance();
+                          sp.remove("token");
+                          sp.remove("user");
+                          Nav.routeReplacement(context, InitPage());
+                        },
+                        child: ItemHiddenMenu(
+                          icon: Icon(
+                            Feather.log_out,
+                            size: 19,
+                            color: Colors.white,
+                          ),
+                          name: 'LogOut',
                           baseStyle: GoogleFonts.poppins(
                               color: Colors.white.withOpacity(0.6),
                               fontSize: 19.0,

@@ -4,13 +4,18 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
+import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/models/CategoryPageModel.dart';
 import 'package:khulnaservice/models/homePageDataModel.dart';
 import 'package:khulnaservice/pages/product_detail.dart';
 import 'package:khulnaservice/pages/shopping_cart_page.dart';
+import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/screen.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
+import 'package:khulnaservice/widgets/customWdiget.dart';
+import 'package:provider/provider.dart';
 
 import '../../config.dart';
 import '../../testPrDEtails.dart';
@@ -22,6 +27,8 @@ class ProductCard extends StatelessWidget {
   final ThemeNotifier themeColor;
   final String imageUrl;
   Product product;
+  FetchData fetchData = FetchData();
+  customWidget CustomWidget = customWidget();
 
   @override
   Widget build(BuildContext context) {
@@ -244,10 +251,12 @@ class ProductCard extends StatelessWidget {
           right: 22,
           child: InkWell(
             onTap: () {
-              Scaffold.of(context).showSnackBar(SnackBar(
-                  backgroundColor: mainColor,
-                  content: Text('Product added to cart')));
-              Nav.route(context, ShoppingCartPage());
+              CustomWidget.myDiaglog(context);
+              fetchData.getAddToCart(product.id.toString(), "1").then((value) {
+                fetchData.getCart(context).then((value) {
+                  Navigator.pop(context);
+                });
+              });
             },
             child: Container(
               padding: EdgeInsets.only(top: 8, left: 8, bottom: 8, right: 8),
@@ -267,16 +276,16 @@ class ProductCard extends StatelessWidget {
                     "assets/icons/ic_product_shopping_cart.svg",
                     height: 12,
                   ),
-                  SizedBox(
-                    width: 8,
-                  ),
-                  Text(
-                    "Add to Basket",
-                    style: GoogleFonts.poppins(
-                        color: Color(0xFF5D6A78),
-                        fontSize: 10,
-                        fontWeight: FontWeight.w400),
-                  )
+//                  SizedBox(
+//                    width: 8,
+//                  ),
+//                  Text(
+//                    "Add to Basket",
+//                    style: GoogleFonts.poppins(
+//                        color: Color(0xFF5D6A78),
+//                        fontSize: 10,
+//                        fontWeight: FontWeight.w400),
+//                  )
                 ],
               ),
             ),

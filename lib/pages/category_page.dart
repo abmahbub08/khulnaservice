@@ -29,8 +29,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
   var indexTab = 0;
 
-  @override
-  void initState() {}
+
 
   @override
   Widget build(BuildContext context) {

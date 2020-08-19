@@ -4,6 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:khulnaservice/api/fetchdata.dart';
+import 'package:khulnaservice/pages/search_page.dart';
+import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/pages/category_page.dart';
 import 'package:khulnaservice/pages/favorite_products_page.dart';
@@ -24,42 +27,61 @@ class _HomeNavigatorState extends State<HomeNavigator> {
     HomePage(),
     CategoryPage(),
     ShoppingCartPage(),
-    FavoriteProductsPage(),
+    SearchPage(),
     MyProfilePage()
   ];
+  bool IsLoading = false;
+  FetchData fetchData = FetchData();
+
+  @override
+  void initState() {
+    fetchData.getHomePageData(context).then((value) {
+      fetchData.getCategory(context).then((value) {
+        fetchData.getCart(context).then((value) {
+          setState(() {
+            IsLoading = true;
+          });
+        });
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
-
     return Scaffold(
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: 12),
-        child: ConvexAppBar(
-          color: Color(0xFF5D6A78),
-          backgroundColor: Colors.white,
-          activeColor: themeColor.getColor(),
-          elevation: 0.0,
-          top: -28,
-          onTap: (int val) {
-            if (val == _currentPage) return;
-            setState(() {
-              _currentPage = val;
-            });
-          },
-          curveSize: 0,
-          initialActiveIndex: _currentPage,
-          style: TabStyle.fixedCircle,
-          items: <TabItem>[
-            TabItem(icon: Feather.home, title: ''),
-            TabItem(icon: Feather.search, title: ''),
-            TabItem(icon: bottomCenterItem(themeColor), title: ''),
-            TabItem(icon: Feather.heart, title: ''),
-            TabItem(icon: Feather.user, title: ''),
-          ],
-        ),
-      ),
-      body: _pages[_currentPage],
+      bottomNavigationBar: IsLoading
+          ? Padding(
+              padding: EdgeInsets.only(bottom: 12),
+              child: ConvexAppBar(
+                color: Color(0xFF5D6A78),
+                backgroundColor: Colors.white,
+                activeColor: themeColor.getColor(),
+                elevation: 0.0,
+                top: -28,
+                onTap: (int val) {
+                  if (val == _currentPage) return;
+                  setState(() {
+                    _currentPage = val;
+                  });
+                },
+                curveSize: 0,
+                initialActiveIndex: _currentPage,
+                style: TabStyle.fixedCircle,
+                items: <TabItem>[
+                  TabItem(icon: Feather.home, title: ''),
+                  TabItem(icon: Feather.list, title: ''),
+                  TabItem(icon: bottomCenterItem(themeColor), title: ''),
+                  TabItem(icon: Feather.search, title: ''),
+                  TabItem(icon: Feather.user, title: ''),
+                ],
+              ),
+            )
+          : SizedBox(),
+      body: IsLoading
+          ? _pages[_currentPage]
+          : Center(child: CircularProgressIndicator()),
     );
   }
 
@@ -80,7 +102,7 @@ class _HomeNavigatorState extends State<HomeNavigator> {
                 badgeColor: themeColor.getColor(),
                 padding: EdgeInsets.all(4),
                 badgeContent: Text(
-                  '12',
+                  '${context.watch<CartProvider>().cartList.cart.length}',
                   style: TextStyle(color: Colors.white, fontSize: 10),
                 ),
                 child: SvgPicture.asset(

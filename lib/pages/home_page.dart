@@ -33,17 +33,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  bool IsLoading = false;
 
-  @override
-  void initState() {
-    fetchData.getHomePageData(context).then((value) {
-      setState(() {
-        IsLoading = true;
-      });
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +42,7 @@ class _HomePageState extends State<HomePage> {
         Provider.of<HomePageProvider>(context, listen: false).homePageData;
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 252, 252, 252),
-      body: IsLoading
-          ? ListView(
+      body:  ListView(
               children: <Widget>[
                 SearchBox(),
 //              FlatButton(
@@ -62,7 +51,7 @@ class _HomePageState extends State<HomePage> {
 //                },
 //                child: Text(translate('button.change_language')),
 //              ),
-                CategoryListView(),
+//                CategoryListView(),
                 InkWell(
                   onTap: () {
                     Nav.route(context, ProductDetailPage());
@@ -169,7 +158,7 @@ class _HomePageState extends State<HomePage> {
 //                ),
               ],
             )
-          : Center(child: CircularProgressIndicator()),
+
     );
   }
 }

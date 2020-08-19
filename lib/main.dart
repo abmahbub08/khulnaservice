@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -7,9 +9,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:flutter_translate/localization_delegate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
+import 'package:khulnaservice/pages/search_page.dart';
+import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:khulnaservice/provider/category_provider.dart';
 import 'package:khulnaservice/provider/homepage_provider.dart';
+import 'package:khulnaservice/provider/place_order_provider.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:khulnaservice/pages/category_page.dart';
@@ -23,14 +30,16 @@ import 'package:khulnaservice/utils/drawer_menu/hidden_drawer/screen_hidden_draw
 import 'package:khulnaservice/utils/drawer_menu/menu/item_hidden_menu.dart';
 import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
-
+import 'package:khulnaservice/provider/search_provider.dart';
 import 'config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var delegate = await LocalizationDelegate.create(
       fallbackLocale: 'en_US', supportedLocales: ['en_US', 'es', 'fa', 'ar']);
-
+  Directory document = await getApplicationDocumentsDirectory();
+  Hive.init(document.path);
+  await Hive.openBox("myCart");
   SharedPreferences.getInstance().then((prefs) {
     Color color = mainColor;
     if (prefs.getInt('color') != null) {
@@ -47,6 +56,15 @@ void main() async {
         ),
         ChangeNotifierProvider<HomePageProvider>(
           create: (_) => HomePageProvider(),
+        ),
+        ChangeNotifierProvider<CartProvider>(
+          create: (_) => CartProvider(),
+        ),
+        ChangeNotifierProvider<searchProvider>(
+          create: (_) => searchProvider(),
+        ),
+        ChangeNotifierProvider<placeOrderProvider>(
+          create: (_) => placeOrderProvider(),
         ),
       ],
       child: Phoenix(
@@ -96,12 +114,9 @@ class InitPage extends StatefulWidget {
 
 class _InitPageState extends State<InitPage> {
   List<ScreenHiddenDrawer> items = new List();
-  FetchData fetchData = FetchData();
 
   @override
   void initState() {
-    fetchData.getCategory(context);
-
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           icon: Icon(
@@ -119,7 +134,7 @@ class _InitPageState extends State<InitPage> {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           icon: Icon(
-            Feather.search,
+            Feather.list,
             color: Colors.white,
             size: 19,
           ),
@@ -145,16 +160,16 @@ class _InitPageState extends State<InitPage> {
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           icon: Icon(
-            Feather.heart,
+            Feather.search,
             size: 19,
             color: Colors.white,
           ),
-          name: 'Favorites',
+          name: 'Search',
           baseStyle: GoogleFonts.poppins(
               color: Colors.white.withOpacity(0.6), fontSize: 19.0),
           colorLineSelected: Colors.orange,
         ),
-        FavoriteProductsPage()));
+        SearchPage()));
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           icon: Icon(
@@ -199,31 +214,31 @@ class _InitPageState extends State<InitPage> {
         ),
         padding: EdgeInsets.only(bottom: 18),
       ),
-      actionsAppBar: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(right: 16, top: 8),
-          child: InkWell(
-            onTap: () {
-              Nav.route(context, ShoppingCartPage());
-//
-            },
-            child: Badge(
-              badgeColor: Color(0xFF5D6A78),
-              alignment: Alignment(-0.5, -1.0),
-              padding: EdgeInsets.all(4),
-              badgeContent: Text(
-                '3',
-                style: TextStyle(color: Colors.white, fontSize: 10),
-              ),
-              child: SvgPicture.asset(
-                "assets/icons/ic_shopping_cart.svg",
-                color: themeColor.getColor(),
-                height: 26,
-              ),
-            ),
-          ),
-        )
-      ],
+//      actionsAppBar: <Widget>[
+//        Padding(
+//          padding: EdgeInsets.only(right: 16, top: 8),
+//          child: InkWell(
+//            onTap: () {
+//              Nav.route(context, ShoppingCartPage());
+////
+//            },
+//            child: Badge(
+//              badgeColor: Color(0xFF5D6A78),
+//              alignment: Alignment(-0.5, -1.0),
+//              padding: EdgeInsets.all(4),
+//              badgeContent: Text(
+//                '3',
+//                style: TextStyle(color: Colors.white, fontSize: 10),
+//              ),
+//              child: SvgPicture.asset(
+//                "assets/icons/ic_shopping_cart.svg",
+//                color: themeColor.getColor(),
+//                height: 26,
+//              ),
+//            ),
+//          ),
+//        )
+//      ],
       backgroundColorMenu: Colors.blueGrey,
       screens: items,
       //    typeOpen: TypeOpen.FROM_RIGHT,

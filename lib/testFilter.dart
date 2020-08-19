@@ -185,7 +185,7 @@ class _TestFilterState extends State<TestFilter> {
                   ),
                 ),
                 ListView.builder(
-                    itemCount: manList.length,
+                    itemCount: 0,
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (BuildContext context, position) {

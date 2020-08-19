@@ -76,4 +76,153 @@ class ApiServices {
       throw Exception();
     }
   }
+
+//  add To Cart
+  Future<http.Response> addToCart(String param, productID, quantity) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.post(Base + '$param', body: {
+        "product_id": productID,
+        "quantity": quantity
+      }, headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+        "Accept": "application/json"
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> cartGet(String param) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.get(Base + '$param', headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+        "Accept": "application/json"
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> deleteCart(String param) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.delete(Base + '$param', headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+        "Accept": "application/json"
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> updateCart(String param, quantity) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.put(Base + '$param', body: {
+        "quantity": quantity
+      }, headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+        "Accept": "application/json"
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> addressUpdate(String param, phone, address1, address2,
+      stateID, cityID, addressType, makeAddressSame) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.put(Base + '$param', body: {
+        "phone": phone,
+        "address_1": address1,
+        "address_2": address2,
+        "state_id": stateID,
+        "city_id": cityID,
+        "address_type": addressType,
+        "country_code": "BD",
+        "make_addresses_same": makeAddressSame,
+      }, headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+        "Accept": "application/json"
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> getPlaceOrderData(String param) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.get(Base + '$param', headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+        "Accept": "application/json"
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> searchGet(String param) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.get(Base + '$param', headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+        "Accept": "application/json"
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> CheckoutRes(
+      String param, name, notes, paymentMethod) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.post(Base + '$param', body: {
+        "name": name,
+        "notes": notes,
+        "payment_method": paymentMethod
+      }, headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+        "Accept": "application/json"
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+
+  Future<http.Response> getOrderList(
+      String param) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.get(Base + '$param', headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+        "Accept": "application/json"
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
 }

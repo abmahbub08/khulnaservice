@@ -1,15 +1,19 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/models/CategoryPageModel.dart';
+import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:khulnaservice/provider/category_provider.dart';
 import 'package:khulnaservice/testFilter.dart';
 import 'package:khulnaservice/testPrDEtails.dart';
+import 'package:khulnaservice/widgets/customWdiget.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/pages/filter_page.dart';
 import 'package:khulnaservice/pages/product_detail.dart';
@@ -28,6 +32,7 @@ class testProduct extends StatefulWidget {
 class _testProductState extends State<testProduct> {
   String deneme = "Dursun";
   FetchData fetchData = FetchData();
+  customWidget CustomWidget = customWidget();
   bool isLoading = true;
   var ProductLoading = "Loading";
   List<Datum> FirstList;
@@ -52,10 +57,21 @@ class _testProductState extends State<testProduct> {
     });
   }
 
+  Box myCartBox;
+
+  var itemLength;
+
+  getItemLengt() {
+    itemLength = myCartBox.length;
+  }
+
   @override
   void initState() {
-    getData();
-
+    myCartBox = Hive.box("myCart");
+    setState(() {
+      getItemLengt();
+    });
+    fetchData.getCart(context);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -72,8 +88,8 @@ class _testProductState extends State<testProduct> {
             "")
         .then((value) {
       getList();
-      isLoading = false;
 
+      isLoading = false;
       setState(() {});
     });
 
@@ -127,9 +143,53 @@ class _testProductState extends State<testProduct> {
       'The most recent',
     ];
     GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
-
+    var size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
+        floatingActionButton: isLoading
+            ? SizedBox()
+            : FloatingActionButton(
+                backgroundColor: Colors.white,
+                onPressed: () {
+                  Nav.route(context, ShoppingCartPage());
+                },
+                child: Container(
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.grey[200],
+                                  blurRadius: 5.0,
+                                  spreadRadius: 1,
+                                  offset: Offset(0.0, 1)),
+                            ],
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(32)),
+                        child: Align(
+                          child: Badge(
+                            badgeColor: themeColor.getColor(),
+                            padding: EdgeInsets.all(4),
+                            badgeContent: Text(
+                              context
+                                  .watch<CartProvider>()
+                                  .cartList
+                                  .cart
+                                  .length
+                                  .toString(),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 10),
+                            ),
+                            child: SvgPicture.asset(
+                                "assets/icons/ic_shopping_cart_bottom.svg"),
+                          ),
+                          alignment: Alignment.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
         backgroundColor: Color.fromARGB(255, 252, 252, 252),
         body: SingleChildScrollView(
           controller: _scrollController,
@@ -548,6 +608,7 @@ class _testProductState extends State<testProduct> {
 
   Stack productSearchItem(BuildContext context, data, ThemeNotifier themeColor,
       name, price, diPrice, id, image) {
+    var size = MediaQuery.of(context).size;
     return Stack(
       children: <Widget>[
         InkWell(
@@ -579,8 +640,8 @@ class _testProductState extends State<testProduct> {
                     child: Stack(
                       children: <Widget>[
                         Container(
-                            width: 300,
-                            height: 120,
+                            width: size.width * 0.5,
+                            height: size.height * 0.16,
                             child: ClipRRect(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(8),
@@ -595,24 +656,24 @@ class _testProductState extends State<testProduct> {
 //                                fit: BoxFit.scaleDown,
 //                              ),
                                 )),
-                        Positioned(
-                          top: 0,
-                          right: 8,
-                          child: Container(
-                            height: 38,
-                            width: 32,
-                            decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.4),
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(8),
-                                    bottomRight: Radius.circular(8))),
-                            child: Icon(
-                              Icons.favorite,
-                              color: Colors.white,
-                              size: 18,
-                            ),
-                          ),
-                        )
+//                        Positioned(
+//                          top: 0,
+//                          right: 8,
+//                          child: Container(
+//                            height: 38,
+//                            width: 32,
+//                            decoration: BoxDecoration(
+//                                color: Colors.white.withOpacity(0.4),
+//                                borderRadius: BorderRadius.only(
+//                                    bottomLeft: Radius.circular(8),
+//                                    bottomRight: Radius.circular(8))),
+//                            child: Icon(
+//                              Icons.favorite,
+//                              color: Colors.redAccent,
+//                              size: 18,
+//                            ),
+//                          ),
+//                        )
                       ],
                     ),
                   ),
@@ -674,9 +735,7 @@ class _testProductState extends State<testProduct> {
                                   height: 5,
                                 ),
                                 double.parse(diPrice) == 0
-                                    ? SizedBox(
-                                        height: 20,
-                                      )
+                                    ? Text("")
                                     : Text(
                                         "৳$diPrice",
                                         style: GoogleFonts.poppins(
@@ -705,14 +764,24 @@ class _testProductState extends State<testProduct> {
           ),
         ),
         Positioned(
-          bottom: 37,
-          right: 22,
+          bottom: size.height * 0.035,
+          right: size.width * 0.05,
           child: InkWell(
             onTap: () {
-              Scaffold.of(context).showSnackBar(SnackBar(
-                  backgroundColor: themeColor.getColor(),
-                  content: Text('Product added to cart')));
-              Nav.route(context, ShoppingCartPage());
+//              myCartBox.put(id, {
+//                "id": "$id",
+//                "price": "$price",
+//                "quantity": "1",
+//                "name": "$name",
+//                "image": "$image",
+//              });
+              CustomWidget.myDiaglog(context);
+              fetchData.getAddToCart(id.toString(), "1").then((value) {
+                fetchData.getCart(context).then((value) {
+                  Navigator.pop(context);
+                });
+              });
+
             },
             child: Container(
               padding: EdgeInsets.only(top: 8, left: 8, bottom: 8, right: 8),
@@ -726,17 +795,10 @@ class _testProductState extends State<testProduct> {
                         spreadRadius: 1,
                         offset: Offset(0.0, 1)),
                   ]),
-              child: InkWell(
-                onTap: () {
-                  print("ssdfsdf");
-
-                  Nav.route(context, ShoppingCartPage());
-                },
-                child: Container(
-                  child: SvgPicture.asset(
-                    "assets/icons/ic_product_shopping_cart.svg",
-                    height: 12,
-                  ),
+              child: Container(
+                child: SvgPicture.asset(
+                  "assets/icons/ic_product_shopping_cart.svg",
+                  height: 12,
                 ),
               ),
             ),
@@ -744,20 +806,5 @@ class _testProductState extends State<testProduct> {
         )
       ],
     );
-  }
-
-  getData() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var url = "http://home2globe.com/ks/public/api/homeProducts";
-    http.Response response = await http.get(url, headers: {
-      "Authorization": "Bearer ${sharedPreferences.get("token")}",
-      "content-type": "application/json",
-      "Accept": "application/json"
-    });
-    if (response.statusCode == 200) {
-      print(response.body);
-    } else {
-      print(response.statusCode);
-    }
   }
 }

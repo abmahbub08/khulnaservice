@@ -2,12 +2,19 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:khulnaservice/models/CategoryModel.dart';
 import 'package:khulnaservice/models/CategoryPageModel.dart';
+import 'package:khulnaservice/models/cartListModel.dart';
 import 'package:khulnaservice/models/homePageDataModel.dart';
+import 'package:khulnaservice/models/orderListModel.dart';
+import 'package:khulnaservice/models/placeOrderModel.dart';
+import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:khulnaservice/provider/category_provider.dart';
 import 'package:khulnaservice/provider/homepage_provider.dart';
+import 'package:khulnaservice/provider/place_order_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/api/repositories.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:khulnaservice/provider/search_provider.dart';
+import 'package:khulnaservice/models/searchModel.dart';
 
 class FetchData {
   Repositories repositories = Repositories();
@@ -80,6 +87,117 @@ class FetchData {
       Provider.of<HomePageProvider>(context, listen: false)
           .setHomeData(homePageDataModelFromJson(results[0].body));
       print(results[0].body);
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+//  addToCart
+  Future getAddToCart(productID, quantity) async {
+    final catRep =
+        repositories.getAddToCartHttp("addtocart", productID, quantity);
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future getCart(context) async {
+    final catRep = repositories.getCartList("cart");
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      print(results[0].body);
+      Provider.of<CartProvider>(context, listen: false)
+          .addCartList(cartListModelFromJson(results[0].body));
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future deleteCart(context, productID) async {
+    final catRep = repositories.deleteCart("removeitem/$productID");
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      print(results[0].body);
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future updateCart(context, productID, quantity) async {
+    final catRep = repositories.updateCart("updateCart/$productID", quantity);
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      print(results[0].body);
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future getPlaceOrderData(context) async {
+    final catRep = repositories.placeOrderHttp("placeOrder");
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      print(results[0].body);
+      Provider.of<placeOrderProvider>(context, listen: false)
+          .addData(placeOrderModelFromJson(results[0].body));
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future addressUpdate(context, phone, address1, address2, stateID, cityID,
+      addressType, makeAddressSame) async {
+    final catRep = repositories.addressUpdateHttp("addressUpdate", phone,
+        address1, address2, stateID, cityID, addressType, makeAddressSame);
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      print(results[0].body);
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future searchData(context, keyword, index, minPrice, maxPrice) async {
+    final catRep = repositories.searchGetHttp(
+        "products?search_keyword=$keyword&page=$index&min_price=$minPrice&max_price=$maxPrice");
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      Provider.of<searchProvider>(context, listen: false)
+          .addSearch(searchModelFromJson(results[0].body));
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future checkOut(context, name, notes, paymentMethod) async {
+    final catRep =
+        repositories.checkOutHttp("checkout", name, notes, paymentMethod);
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      print(results[0].body);
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future OrderList(context) async {
+    final catRep = repositories.orderListRes("allOrders");
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      print(results[0].body);
+      Provider.of<placeOrderProvider>(context, listen: false)
+          .addOrder(orderListModelFromJson(results[0].body));
       return results[0].body;
     } else {
       throw results[0].body;

@@ -10,7 +10,12 @@ import 'package:getflutter/components/button/gf_button.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:getflutter/shape/gf_button_shape.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
+import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/models/CategoryPageModel.dart';
+import 'package:khulnaservice/pages/shopping_cart_page.dart';
+import 'package:khulnaservice/provider/cart_provider.dart';
+import 'package:khulnaservice/widgets/customWdiget.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/pages/order_page.dart';
 import 'package:khulnaservice/utils/commons/colors.dart';
@@ -24,7 +29,7 @@ import 'package:khulnaservice/widgets/homepage/product_list_titlebar.dart';
 import 'package:khulnaservice/widgets/product_detail/slider_dot.dart';
 
 class testPrDetails extends StatefulWidget {
-  Datum data;
+  var data;
 
   testPrDetails(this.data);
 
@@ -40,6 +45,8 @@ class _testPrDetailsState extends State<testPrDetails>
   ScrollController tempScroll = ScrollController();
   double radius = 40;
   int piece = 1;
+  customWidget CustomWidget = customWidget();
+  FetchData fetchData = FetchData();
 
   @override
   void initState() {
@@ -163,29 +170,39 @@ class _testPrDetailsState extends State<testPrDetails>
               Positioned(
                 right: 24,
                 top: 24,
-                child: Container(
-                  height: 42,
-                  width: 48,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(8),
-                        bottomRight: Radius.circular(8)),
-                    color: Colors.grey[300],
-                  ),
-                  child: Badge(
-                    animationDuration: Duration(milliseconds: 1500),
-                    badgeColor: themeColor.getColor(),
-                    alignment: Alignment(0, 0),
-                    position: BadgePosition.bottomRight(),
-                    padding: EdgeInsets.all(8),
-                    badgeContent: Text(
-                      isLiked ? '4' : '5',
-                      style: TextStyle(color: whiteColor, fontSize: 10),
+                child: GestureDetector(
+                  onTap: () {
+                    Nav.route(context, ShoppingCartPage());
+                  },
+                  child: Container(
+                    height: 42,
+                    width: 48,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(8)),
+                      color: Colors.grey[300],
                     ),
-                    child: SvgPicture.asset(
-                      "assets/icons/ic_shopping_cart.svg",
-                      color: Colors.grey[400],
-                      height: 26,
+                    child: Badge(
+                      animationDuration: Duration(milliseconds: 1500),
+                      badgeColor: themeColor.getColor(),
+                      alignment: Alignment(0, 0),
+                      position: BadgePosition.bottomRight(),
+                      padding: EdgeInsets.all(8),
+                      badgeContent: Text(
+                        context
+                            .watch<CartProvider>()
+                            .cartList
+                            .cart
+                            .length
+                            .toString(),
+                        style: TextStyle(color: whiteColor, fontSize: 10),
+                      ),
+                      child: SvgPicture.asset(
+                        "assets/icons/ic_shopping_cart.svg",
+                        color: Colors.grey[400],
+                        height: 26,
+                      ),
                     ),
                   ),
                 ),
@@ -508,9 +525,7 @@ class _testPrDetailsState extends State<testPrDetails>
                                           InkWell(
                                               onTap: () {
                                                 setState(() {
-                                                  if (piece != 0) {
-                                                    piece--;
-                                                  }
+                                                  piece--;
                                                 });
                                               },
                                               child: Padding(
@@ -542,7 +557,7 @@ class _testPrDetailsState extends State<testPrDetails>
                                           InkWell(
                                               onTap: () {
                                                 setState(() {
-                                                  if (piece != 9) {
+                                                  if (piece < 9) {
                                                     piece++;
                                                   }
                                                 });
@@ -574,7 +589,26 @@ class _testPrDetailsState extends State<testPrDetails>
                                             size: 16,
                                           ),
                                           onPressed: () {
-                                            Nav.route(context, OrderPage());
+//                                            Hive.box("myCart")
+//                                                .put(widget.data.id, {
+//                                              "id": "${widget.data.id}",
+//                                              "price": "${widget.data.price}",
+//                                              "quantity": "$piece",
+//                                              "name": "${widget.data.name}",
+//                                              "image": "${widget.data.image}",
+//                                            });
+                                            CustomWidget.myDiaglog(context);
+                                            fetchData
+                                                .getAddToCart(
+                                                    widget.data.id.toString(),
+                                                    "$piece")
+                                                .then((value) {
+                                              fetchData
+                                                  .getCart(context)
+                                                  .then((value) {
+                                                Navigator.pop(context);
+                                              });
+                                            });
                                           },
                                           child: Text("Add to Basket",
                                               style: GoogleFonts.poppins(

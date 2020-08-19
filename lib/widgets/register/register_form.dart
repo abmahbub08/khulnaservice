@@ -183,6 +183,7 @@ class _RegisterFormState extends State<RegisterForm> {
         });
         Nav.routeReplacement(context, InitPage());
       }).catchError((onError) {
+        print(onError);
         setState(() {
           _isLoading = false;
         });

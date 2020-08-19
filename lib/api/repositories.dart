@@ -35,10 +35,86 @@ class Repositories {
       throw Exception();
     }
   }
+
 //  HomePage
   Future<http.Response> getHomePageHttp(String param) {
     try {
       return apiService.homepageRes(param);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+//addToCart
+  Future<http.Response> getAddToCartHttp(String param, productID, quantity) {
+    try {
+      return apiService.addToCart(param, productID, quantity);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> getCartList(String param) {
+    try {
+      return apiService.cartGet(param);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> deleteCart(String param) {
+    try {
+      return apiService.deleteCart(param);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> updateCart(String param, quantity) {
+    try {
+      return apiService.updateCart(param, quantity);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> placeOrderHttp(String param) {
+    try {
+      return apiService.getPlaceOrderData(param);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> addressUpdateHttp(String param, phone, address1,
+      address2, stateID, cityID, addressType, makeAddressSame) {
+    try {
+      return apiService.addressUpdate(param, phone, address1, address2, stateID,
+          cityID, addressType, makeAddressSame);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> searchGetHttp(String param) {
+    try {
+      return apiService.searchGet(param);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> checkOutHttp(String param, name, notes, paymentMethod) {
+    try {
+      return apiService.CheckoutRes(param, name, notes, paymentMethod);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> orderListRes(String param) {
+    try {
+      return apiService.getOrderList(param);
     } catch (e) {
       throw Exception();
     }

@@ -58,7 +58,37 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                     "assets/icons/ic_location.png",
                     width: 22,
                   ),
-                  title: Text("Address ",
+                  title: Text("Edit primary address ",
+                      style: GoogleFonts.poppins(
+                          fontSize: 15, color: Color(0xFF5D6A78))),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                ListTile(
+                  onTap: () {
+                    Nav.route(context, AddressPage());
+                  },
+                  leading: Image.asset(
+                    "assets/icons/ic_location.png",
+                    width: 22,
+                  ),
+                  title: Text("Edit shipping address ",
+                      style: GoogleFonts.poppins(
+                          fontSize: 15, color: Color(0xFF5D6A78))),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                ListTile(
+                  onTap: () {
+                    Nav.route(context, AddressPage());
+                  },
+                  leading: Image.asset(
+                    "assets/icons/ic_location.png",
+                    width: 22,
+                  ),
+                  title: Text("Edit billing address ",
                       style: GoogleFonts.poppins(
                           fontSize: 15, color: Color(0xFF5D6A78))),
                 ),
@@ -73,7 +103,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                     "assets/icons/ic_lock.png",
                     width: 22,
                   ),
-                  title: Text("Change Password ",
+                  title: Text("Edit Name",
                       style: GoogleFonts.poppins(
                           fontSize: 15, color: Color(0xFF5D6A78))),
                 ),
@@ -88,25 +118,25 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                     "assets/icons/ic_user.png",
                     width: 22,
                   ),
-                  title: Text("My User Info",
+                  title: Text("Edit Image",
                       style: GoogleFonts.poppins(
                           fontSize: 15, color: Color(0xFF5D6A78))),
                 ),
-                SizedBox(
-                  height: 16,
-                ),
-                ListTile(
-                  onTap: () {
-                    Nav.route(context, NotificationSettingsPage());
-                  },
-                  leading: Image.asset(
-                    "assets/icons/ic_notification.png",
-                    width: 22,
-                  ),
-                  title: Text("Notification Settings",
-                      style: GoogleFonts.poppins(
-                          fontSize: 15, color: Color(0xFF5D6A78))),
-                ),
+//                SizedBox(
+//                  height: 16,
+//                ),
+//                ListTile(
+//                  onTap: () {
+//                    Nav.route(context, NotificationSettingsPage());
+//                  },
+//                  leading: Image.asset(
+//                    "assets/icons/ic_notification.png",
+//                    width: 22,
+//                  ),
+//                  title: Text("Notification Settings",
+//                      style: GoogleFonts.poppins(
+//                          fontSize: 15, color: Color(0xFF5D6A78))),
+//                ),
               ],
             ),
           ),

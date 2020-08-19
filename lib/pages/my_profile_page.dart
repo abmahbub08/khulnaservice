@@ -66,74 +66,74 @@ class _MyProfilePageState extends State<MyProfilePage> {
                       style: GoogleFonts.poppins(
                           fontSize: 15, color: Color(0xFF5D6A78))),
                 ),
-                SizedBox(
-                  height: 12,
-                ),
-                ListTile(
-                  onTap: () {
-                    Nav.route(context, ProductDetailPageAlternative());
-                  },
-                  leading: Image.asset("assets/icons/ic_comment.png",
-                      width: 22, color: Color(0xFF5D6A78)),
-                  title: Text("Product ratings",
-                      style: GoogleFonts.poppins(
-                          fontSize: 15, color: Color(0xFF5D6A78))),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                ListTile(
-                  onTap: () {
-                    Nav.route(context, ContactPage());
-                  },
-                  leading: Image.asset("assets/icons/ic_user.png",
-                      width: 22, color: Color(0xFF5D6A78)),
-                  title: Text("Support",
-                      style: GoogleFonts.poppins(
-                          fontSize: 15, color: Color(0xFF5D6A78))),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                ListTile(
-                  onTap: () {
-                    Nav.route(context, FavoriteProductsPage());
-                  },
-                  leading: Image.asset("assets/icons/ic_heart_profile.png",
-                      width: 22, color: Color(0xFF5D6A78)),
-                  title: Text("My Favorites",
-                      style: GoogleFonts.poppins(
-                          fontSize: 15, color: Color(0xFF5D6A78))),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                ListTile(
-                  onTap: () {
-                    Nav.route(context, AboutPage());
-                  },
-                  leading: Image.asset("assets/icons/ic_question.png",
-                      width: 20, color: Color(0xFF5D6A78)),
-                  title: Text("Frequently Asked Questions",
-                      style: GoogleFonts.poppins(
-                          fontSize: 15, color: Color(0xFF5D6A78))),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                ListTile(
-                  onTap: () {
-                    Nav.route(context, ProductDetailPage());
-                  },
-                  leading: Image.asset("assets/icons/ic_ticket.png",
-                      width: 22, color: Color(0xFF5D6A78)),
-                  title: Text("Coupons",
-                      style: GoogleFonts.poppins(
-                          fontSize: 15, color: Color(0xFF5D6A78))),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
+//                SizedBox(
+//                  height: 12,
+//                ),
+//                ListTile(
+//                  onTap: () {
+//                    Nav.route(context, ProductDetailPageAlternative());
+//                  },
+//                  leading: Image.asset("assets/icons/ic_comment.png",
+//                      width: 22, color: Color(0xFF5D6A78)),
+//                  title: Text("Product ratings",
+//                      style: GoogleFonts.poppins(
+//                          fontSize: 15, color: Color(0xFF5D6A78))),
+//                ),
+//                SizedBox(
+//                  height: 12,
+//                ),
+//                ListTile(
+//                  onTap: () {
+//                    Nav.route(context, ContactPage());
+//                  },
+//                  leading: Image.asset("assets/icons/ic_user.png",
+//                      width: 22, color: Color(0xFF5D6A78)),
+//                  title: Text("Support",
+//                      style: GoogleFonts.poppins(
+//                          fontSize: 15, color: Color(0xFF5D6A78))),
+//                ),
+//                SizedBox(
+//                  height: 12,
+//                ),
+//                ListTile(
+//                  onTap: () {
+//                    Nav.route(context, FavoriteProductsPage());
+//                  },
+//                  leading: Image.asset("assets/icons/ic_heart_profile.png",
+//                      width: 22, color: Color(0xFF5D6A78)),
+//                  title: Text("My Favorites",
+//                      style: GoogleFonts.poppins(
+//                          fontSize: 15, color: Color(0xFF5D6A78))),
+//                ),
+//                SizedBox(
+//                  height: 12,
+//                ),
+//                ListTile(
+//                  onTap: () {
+//                    Nav.route(context, AboutPage());
+//                  },
+//                  leading: Image.asset("assets/icons/ic_question.png",
+//                      width: 20, color: Color(0xFF5D6A78)),
+//                  title: Text("Frequently Asked Questions",
+//                      style: GoogleFonts.poppins(
+//                          fontSize: 15, color: Color(0xFF5D6A78))),
+//                ),
+//                SizedBox(
+//                  height: 12,
+//                ),
+//                ListTile(
+//                  onTap: () {
+//                    Nav.route(context, ProductDetailPage());
+//                  },
+//                  leading: Image.asset("assets/icons/ic_ticket.png",
+//                      width: 22, color: Color(0xFF5D6A78)),
+//                  title: Text("Coupons",
+//                      style: GoogleFonts.poppins(
+//                          fontSize: 15, color: Color(0xFF5D6A78))),
+//                ),
+//                SizedBox(
+//                  height: 12,
+//                ),
                 ListTile(
                   onTap: () {
                     Nav.route(context, MyProfileSettings());
