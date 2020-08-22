@@ -119,4 +119,12 @@ class Repositories {
       throw Exception();
     }
   }
+
+  Future<http.Response> nameUpdateHttp(String param, name) {
+    try {
+      return apiService.nameUpdate(param, name);
+    } catch (e) {
+      throw Exception();
+    }
+  }
 }

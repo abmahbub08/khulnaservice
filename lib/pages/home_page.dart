@@ -33,18 +33,16 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
     var MyData =
         Provider.of<HomePageProvider>(context, listen: false).homePageData;
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 252, 252, 252),
-      body:  ListView(
-              children: <Widget>[
-                SearchBox(),
+        backgroundColor: Color.fromARGB(255, 252, 252, 252),
+        body: ListView(
+          children: <Widget>[
+            SearchBox(),
 //              FlatButton(
 //                onPressed: () {
 //                  _onActionSheetPress(context);
@@ -52,59 +50,59 @@ class _HomePageState extends State<HomePage> {
 //                child: Text(translate('button.change_language')),
 //              ),
 //                CategoryListView(),
-                InkWell(
-                  onTap: () {
-                    Nav.route(context, ProductDetailPage());
-                  },
-                  child: CarouselSlider(
-                    items: imageSliders,
-                    options: CarouselOptions(
-                        autoPlay: false,
-                        height: 175,
-                        viewportFraction: 1.0,
-                        enlargeCenterPage: false,
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            _carouselCurrentPage = index;
-                          });
-                        }),
-                  ),
-                ),
-                SliderDot(current: _carouselCurrentPage),
-                DiscountList(
-                  myData: MyData.featuredProducts,
-                  image: MyData.featuredProducts[0].image,
-                  title: MyData.featuredProducts[0].name,
-                  themeColor: themeColor,
-                  productListTitleBar: ProductListTitleBar(
-                    themeColor: themeColor,
-                    title: "Feature",
-                    isCountShow: true,
-                  ),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-
-                ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: MyData.homeCategories.length,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return ProductList(
-                        product: MyData.homeCategories[index].products,
-                        themeColor: themeColor,
-                        productListTitleBar: ProductListTitleBar(
-                          themeColor: themeColor,
-                          title: "${MyData.homeCategories[index].name}",
-                          isCountShow: false,
-                        ),
-                      );
+            InkWell(
+              onTap: () {
+                Nav.route(context, ProductDetailPage());
+              },
+              child: CarouselSlider(
+                items: imageSliders,
+                options: CarouselOptions(
+                    autoPlay: false,
+                    height: 175,
+                    viewportFraction: 1.0,
+                    enlargeCenterPage: false,
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        _carouselCurrentPage = index;
+                      });
                     }),
+              ),
+            ),
+            SliderDot(current: _carouselCurrentPage),
+            DiscountList(
+              myData: MyData.featuredProducts,
+              image: MyData.featuredProducts[0].image,
+              title: MyData.featuredProducts[0].name,
+              themeColor: themeColor,
+              productListTitleBar: ProductListTitleBar(
+                themeColor: themeColor,
+                title: "Feature",
+                isCountShow: true,
+              ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
 
-                SizedBox(
-                  height: 8,
-                ),
+            ListView.builder(
+                shrinkWrap: true,
+                itemCount: MyData.homeCategories.length,
+                physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return ProductList(
+                    product: MyData.homeCategories[index].products,
+                    themeColor: themeColor,
+                    productListTitleBar: ProductListTitleBar(
+                      themeColor: themeColor,
+                      title: "${MyData.homeCategories[index].name}",
+                      isCountShow: false,
+                    ),
+                  );
+                }),
+
+            SizedBox(
+              height: 8,
+            ),
 //                InkWell(
 //                  onTap: () {
 //                    Nav.route(context, ProductDetailPage());
@@ -156,9 +154,7 @@ class _HomePageState extends State<HomePage> {
 //                SizedBox(
 //                  height: 36,
 //                ),
-              ],
-            )
-
-    );
+          ],
+        ));
   }
 }

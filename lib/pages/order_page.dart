@@ -20,6 +20,7 @@ import 'package:khulnaservice/utils/theme_notifier.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../config.dart';
 import '../webView.dart';
 import 'new_adress_page.dart';
 import 'orders_detail_page.dart';
@@ -52,6 +53,7 @@ class _OrderPageState extends State<OrderPage> {
         Provider.of<CartProvider>(context, listen: false).cartList.cart;
     GlobalKey<ScaffoldState> _Key = GlobalKey<ScaffoldState>();
 
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0xFFFCFCFC),
@@ -62,6 +64,7 @@ class _OrderPageState extends State<OrderPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: myCart.length,
                     itemBuilder: (context, index) {
@@ -84,23 +87,40 @@ class _OrderPageState extends State<OrderPage> {
                                       ),
                                     )
                                   ]),
-                              child: Column(
+                              child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                          width: 300,
-                                          child: Text(myCart[index].name)),
-                                      Text("৳ ${myCart[index].price}")
-                                    ],
+                                  Image.network(
+                                    "$imageLink/ims/?src=/uploads/product/${myCart[index].id}/front/cropped/${myCart[index].attributes.image}&p=small",
+                                    height: 50,
+                                    width: 50,
                                   ),
-                                  Text("Quantity: ${myCart[index].quantity}"),
-                                  Text("Additional Shipping cost: ${myCart[index].attributes.shipping}"),
+                                  SizedBox(
+                                    width: 8,
+                                  ),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                              width: 250,
+                                              child: Text(myCart[index].name)),
+                                          Text("৳ ${myCart[index].price}"),
+                                        ],
+                                      ),
+                                      Text(
+                                          "Quantity: ${myCart[index].quantity}"),
+                                      Text(
+                                          "Additional Shipping cost: ${myCart[index].attributes.shipping}"),
+                                    ],
+                                  )
                                 ],
                               )),
                         ],
@@ -114,10 +134,68 @@ class _OrderPageState extends State<OrderPage> {
                     child: Padding(
                       padding: EdgeInsets.only(right: 10),
                       child: Text(
-                        "Total : 152",
+                        "Total : ${Provider.of<placeOrderProvider>(context, listen: false).searchData.total}",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     )),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(.2),
+                          blurRadius: 6.0, // soften the shadow
+                          spreadRadius: 0.0, //extend the shadow
+                          offset: Offset(
+                            0.0, // Move to right 10  horizontally
+                            1.0, // Move to bottom 10 Vertically
+                          ),
+                        )
+                      ]),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 40,
+                        width: 250,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 8, right: 8),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: themeColor.getColor()),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: textColor),
+                                ),
+                                labelStyle: new TextStyle(
+                                    color: const Color(0xFF424242)),
+                                hintText: "Enter your coupon",
+                                hintStyle: GoogleFonts.poppins(
+                                    fontSize: 12, color: textColor)),
+                          ),
+                        ),
+                      ),
+                      RaisedButton(
+                        onPressed: () {},
+                        color: themeColor.getColor(),
+                        child: Text(
+                          "Add coupon",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Text(
@@ -330,7 +408,7 @@ class _OrderPageState extends State<OrderPage> {
                           var data = jsonDecode(value);
                           Route route = MaterialPageRoute(
                               builder: (context) => webView(
-                                  "https://home2globe.com/ks/public/pay?order_id=${data["order_id"]}"));
+                                  "${imageLink}/pay?order_id=${data["order_id"]}"));
                           Navigator.push(context, route).then((value) {
                             Route route = MaterialPageRoute(
                                 builder: (context) => OrdersDetailPage());
@@ -425,7 +503,17 @@ class _OrderPageState extends State<OrderPage> {
                     color: themeColor.getColor(),
                     type: GFButtonType.outline,
                     onPressed: () {
-                      Nav.route(context, NewAddressPage(2));
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (c, a1, a2) => NewAddressPage(2, false),
+                          transitionsBuilder: (c, anim, a2, child) =>
+                              FadeTransition(opacity: anim, child: child),
+                          transitionDuration: Duration(milliseconds: 280),
+                        ),
+                      ).then((value) {
+                        setState(() {});
+                      });
                     },
                     child: data.billingAddress == null
                         ? Text("Add billing")
@@ -441,7 +529,7 @@ class _OrderPageState extends State<OrderPage> {
                     color: themeColor.getColor(),
                     type: GFButtonType.outline,
                     onPressed: () {
-                      Nav.route(context, NewAddressPage(1));
+                      Nav.route(context, NewAddressPage(1, false));
                     },
                     child: data.shippingAddress == null
                         ? Text("Add Shipping")
@@ -539,4 +627,5 @@ class _OrderPageState extends State<OrderPage> {
   TextEditingController shipToController = TextEditingController();
   TextEditingController notesController = TextEditingController();
   customWidget CustomWidget = customWidget();
+  var myTotal;
 }

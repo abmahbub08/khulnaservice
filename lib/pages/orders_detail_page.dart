@@ -74,193 +74,27 @@ class _OrdersDetailPageState extends State<OrdersDetailPage> {
                   children: <Widget>[
                     SingleChildScrollView(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-//                  Container(
-//                    width: ScreenUtil.getWidth(context),
-//                    margin: EdgeInsets.only(left: 16, right: 16, top: 8),
-//                    padding: EdgeInsets.only(left: 8, right: 8),
-//                    decoration: BoxDecoration(
-//                      boxShadow: [
-//                        BoxShadow(
-//                            color: Colors.grey[200],
-//                            blurRadius: 8.0,
-//                            spreadRadius: 1,
-//                            offset: Offset(0.0, 3))
-//                      ],
-//                      color: Theme.of(context).bottomAppBarColor,
-//                      borderRadius: BorderRadius.circular(12),
-//                    ),
-//                    child: ExpandablePanel(
-//                      header: Text(
-//                        "Order Details",
-//                        style: GoogleFonts.poppins(
-//                            color: Color(0xFF5D6A78), fontSize: 12),
-//                      ),
-//                      expanded: Padding(
-//                        padding: const EdgeInsets.all(8.0),
-//                        child: Column(
-//                          children: <Widget>[
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                              children: <Widget>[
-//                                Container(
-//                                  width: ScreenUtil.getWidth(context) / 4,
-//                                  child: Text(
-//                                    "The unveiled blessing of harmony is to meet with dogma  ",
-//                                    softWrap: true,
-//                                    style: GoogleFonts.poppins(
-//                                      fontSize: 12,
-//                                      fontWeight: FontWeight.w300,
-//                                      color: Color(0xFF5D6A78),
-//                                    ),
-//                                  ),
-//                                ),
-//                                Text(
-//                                  "1",
-//                                  softWrap: true,
-//                                  style: GoogleFonts.poppins(
-//                                    fontSize: 12,
-//                                    fontWeight: FontWeight.w300,
-//                                    color: Color(0xFF5D6A78),
-//                                  ),
-//                                ),
-//                                Text(
-//                                  "\$450",
-//                                  softWrap: true,
-//                                  style: GoogleFonts.poppins(
-//                                    fontSize: 12,
-//                                    fontWeight: FontWeight.w300,
-//                                    color: Color(0xFF5D6A78),
-//                                  ),
-//                                )
-//                              ],
-//                            ),
-//                            Divider(),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                              children: <Widget>[
-//                                Container(
-//                                  width: ScreenUtil.getWidth(context) / 4,
-//                                  child: Text(
-//                                    "The unveiled blessing of harmony is to meet with dogma  ",
-//                                    softWrap: true,
-//                                    style: GoogleFonts.poppins(
-//                                      fontSize: 12,
-//                                      fontWeight: FontWeight.w300,
-//                                      color: Color(0xFF5D6A78),
-//                                    ),
-//                                  ),
-//                                ),
-//                                Text(
-//                                  "1",
-//                                  softWrap: true,
-//                                  style: GoogleFonts.poppins(
-//                                    fontSize: 12,
-//                                    fontWeight: FontWeight.w300,
-//                                    color: Color(0xFF5D6A78),
-//                                  ),
-//                                ),
-//                                Text(
-//                                  "\$450",
-//                                  softWrap: true,
-//                                  style: GoogleFonts.poppins(
-//                                    fontSize: 12,
-//                                    fontWeight: FontWeight.w300,
-//                                    color: Color(0xFF5D6A78),
-//                                  ),
-//                                )
-//                              ],
-//                            ),
-//                            Divider(),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                              children: <Widget>[
-//                                Container(
-//                                  width: ScreenUtil.getWidth(context) / 4,
-//                                  child: Text(
-//                                    "The unveiled blessing of harmony is to meet with dogma  ",
-//                                    softWrap: true,
-//                                    style: GoogleFonts.poppins(
-//                                      fontSize: 12,
-//                                      fontWeight: FontWeight.w300,
-//                                      color: Color(0xFF5D6A78),
-//                                    ),
-//                                  ),
-//                                ),
-//                                Text(
-//                                  "1",
-//                                  softWrap: true,
-//                                  style: GoogleFonts.poppins(
-//                                    fontSize: 12,
-//                                    fontWeight: FontWeight.w300,
-//                                    color: Color(0xFF5D6A78),
-//                                  ),
-//                                ),
-//                                Text(
-//                                  "\$331",
-//                                  softWrap: true,
-//                                  style: GoogleFonts.poppins(
-//                                    fontSize: 12,
-//                                    fontWeight: FontWeight.w300,
-//                                    color: Color(0xFF5D6A78),
-//                                  ),
-//                                )
-//                              ],
-//                            ),
-//                            Divider(),
-//                            Row(
-//                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                              children: <Widget>[
-//                                Container(
-//                                  width: ScreenUtil.getWidth(context) / 4,
-//                                  child: Text(
-//                                    "The unveiled blessing of harmony is to meet with dogma  ",
-//                                    softWrap: true,
-//                                    style: GoogleFonts.poppins(
-//                                      fontSize: 12,
-//                                      fontWeight: FontWeight.w300,
-//                                      color: Color(0xFF5D6A78),
-//                                    ),
-//                                  ),
-//                                ),
-//                                Text(
-//                                  "2",
-//                                  softWrap: true,
-//                                  style: GoogleFonts.poppins(
-//                                    fontSize: 12,
-//                                    fontWeight: FontWeight.w300,
-//                                    color: Color(0xFF5D6A78),
-//                                  ),
-//                                ),
-//                                Text(
-//                                  "\$450",
-//                                  softWrap: true,
-//                                  style: GoogleFonts.poppins(
-//                                    fontSize: 12,
-//                                    fontWeight: FontWeight.w300,
-//                                    color: Color(0xFF5D6A78),
-//                                  ),
-//                                )
-//                              ],
-//                            ),
-//                            Divider(),
-//                          ],
-//                        ),
-//                      ),
-//                    ),
-//                  ),
-                          ListView.builder(
-                            itemCount: dataList.orders.length,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return OrderItem(
-                                  order: dataList.orders[index],
-                                  themeColor: themeColor,
-                                  imageUrl: "prodcut1.png");
-                            },
-                          )
+                          dataList.orders.length == 0
+                              ? Container(
+                                  height: MediaQuery.of(context).size.height,
+                                  width: double.infinity,
+                                  child: Center(
+                                    child: Text("No Order Available"),
+                                  ),
+                                )
+                              : ListView.builder(
+                                  itemCount: dataList.orders.length,
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    return OrderItem(
+                                        order: dataList.orders[index],
+                                        themeColor: themeColor,
+                                        imageUrl: "prodcut1.png");
+                                  },
+                                )
                         ],
                       ),
                     ),

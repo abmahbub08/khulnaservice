@@ -24,6 +24,7 @@ class NewAddressInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+
       controller: textEditing,
       decoration: InputDecoration(
           hintText: hintText,

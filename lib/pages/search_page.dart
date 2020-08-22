@@ -132,48 +132,54 @@ class _SearchPageState extends State<SearchPage> {
       child: Scaffold(
         floatingActionButton: isLoading
             ? SizedBox()
-            : FloatingActionButton(
-                backgroundColor: Colors.white,
-                onPressed: () {
-                  Nav.route(context, ShoppingCartPage());
-                },
-                child: Container(
-                  child: Stack(
-                    children: <Widget>[
-                      Container(
-                        decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey[200],
-                                  blurRadius: 5.0,
-                                  spreadRadius: 1,
-                                  offset: Offset(0.0, 1)),
-                            ],
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(32)),
-                        child: Align(
-                          child: Badge(
-                            badgeColor: themeColor.getColor(),
-                            padding: EdgeInsets.all(4),
-                            badgeContent: Text(
-                              context
-                                  .watch<CartProvider>()
-                                  .cartList
-                                  .cart
-                                  .length
-                                  .toString(),
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 10),
-                            ),
-                            child: SvgPicture.asset(
-                                "assets/icons/ic_shopping_cart_bottom.svg"),
+            : GestureDetector(
+          onTap: () {
+            Nav.route(context, ShoppingCartPage());
+          },
+          child: Container(
+            height: size.height *0.08,
+            width: size.width * 0.18,
+            child: Stack(
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey[200],
+                            blurRadius: 5.0,
+                            spreadRadius: 1,
+                            offset: Offset(0.0, 1)),
+                      ],
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(32)),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Align(
+                        child: Badge(
+                          badgeColor: themeColor.getColor(),
+                          padding: EdgeInsets.all(4),
+                          badgeContent: Text(
+                            '${context.watch<CartProvider>().cartList.cart.length}',
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 10),
                           ),
-                          alignment: Alignment.center,
+                          child: SvgPicture.asset(
+                              "assets/icons/ic_shopping_cart_bottom.svg"),
                         ),
+                        alignment: Alignment.center,
                       ),
+                      Text(
+                        "৳${context.watch<CartProvider>().addAmount()}",
+                        style: TextStyle(color: themeColor.getColor()),
+                      )
                     ],
                   ),
-                )),
+                ),
+              ],
+            ),
+          ),
+        ),
         backgroundColor: Color.fromARGB(255, 252, 252, 252),
         body: SingleChildScrollView(
           controller: _scrollController,

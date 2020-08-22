@@ -13,6 +13,16 @@ class CartProvider extends ChangeNotifier {
 
   addCartList(value) {
     cartList = value;
+    addAmount();
     notifyListeners();
+  }
+
+  int addAmount() {
+    int myData = 0;
+    cartList.cart.forEach((element) {
+      myData = myData + element.price * int.parse(element.quantity.toString());
+    });
+
+    return myData;
   }
 }

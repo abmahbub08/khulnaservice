@@ -9,6 +9,9 @@ import 'package:khulnaservice/pages/notification_settings_page.dart';
 import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
 
+import 'edit_image.dart';
+import 'new_adress_page.dart';
+
 class MyProfileSettings extends StatefulWidget {
   @override
   _MyProfileSettingsState createState() => _MyProfileSettingsState();
@@ -52,7 +55,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                 ),
                 ListTile(
                   onTap: () {
-                    Nav.route(context, AddressPage());
+                    Nav.route(context, NewAddressPage(0, true));
                   },
                   leading: Image.asset(
                     "assets/icons/ic_location.png",
@@ -67,7 +70,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                 ),
                 ListTile(
                   onTap: () {
-                    Nav.route(context, AddressPage());
+                    Nav.route(context, NewAddressPage(1, true));
                   },
                   leading: Image.asset(
                     "assets/icons/ic_location.png",
@@ -82,7 +85,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                 ),
                 ListTile(
                   onTap: () {
-                    Nav.route(context, AddressPage());
+                    Nav.route(context, NewAddressPage(2, true));
                   },
                   leading: Image.asset(
                     "assets/icons/ic_location.png",
@@ -112,7 +115,7 @@ class _MyProfileSettingsState extends State<MyProfileSettings> {
                 ),
                 ListTile(
                   onTap: () {
-                    Nav.route(context, EditUserInfoPage());
+                    Nav.route(context, EditImage());
                   },
                   leading: Image.asset(
                     "assets/icons/ic_user.png",

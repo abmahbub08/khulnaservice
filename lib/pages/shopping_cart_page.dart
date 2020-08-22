@@ -22,6 +22,8 @@ import 'package:khulnaservice/utils/theme_notifier.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import '../config.dart';
+
 class ShoppingCartPage extends StatefulWidget {
   ShoppingCartPage({Key key}) : super(key: key);
 
@@ -53,10 +55,9 @@ class HomeWidgetState extends State<ShoppingCartPage>
     final themeColor = Provider.of<ThemeNotifier>(context);
     var myCart =
         Provider.of<CartProvider>(context, listen: false).cartList.cart;
-
+    total = 0;
     myCart.forEach((element) {
       total = total + element.price * int.parse(element.quantity.toString());
-      ;
     });
     return SafeArea(
       child: Scaffold(
@@ -103,14 +104,23 @@ class HomeWidgetState extends State<ShoppingCartPage>
                                 children: <Widget>[
                                   Container(
                                     child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Image.network(
-                                        "https://khulnaservice.com/ims/?src=/uploads/product/${myCart[index].id}/front/cropped/${myCart[index].attributes.image}&p=small",
-                                        fit: BoxFit.cover,
-                                        width:
-                                            ScreenUtil.getWidth(context) * 0.30,
-                                      ),
-                                    ),
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: FadeInImage.assetNetwork(
+                                          placeholder:
+                                              "assets/images/produload.jpg",
+                                          image:
+                                              "$imageLink/ims/?src=/uploads/product/${myCart[index].id}/front/cropped/${myCart[index].attributes.image}&p=small",
+                                          fit: BoxFit.cover,
+                                          width: ScreenUtil.getWidth(context) *
+                                              0.30,
+                                        )
+//                                      Image.network(
+//                                        "https://khulnaservice.com/ims/?src=/uploads/product/${myCart[index].id}/front/cropped/${myCart[index].attributes.image}&p=small",
+//                                        fit: BoxFit.cover,
+//                                        width:
+//                                            ScreenUtil.getWidth(context) * 0.30,
+//                                      ),
+                                        ),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(8),
@@ -186,7 +196,7 @@ class HomeWidgetState extends State<ShoppingCartPage>
 //                                            .addCartLength("value");
 //                                      });
 //                                      getTotal();
-//                                      setState(() {});
+//
 
                                   CustomWidget.myDiaglog(context);
                                   fetchData
@@ -195,6 +205,7 @@ class HomeWidgetState extends State<ShoppingCartPage>
                                     fetchData.getCart(context).then((value) {
                                       total = 0;
                                       Navigator.pop(context);
+                                      setState(() {});
                                     });
                                   });
                                 },
@@ -282,7 +293,8 @@ class HomeWidgetState extends State<ShoppingCartPage>
           SizedBox(
             width: 16,
           ),
-          Text("${Provider.of<CartProvider>(context, listen: false).cartList.cart.length} products",
+          Text(
+              "${Provider.of<CartProvider>(context, listen: false).cartList.cart.length} products",
               style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w400,
                   fontSize: 12,
@@ -294,12 +306,7 @@ class HomeWidgetState extends State<ShoppingCartPage>
 
   Widget shoppingCartBottomSummary(ThemeNotifier themeColor) {
     var myNumber = 0;
-//    Provider.of<CartProvider>(context, listen: false)
-//        .cartList
-//        .cart
-//        .forEach((element) {
-//      myNumber = myNumber + element.price;
-//    });
+    var data = Provider.of<CartProvider>(context, listen: false).cartList.cart;
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
@@ -343,18 +350,25 @@ class HomeWidgetState extends State<ShoppingCartPage>
               style: GoogleFonts.poppins(color: whiteColor, fontSize: 10),
             ),
             onPressed: () {
-              CustomWidget.myDiaglog(context);
-              fetchData.getPlaceOrderData(context).then((value) {
-                Navigator.pop(context);
-                Nav.route(context, OrderPage());
-              }).catchError((e) {
-                print(e);
-                Navigator.pop(context);
+              if (data.length == 0) {
                 Scaffold.of(context).showSnackBar(SnackBar(
                     duration: Duration(seconds: 2),
                     backgroundColor: themeColor.getColor(),
-                    content: Text('Something went wrong')));
-              });
+                    content: Text('Your cart is empty')));
+              } else {
+                CustomWidget.myDiaglog(context);
+                fetchData.getPlaceOrderData(context).then((value) {
+                  Navigator.pop(context);
+                  Nav.route(context, OrderPage());
+                }).catchError((e) {
+                  print(e);
+                  Navigator.pop(context);
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                      duration: Duration(seconds: 2),
+                      backgroundColor: themeColor.getColor(),
+                      content: Text('Something went wrong')));
+                });
+              }
             },
             type: GFButtonType.solid,
             shape: GFButtonShape.pills,

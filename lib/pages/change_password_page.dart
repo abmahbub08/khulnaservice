@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:khulnaservice/api/fetchdata.dart';
+import 'package:khulnaservice/widgets/customWdiget.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/utils/commons/colors.dart';
 import 'package:khulnaservice/utils/navigator.dart';
@@ -16,6 +18,8 @@ class ChangePasswordPage extends StatefulWidget {
 }
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
@@ -32,24 +36,30 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       child: Scaffold(
         bottomNavigationBar: InkWell(
           onTap: () {
-            Nav.routeReplacement(context, InitPage());
+            CustomWidget.myDiaglog(context);
+            fetchData.nameUpdate(nameController.text).then((value) {
+              Navigator.pop(context);
+              CustomWidget.myShowDialog(context, "Profile Name Updated");
+            });
           },
-          child: Container(
-            margin: EdgeInsets.only(left: 14, right: 14),
-            child: Align(
-              alignment: Alignment.center,
-              child: Text(
-                "Save",
-                style: GoogleFonts.poppins(color: Colors.white),
-              ),
-            ),
-            height: 42,
-            decoration: BoxDecoration(
-                color: themeColor.getColor(),
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(32),
-                    topRight: Radius.circular(32))),
-          ),
+          child: isLoading
+              ? Center()
+              : Container(
+                  margin: EdgeInsets.only(left: 14, right: 14),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "Save",
+                      style: GoogleFonts.poppins(color: Colors.white),
+                    ),
+                  ),
+                  height: 42,
+                  decoration: BoxDecoration(
+                      color: themeColor.getColor(),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(32),
+                          topRight: Radius.circular(32))),
+                ),
         ),
         backgroundColor: Color(0xFFFCFCFC),
         body: Container(
@@ -59,7 +69,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "Change Password",
+                  "Change Name",
                   style: GoogleFonts.poppins(fontSize: 18, color: textColor),
                 ),
                 Container(
@@ -78,89 +88,90 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     child: Column(
                       children: <Widget>[
                         MyTextFormFieldLine(
-                          labelText: "Email",
-                          hintText: 'Email',
-                          isEmail: true,
-                          validator: (String value) {
-                            if (!validator.isEmail(value)) {
-                              return 'Please enter a valid email';
-                            }
-                            return null;
-                          },
+                          controller: nameController,
+                          labelText: "Name",
+                          hintText: 'Name',
+//                          isEmail: true,
+//                          validator: (String value) {
+////                            if (!validator.isEmail(value)) {
+////                              return 'Please enter a valid email';
+////                            }
+//                            return null;
+//                          },
                           onSaved: (String value) {
 //                        model.email = value;
                           },
                         ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        MyTextFormFieldLine(
-                          labelText: "Password",
-                          hintText: 'Password',
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              // Based on passwordVisible state choose the icon
-                              passwordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: themeColor.getColor(),
-                            ),
-                            onPressed: () {
-                              // Update the state i.e. toogle the state of passwordVisible variable
-                              setState(() {
-                                passwordVisible = !passwordVisible;
-                              });
-                            },
-                          ),
-                          isPassword: passwordVisible,
-                          validator: (String value) {
-                            if (value.length < 7) {
-                              return 'Password should be minimum 7 characters';
-                            }
-
-                            _formKey.currentState.save();
-
-                            return null;
-                          },
-                          onSaved: (String value) {
-//                        model.password = value;
-                          },
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        MyTextFormFieldLine(
-                          labelText: "Confirm Password",
-                          hintText: 'Confirm Password',
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              // Based on passwordVisible state choose the icon
-                              passwordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: themeColor.getColor(),
-                            ),
-                            onPressed: () {
-                              // Update the state i.e. toogle the state of passwordVisible variable
-                              setState(() {
-                                passwordVisible = !passwordVisible;
-                              });
-                            },
-                          ),
-                          isPassword: passwordVisible,
-                          validator: (String value) {
-                            if (value.length < 7) {
-                              return 'Password should be minimum 7 characters';
-                            }
-
-                            _formKey.currentState.save();
-
-                            return null;
-                          },
-                          onSaved: (String value) {
-//                        model.password = value;
-                          },
-                        ),
+//                        SizedBox(
+//                          height: 16,
+//                        ),
+//                        MyTextFormFieldLine(
+//                          labelText: "Password",
+//                          hintText: 'Password',
+//                          suffixIcon: IconButton(
+//                            icon: Icon(
+//                              // Based on passwordVisible state choose the icon
+//                              passwordVisible
+//                                  ? Icons.visibility
+//                                  : Icons.visibility_off,
+//                              color: themeColor.getColor(),
+//                            ),
+//                            onPressed: () {
+//                              // Update the state i.e. toogle the state of passwordVisible variable
+//                              setState(() {
+//                                passwordVisible = !passwordVisible;
+//                              });
+//                            },
+//                          ),
+//                          isPassword: passwordVisible,
+//                          validator: (String value) {
+//                            if (value.length < 7) {
+//                              return 'Password should be minimum 7 characters';
+//                            }
+//
+//                            _formKey.currentState.save();
+//
+//                            return null;
+//                          },
+//                          onSaved: (String value) {
+////                        model.password = value;
+//                          },
+//                        ),
+//                        SizedBox(
+//                          height: 16,
+//                        ),
+//                        MyTextFormFieldLine(
+//                          labelText: "Confirm Password",
+//                          hintText: 'Confirm Password',
+//                          suffixIcon: IconButton(
+//                            icon: Icon(
+//                              // Based on passwordVisible state choose the icon
+//                              passwordVisible
+//                                  ? Icons.visibility
+//                                  : Icons.visibility_off,
+//                              color: themeColor.getColor(),
+//                            ),
+//                            onPressed: () {
+//                              // Update the state i.e. toogle the state of passwordVisible variable
+//                              setState(() {
+//                                passwordVisible = !passwordVisible;
+//                              });
+//                            },
+//                          ),
+//                          isPassword: passwordVisible,
+//                          validator: (String value) {
+//                            if (value.length < 7) {
+//                              return 'Password should be minimum 7 characters';
+//                            }
+//
+//                            _formKey.currentState.save();
+//
+//                            return null;
+//                          },
+//                          onSaved: (String value) {
+////                        model.password = value;
+//                          },
+//                        ),
                       ],
                     ),
                   ),
@@ -172,4 +183,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       ),
     );
   }
+
+  FetchData fetchData = FetchData();
+  customWidget CustomWidget = customWidget();
+  TextEditingController nameController = TextEditingController();
 }

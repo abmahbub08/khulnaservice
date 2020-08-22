@@ -121,7 +121,7 @@ class _LoginFormState extends State<LoginForm> {
         _isLoading = true;
       });
 
-      fetchData.getLog(email, password).then((value) {
+      fetchData.getLog(context, email, password).then((value) {
         var body = jsonDecode(value);
         if (body['message'] == 'success') {
           Nav.routeReplacement(context, InitPage());

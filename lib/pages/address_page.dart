@@ -29,7 +29,7 @@ class _AddressPageState extends State<AddressPage> {
       child: Scaffold(
         bottomNavigationBar: InkWell(
           onTap: () {
-            Nav.routeReplacement(context, NewAddressPage(0));
+//            Nav.routeReplacement(context, NewAddressPage(0));
           },
           child: Container(
             margin: EdgeInsets.only(left: 14, right: 14),

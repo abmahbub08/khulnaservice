@@ -148,12 +148,13 @@ class _testProductState extends State<testProduct> {
       child: Scaffold(
         floatingActionButton: isLoading
             ? SizedBox()
-            : FloatingActionButton(
-                backgroundColor: Colors.white,
-                onPressed: () {
+            : GestureDetector(
+                onTap: () {
                   Nav.route(context, ShoppingCartPage());
                 },
                 child: Container(
+                  height: size.height *0.08,
+                  width: size.width * 0.18,
                   child: Stack(
                     children: <Widget>[
                       Container(
@@ -167,29 +168,34 @@ class _testProductState extends State<testProduct> {
                             ],
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(32)),
-                        child: Align(
-                          child: Badge(
-                            badgeColor: themeColor.getColor(),
-                            padding: EdgeInsets.all(4),
-                            badgeContent: Text(
-                              context
-                                  .watch<CartProvider>()
-                                  .cartList
-                                  .cart
-                                  .length
-                                  .toString(),
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Align(
+                              child: Badge(
+                                badgeColor: themeColor.getColor(),
+                                padding: EdgeInsets.all(4),
+                                badgeContent: Text(
+                                  '${context.watch<CartProvider>().cartList.cart.length}',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 10),
+                                ),
+                                child: SvgPicture.asset(
+                                    "assets/icons/ic_shopping_cart_bottom.svg"),
+                              ),
+                              alignment: Alignment.center,
                             ),
-                            child: SvgPicture.asset(
-                                "assets/icons/ic_shopping_cart_bottom.svg"),
-                          ),
-                          alignment: Alignment.center,
+                            Text(
+                              "৳${context.watch<CartProvider>().addAmount()}",
+                              style: TextStyle(color: themeColor.getColor()),
+                            )
+                          ],
                         ),
                       ),
                     ],
                   ),
-                )),
+                ),
+              ),
         backgroundColor: Color.fromARGB(255, 252, 252, 252),
         body: SingleChildScrollView(
           controller: _scrollController,
@@ -650,30 +656,7 @@ class _testProductState extends State<testProduct> {
                                 child: FadeInImage.assetNetwork(
                                     placeholder: "assets/images/produload.jpg",
                                     image:
-                                        "https://khulnaservice.com/ims/?src=/uploads/product/$id/front/cropped/$image&p=small")
-//                              Image.network(
-//                                "https://khulnaservice.com/ims/?src=/uploads/product/$id/front/cropped/$image&p=small",
-//                                fit: BoxFit.scaleDown,
-//                              ),
-                                )),
-//                        Positioned(
-//                          top: 0,
-//                          right: 8,
-//                          child: Container(
-//                            height: 38,
-//                            width: 32,
-//                            decoration: BoxDecoration(
-//                                color: Colors.white.withOpacity(0.4),
-//                                borderRadius: BorderRadius.only(
-//                                    bottomLeft: Radius.circular(8),
-//                                    bottomRight: Radius.circular(8))),
-//                            child: Icon(
-//                              Icons.favorite,
-//                              color: Colors.redAccent,
-//                              size: 18,
-//                            ),
-//                          ),
-//                        )
+                                        "https://khulnaservice.com/ims/?src=/uploads/product/$id/front/cropped/$image&p=small"))),
                       ],
                     ),
                   ),
@@ -697,34 +680,6 @@ class _testProductState extends State<testProduct> {
                         SizedBox(
                           height: 2,
                         ),
-//                        Row(
-//                          children: <Widget>[
-//                            RatingBar(
-//                              ignoreGestures: true,
-//                              initialRating: 3,
-//                              itemSize: 14.0,
-//                              minRating: 1,
-//                              direction: Axis.horizontal,
-//                              allowHalfRating: true,
-//                              itemCount: 5,
-//                              itemBuilder: (context, _) => Icon(
-//                                Ionicons.ios_star,
-//                                color: themeColor.getColor(),
-//                              ),
-//                              onRatingUpdate: (rating) {
-//                                print(rating);
-//                              },
-//                            ),
-//                            SizedBox(
-//                              width: 8,
-//                            ),
-//                            Text(
-//                              "(395)",
-//                              style: GoogleFonts.poppins(
-//                                  fontSize: 9, fontWeight: FontWeight.w400),
-//                            )
-//                          ],
-//                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -768,26 +723,18 @@ class _testProductState extends State<testProduct> {
           right: size.width * 0.05,
           child: InkWell(
             onTap: () {
-//              myCartBox.put(id, {
-//                "id": "$id",
-//                "price": "$price",
-//                "quantity": "1",
-//                "name": "$name",
-//                "image": "$image",
-//              });
               CustomWidget.myDiaglog(context);
               fetchData.getAddToCart(id.toString(), "1").then((value) {
                 fetchData.getCart(context).then((value) {
                   Navigator.pop(context);
                 });
               });
-
             },
             child: Container(
               padding: EdgeInsets.only(top: 8, left: 8, bottom: 8, right: 8),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: Colors.white,
+                  color: themeColor.getColor(),
                   boxShadow: [
                     BoxShadow(
                         color: Colors.grey[200],
@@ -799,6 +746,7 @@ class _testProductState extends State<testProduct> {
                 child: SvgPicture.asset(
                   "assets/icons/ic_product_shopping_cart.svg",
                   height: 12,
+                  color: Colors.white,
                 ),
               ),
             ),

@@ -155,7 +155,7 @@ class ApiServices {
         "make_addresses_same": makeAddressSame,
       }, headers: {
         "Authorization": "Bearer ${sharedPreferences.get("token")}",
-        "Accept": "application/json"
+        "Content-Type": "application/x-www-form-urlencoded"
       });
       return result;
     } catch (e) {
@@ -169,7 +169,7 @@ class ApiServices {
     try {
       final result = http.get(Base + '$param', headers: {
         "Authorization": "Bearer ${sharedPreferences.get("token")}",
-        "Accept": "application/json"
+        "Accept": "application/json",
       });
       return result;
     } catch (e) {
@@ -210,9 +210,7 @@ class ApiServices {
     }
   }
 
-
-  Future<http.Response> getOrderList(
-      String param) async {
+  Future<http.Response> getOrderList(String param) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     try {
@@ -225,4 +223,23 @@ class ApiServices {
       throw Exception();
     }
   }
+
+  Future<http.Response> nameUpdate(String param, name) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.put(Base + '$param', body: {
+        "name": name,
+        "is_deactivated": 0.toString(),
+      }, headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+        "Content-Type": "application/x-www-form-urlencoded"
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+
 }

@@ -269,21 +269,36 @@ class OrderItem extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return Column(
                               children: [
-                                im.Image.network(
-                                  "$imageLink/ims/?src=/uploads/product/${order.cart[index].id}/front/cropped/${order.cart[index].attributes.image}&p=small",
-                                  height: 70,
-                                ),
-                                Text(order.cart[index].name),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Text("Price: ${order.cart[index].price}"),
-                                    Text(
-                                        "Quantity: ${order.cart[index].quantity}"),
+                                    im.Image.network(
+                                      "$imageLink/ims/?src=/uploads/product/${order.cart[index].id}/front/cropped/${order.cart[index].attributes.image}&p=small",
+                                      height: 70,
+                                    ),
+                                    SizedBox(width: 10,),
+                                    SizedBox(
+                                      width: 240,
+                                      child: Column(
+                                        children: [
+                                          Text(order.cart[index].name),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Text(
+                                                  "Price: ${order.cart[index].price}"),
+                                              Text(
+                                                  "Quantity: ${order.cart[index].quantity}"),
+                                            ],
+                                          ),
+
+                                        ],
+                                      ),
+                                    )
                                   ],
                                 ),
-                                Divider(thickness: 1,color: Colors.black,)
+
+                                Divider()
                               ],
                             );
                           })),

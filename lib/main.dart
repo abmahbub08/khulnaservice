@@ -16,6 +16,7 @@ import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:khulnaservice/provider/category_provider.dart';
 import 'package:khulnaservice/provider/homepage_provider.dart';
 import 'package:khulnaservice/provider/place_order_provider.dart';
+import 'package:khulnaservice/provider/user_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,6 +66,9 @@ void main() async {
         ),
         ChangeNotifierProvider<placeOrderProvider>(
           create: (_) => placeOrderProvider(),
+        ),
+        ChangeNotifierProvider<userProvider>(
+          create: (_) => userProvider(),
         ),
       ],
       child: Phoenix(

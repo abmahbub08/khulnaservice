@@ -11,22 +11,24 @@ class MyTextFormFieldLine extends StatelessWidget {
   final IconButton suffixIcon;
   final bool isPassword;
   final bool isEmail;
+  TextEditingController controller;
 
-  MyTextFormFieldLine({
-    this.hintText,
-    this.validator,
-    this.onSaved,
-    this.isPassword = false,
-    this.isEmail = false,
-    this.labelText,
-    this.suffixIcon,
-  });
+  MyTextFormFieldLine(
+      {this.hintText,
+      this.validator,
+      this.onSaved,
+      this.isPassword = false,
+      this.isEmail = false,
+      this.labelText,
+      this.suffixIcon,
+      this.controller});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: ScreenUtil.getWidth(context) / 1.5,
       child: TextFormField(
+        controller: controller,
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: GoogleFonts.poppins(color: textColor),

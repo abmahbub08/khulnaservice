@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/main.dart';
+import 'package:khulnaservice/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/pages/about_page.dart';
 import 'package:khulnaservice/pages/change_password_page.dart';
@@ -92,7 +93,7 @@ class _HiddenMenuState extends State<HiddenMenu> {
               ),
               ListTile(
                 title: Text(
-                  "Jon Doe",
+                  "ags",
                   style: GoogleFonts.poppins(color: Colors.white),
                 ),
                 leading: CircleAvatar(
@@ -321,7 +322,7 @@ class _HiddenMenuState extends State<HiddenMenu> {
                               await SharedPreferences.getInstance();
                           sp.remove("token");
                           sp.remove("user");
-                          Nav.routeReplacement(context, InitPage());
+                          Nav.routeReplacement(context, MyApp());
                         },
                         child: ItemHiddenMenu(
                           icon: Icon(

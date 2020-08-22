@@ -109,29 +109,29 @@ class ProductCard extends StatelessWidget {
                                     placeholder: "assets/images/produload.jpg",
                                     image:
                                         "https://khulnaservice.com/ims/?src=/uploads/product/${product.id}/front/cropped/${product.image}&p=small"))),
-                        Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.redAccent.withOpacity(0.2),
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(8))),
-                            width: 140,
-                            height: 20,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                "FREE CARGO",
-                                style: GoogleFonts.poppins(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+//                        Align(
+//                          alignment: Alignment.bottomLeft,
+//                          child: Container(
+//                            decoration: BoxDecoration(
+//                                color: Colors.redAccent.withOpacity(0.2),
+//                                borderRadius: BorderRadius.only(
+//                                    topLeft: Radius.circular(8),
+//                                    topRight: Radius.circular(8))),
+//                            width: 140,
+//                            height: 20,
+//                            child: Align(
+//                              alignment: Alignment.center,
+//                              child: Text(
+//                                "FREE CARGO",
+//                                style: GoogleFonts.poppins(
+//                                  fontSize: 12,
+//                                  color: Colors.black,
+//                                  fontWeight: FontWeight.w300,
+//                                ),
+//                              ),
+//                            ),
+//                          ),
+//                        ),
 //                        Positioned(
 //                          top: 0,
 //                          right: 8,
@@ -262,7 +262,7 @@ class ProductCard extends StatelessWidget {
               padding: EdgeInsets.only(top: 8, left: 8, bottom: 8, right: 8),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: Colors.white,
+                  color: themeColor.getColor(),
                   boxShadow: [
                     BoxShadow(
                         color: Colors.grey[200],
@@ -275,6 +275,7 @@ class ProductCard extends StatelessWidget {
                   SvgPicture.asset(
                     "assets/icons/ic_product_shopping_cart.svg",
                     height: 12,
+                    color: Colors.white,
                   ),
 //                  SizedBox(
 //                    width: 8,

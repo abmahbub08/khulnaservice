@@ -147,14 +147,10 @@ class _CategoryPageState extends State<CategoryPage> {
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             children: <Widget>[
-              GridView.count(
+              ListView(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                childAspectRatio: 1.045,
-                // Create a grid with 2 columns. If you change the scrollDirection to
-                // horizontal, this produces 2 rows.
-                crossAxisCount: 3,
-                mainAxisSpacing: 16,
+
                 // Generate 100 widgets that display their index in the List.
                 children: List.generate(
                     Provider.of<CategoryProvider>(context, listen: false)
@@ -163,66 +159,61 @@ class _CategoryPageState extends State<CategoryPage> {
                         .children[indexThird]
                         .children
                         .length, (index) {
-                  return GestureDetector(
-                    onTap: () {
-                      print(
-                          Provider.of<CategoryProvider>(context, listen: false)
-                              .myCategory
-                              .category[indexTab]
-                              .children[indexThird]
-                              .children[index]
-                              .slug);
+                  return Column(
 
-                      Provider.of<CategoryProvider>(context, listen: false)
-                          .addCatSlug(Provider.of<CategoryProvider>(context,
-                                  listen: false)
-                              .myCategory
-                              .category[indexTab]
-                              .children[indexThird]
-                              .children[index]
-                              .slug);
 
-                      Route route = MaterialPageRoute(
-                          builder: (context) => testProduct());
-                      Navigator.push(context, route);
-                    },
-                    child: Center(
-                      child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            ClipRRect(
-                              child: Image.asset(
-                                "assets/images/${subCategoriesImages[index]}.png",
-                                height: 75,
-                                width: 84,
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 2.0, bottom: 1.0),
-                              child: AutoSizeText(
-                                Provider.of<CategoryProvider>(context,
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: GestureDetector(
+                          onTap: () {
+                            print(
+                                Provider.of<CategoryProvider>(context, listen: false)
+                                    .myCategory
+                                    .category[indexTab]
+                                    .children[indexThird]
+                                    .children[index]
+                                    .slug);
+
+                            Provider.of<CategoryProvider>(context, listen: false)
+                                .addCatSlug(Provider.of<CategoryProvider>(context,
                                         listen: false)
                                     .myCategory
                                     .category[indexTab]
                                     .children[indexThird]
                                     .children[index]
-                                    .name,
-                                maxLines: 2,
-                                minFontSize: 7,
-                                style: GoogleFonts.poppins(
-                                  fontSize: 10,
-                                  color: Color(0xFF5D6A78),
-                                  fontWeight: FontWeight.w400,
-                                ),
+                                    .slug);
+
+                            Route route = MaterialPageRoute(
+                                builder: (context) => testProduct());
+                            Navigator.push(context, route);
+                          },
+                          child:  Padding(
+                            padding:
+                            EdgeInsets.only(left:64,top: 2.0, bottom: 1.0),
+                            child: AutoSizeText(
+
+                              Provider.of<CategoryProvider>(context,
+                                  listen: false)
+                                  .myCategory
+                                  .category[indexTab]
+                                  .children[indexThird]
+                                  .children[index]
+                                  .name,
+                              textDirection: TextDirection.ltr,
+                              maxLines: 2,
+                              minFontSize: 7,
+                              style: GoogleFonts.poppins(
+
+                                color: Color(0xFF5D6A78),
+                                fontWeight: FontWeight.w400,
                               ),
-                            )
-                          ],
+                            ),
+                          )
                         ),
                       ),
-                    ),
+                      Divider()
+                    ],
                   );
                 }),
               )

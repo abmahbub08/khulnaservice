@@ -97,18 +97,27 @@ class _HomeNavigatorState extends State<HomeNavigator> {
                   spreadRadius: 1,
                   offset: Offset(0.0, 1)),
             ], color: Colors.white, borderRadius: BorderRadius.circular(32)),
-            child: Align(
-              child: Badge(
-                badgeColor: themeColor.getColor(),
-                padding: EdgeInsets.all(4),
-                badgeContent: Text(
-                  '${context.watch<CartProvider>().cartList.cart.length}',
-                  style: TextStyle(color: Colors.white, fontSize: 10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Align(
+                  child: Badge(
+                    badgeColor: themeColor.getColor(),
+                    padding: EdgeInsets.all(4),
+                    badgeContent: Text(
+                      '${context.watch<CartProvider>().cartList.cart.length}',
+                      style: TextStyle(color: Colors.white, fontSize: 10),
+                    ),
+                    child: SvgPicture.asset(
+                        "assets/icons/ic_shopping_cart_bottom.svg"),
+                  ),
+                  alignment: Alignment.center,
                 ),
-                child: SvgPicture.asset(
-                    "assets/icons/ic_shopping_cart_bottom.svg"),
-              ),
-              alignment: Alignment.center,
+                Text(
+                  "৳${context.watch<CartProvider>().addAmount()}",
+                  style: TextStyle(color: themeColor.getColor()),
+                )
+              ],
             ),
           ),
         ],

@@ -203,19 +203,20 @@ class DiscountItem extends StatelessWidget {
                                 },
                                 icon: SvgPicture.asset(
                                   "assets/icons/ic_product_shopping_cart.svg",
+                                  color: Colors.white,
                                   height: 12,
                                 ),
                                 child: Text(
                                   "Add to Basket",
                                   style: GoogleFonts.poppins(
-                                      color: Color(0xFF5D6A78),
+                                      color: Colors.white,
                                       fontSize: 10,
                                       fontWeight: FontWeight.w400),
                                 ),
                                 type: GFButtonType.transparent,
                               ),
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: themeColor.getColor(),
                                   borderRadius: BorderRadius.circular(3),
                                   boxShadow: [
                                     BoxShadow(

@@ -1,20 +1,24 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:khulnaservice/api/api_services.dart';
 import 'package:khulnaservice/models/CategoryModel.dart';
 import 'package:khulnaservice/models/CategoryPageModel.dart';
 import 'package:khulnaservice/models/cartListModel.dart';
 import 'package:khulnaservice/models/homePageDataModel.dart';
 import 'package:khulnaservice/models/orderListModel.dart';
 import 'package:khulnaservice/models/placeOrderModel.dart';
+import 'package:khulnaservice/models/userModel.dart';
 import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:khulnaservice/provider/category_provider.dart';
 import 'package:khulnaservice/provider/homepage_provider.dart';
 import 'package:khulnaservice/provider/place_order_provider.dart';
+import 'package:khulnaservice/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/api/repositories.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:khulnaservice/provider/search_provider.dart';
 import 'package:khulnaservice/models/searchModel.dart';
+import 'package:http/http.dart' as http;
 
 class FetchData {
   Repositories repositories = Repositories();
@@ -25,8 +29,9 @@ class FetchData {
     SharedPreferences Sp = await SharedPreferences.getInstance();
     if (results[0].statusCode == 200) {
       var data = jsonDecode(results[0].body);
+      print(data);
       Sp.setString('token', data['access_token']);
-      Sp.setString('user', data['user']);
+      Sp.setString('name', data['name']);
 
       return results[0].body;
     } else {
@@ -34,7 +39,7 @@ class FetchData {
     }
   }
 
-  Future getLog(email, password) async {
+  Future getLog(context, email, password) async {
     final loginRep = repositories.getLoginHttp("login", email, password);
     var results = await Future.wait([loginRep]);
     SharedPreferences Sp = await SharedPreferences.getInstance();
@@ -42,8 +47,9 @@ class FetchData {
       var data = jsonDecode(results[0].body);
 
       Sp.setString('token', data['access_token']);
-      Sp.setString('user', json.encode(['user']));
-
+      Sp.setString('name', data['name']);
+      Provider.of<userProvider>(context, listen: false)
+          .addData(userDataModelFromJson(results[0].body));
       return results[0].body;
     } else {
       throw results[0].body;
@@ -147,8 +153,10 @@ class FetchData {
       print(results[0].body);
       Provider.of<placeOrderProvider>(context, listen: false)
           .addData(placeOrderModelFromJson(results[0].body));
+
       return results[0].body;
     } else {
+      print(results[0].body);
       throw results[0].body;
     }
   }
@@ -195,12 +203,44 @@ class FetchData {
     final catRep = repositories.orderListRes("allOrders");
     var results = await Future.wait([catRep]);
     if (results[0].statusCode == 200) {
-      print(results[0].body);
+      var data = jsonDecode(results[0].body);
+
       Provider.of<placeOrderProvider>(context, listen: false)
           .addOrder(orderListModelFromJson(results[0].body));
+      return data;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future nameUpdate(name) async {
+    final catRep = repositories.nameUpdateHttp("profileUpdate", name);
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      print(results[0].body);
       return results[0].body;
     } else {
       throw results[0].body;
+    }
+  }
+
+  Future imageUpdate(filepath) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    Map<String, String> headers = {
+      "Authorization": "Bearer ${sharedPreferences.get("token")}",
+      "Content-Type": "application/x-www-form-urlencoded"
+    };
+    var url = Base + "info";
+    var request = http.MultipartRequest("PUT",
+        Uri.parse("https://home2globe.com/ks/public/api/profileImageUpdate"));
+    request.files.add(await http.MultipartFile.fromPath('Image', filepath));
+    request.headers.addAll(headers);
+
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      return "success";
+    } else {
+      throw "error";
     }
   }
 }

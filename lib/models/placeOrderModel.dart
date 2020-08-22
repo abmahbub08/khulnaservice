@@ -12,49 +12,51 @@ String placeOrderModelToJson(PlaceOrderModel data) =>
 
 class PlaceOrderModel {
   PlaceOrderModel({
-    this.cart,
     this.cartItems,
     this.shippingAddress,
     this.billingAddress,
-//    this.shippingCondition,
+    this.shippingCondition,
     this.couponCondition,
+    this.total,
     this.divisions,
   });
 
-  Cart cart;
-  Map<String, CartItem> cartItems;
+  List<CartItem> cartItems;
   IngAddress shippingAddress;
   IngAddress billingAddress;
-
-//  Condition shippingCondition;
+  var shippingCondition;
   dynamic couponCondition;
+  var total;
   List<State> divisions;
 
   factory PlaceOrderModel.fromJson(Map<String, dynamic> json) =>
       PlaceOrderModel(
-        cart: Cart.fromJson(json["cart"]),
-        cartItems: Map.from(json["cartItems"])
-            .map((k, v) => MapEntry<String, CartItem>(k, CartItem.fromJson(v))),
-        shippingAddress: json['shippingAddress'] != null
+        cartItems: List<CartItem>.from(
+            json["cartItems"].map((x) => CartItem.fromJson(x))),
+        shippingAddress: json["shippingAddress"] != null
             ? IngAddress.fromJson(json["shippingAddress"])
             : null,
-        billingAddress: json['billingAddress'] != null
+        billingAddress: json["billingAddress"] != null
             ? IngAddress.fromJson(json["billingAddress"])
             : null,
-//        shippingCondition: Condition.fromJson(json["shippingCondition"]),
+        shippingCondition: json["shippingCondition"] != null
+            ? json["shippingCondition"]
+            : null,
         couponCondition: json["couponCondition"],
+        total: json["total"] != null
+            ? json["total"]
+            : null,
         divisions:
             List<State>.from(json["divisions"].map((x) => State.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "cart": cart.toJson(),
-        "cartItems": Map.from(cartItems)
-            .map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+        "cartItems": List<dynamic>.from(cartItems.map((x) => x.toJson())),
         "shippingAddress": shippingAddress.toJson(),
         "billingAddress": billingAddress.toJson(),
-//        "shippingCondition": shippingCondition.toJson(),
+        "shippingCondition": shippingCondition.toJson(),
         "couponCondition": couponCondition,
+        "total": total.toJson(),
         "divisions": List<dynamic>.from(divisions.map((x) => x.toJson())),
       };
 }
@@ -227,22 +229,6 @@ class State {
       };
 }
 
-class Cart {
-  Cart({
-    this.currentItem,
-  });
-
-  dynamic currentItem;
-
-  factory Cart.fromJson(Map<String, dynamic> json) => Cart(
-        currentItem: json["currentItem"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "currentItem": currentItem,
-      };
-}
-
 class CartItem {
   CartItem({
     this.id,
@@ -250,16 +236,15 @@ class CartItem {
     this.price,
     this.quantity,
     this.attributes,
-//    this.conditions,
+    this.conditions,
   });
 
   int id;
   String name;
   int price;
-  dynamic quantity;
+  var quantity;
   Attributes attributes;
-
-//  List<Condition> conditions;
+  List<Condition> conditions;
 
   factory CartItem.fromJson(Map<String, dynamic> json) => CartItem(
         id: json["id"],
@@ -267,8 +252,8 @@ class CartItem {
         price: json["price"],
         quantity: json["quantity"],
         attributes: Attributes.fromJson(json["attributes"]),
-//        conditions: List<Condition>.from(
-//            json["conditions"].map((x) => Condition.fromJson(x))),
+        conditions: List<Condition>.from(
+            json["conditions"].map((x) => Condition.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -277,7 +262,7 @@ class CartItem {
         "price": price,
         "quantity": quantity,
         "attributes": attributes.toJson(),
-//        "conditions": List<dynamic>.from(conditions.map((x) => x.toJson())),
+        "conditions": List<dynamic>.from(conditions.map((x) => x.toJson())),
       };
 }
 
@@ -336,20 +321,19 @@ class Attributes {
         "cart_ts": cartTs,
       };
 }
-//
-//class Condition {
-//  Condition({
-//    this.parsedRawValue,
-//  });
-//
-//  dynamic parsedRawValue;
-//
-//  factory Condition.fromJson(Map<String, dynamic> json) => Condition(
-//        parsedRawValue:
-//            json["parsedRawValue"] != null ? json["parsedRawValue"] : null,
-//      );
-//
-//  Map<String, dynamic> toJson() => {
-//        "parsedRawValue": parsedRawValue,
-//      };
-//}
+
+class Condition {
+  Condition({
+    this.parsedRawValue,
+  });
+
+  dynamic parsedRawValue;
+
+  factory Condition.fromJson(Map<String, dynamic> json) => Condition(
+        parsedRawValue: json["parsedRawValue"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "parsedRawValue": parsedRawValue,
+      };
+}

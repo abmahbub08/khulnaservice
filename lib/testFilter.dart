@@ -29,11 +29,19 @@ class _TestFilterState extends State<TestFilter> {
     super.initState();
   }
 
+  List myData = [];
+
   getData() {
+    var manList = Provider.of<CategoryProvider>(context, listen: false)
+        .getPage()
+        .manufacturers;
     minPrice.text =
         Provider.of<CategoryProvider>(context, listen: false).minPrice;
     maxPrice.text =
         Provider.of<CategoryProvider>(context, listen: false).maxPrice;
+    manList.forEach((element) {
+      myData.add(false);
+    });
     setState(() {});
   }
 
@@ -184,25 +192,42 @@ class _TestFilterState extends State<TestFilter> {
                     ),
                   ),
                 ),
+
                 ListView.builder(
-                    itemCount: 0,
+                    itemCount: manList.length,
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     itemBuilder: (BuildContext context, position) {
                       return Container(
                         height: 40,
-                        child: Transform.scale(
-                          scale: 0.9,
-                          child: RadioListTile(
-                            value: false,
-                            title: Text(
+                        child: Row(
+                          children: [
+                            Transform.scale(
+                              scale: 0.9,
+                              child: Checkbox(
+                                value: myData[position],
+                                onChanged: (bool value) {
+                                  myCheckList = "";
+                                  myData.removeAt(position);
+                                  myData.insert(position, value);
+
+                                  setState(() {});
+                                  for (int i = 0; i < manList.length; i++) {
+                                    if (myData[i] == true) {
+                                      myCheckList +=
+                                          manList[i].id.toString() + ",";
+                                    }
+                                  }
+                                  print(myCheckList);
+                                },
+                              ),
+                            ),
+                            Text(
                               manList[position].name,
                               style: GoogleFonts.poppins(
                                   fontSize: 14, color: Color(0xFFA1B1C2)),
                             ),
-                            groupValue: null,
-                            onChanged: (bool value) {},
-                          ),
+                          ],
                         ),
                       );
                     })
@@ -232,4 +257,6 @@ class _TestFilterState extends State<TestFilter> {
       ),
     );
   }
+
+  var myCheckList = "";
 }
