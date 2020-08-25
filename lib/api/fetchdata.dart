@@ -92,7 +92,8 @@ class FetchData {
     if (results[0].statusCode == 200) {
       Provider.of<HomePageProvider>(context, listen: false)
           .setHomeData(homePageDataModelFromJson(results[0].body));
-      print(results[0].body);
+      var data =jsonDecode(results[0].body);
+      print(data['header_key'].values.toList());
       return results[0].body;
     } else {
       throw results[0].body;

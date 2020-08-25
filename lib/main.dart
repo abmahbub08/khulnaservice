@@ -9,7 +9,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:flutter_translate/localization_delegate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/pages/search_page.dart';
 import 'package:khulnaservice/provider/cart_provider.dart';
@@ -21,7 +20,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:khulnaservice/pages/category_page.dart';
-import 'package:khulnaservice/pages/favorite_products_page.dart';
 import 'package:khulnaservice/pages/home_navigator.dart';
 import 'package:khulnaservice/pages/my_profile_page.dart';
 import 'package:khulnaservice/pages/shopping_cart_page.dart';
@@ -29,7 +27,6 @@ import 'package:khulnaservice/pages/splash_screen.dart';
 import 'package:khulnaservice/utils/drawer_menu/hidden_drawer/hidden_drawer_menu.dart';
 import 'package:khulnaservice/utils/drawer_menu/hidden_drawer/screen_hidden_drawer.dart';
 import 'package:khulnaservice/utils/drawer_menu/menu/item_hidden_menu.dart';
-import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
 import 'package:khulnaservice/provider/search_provider.dart';
 import 'config.dart';
@@ -38,9 +35,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var delegate = await LocalizationDelegate.create(
       fallbackLocale: 'en_US', supportedLocales: ['en_US', 'es', 'fa', 'ar']);
-  Directory document = await getApplicationDocumentsDirectory();
-  Hive.init(document.path);
-  await Hive.openBox("myCart");
+
   SharedPreferences.getInstance().then((prefs) {
     Color color = mainColor;
     if (prefs.getInt('color') != null) {
