@@ -11,6 +11,7 @@ import 'package:khulnaservice/widgets/commons/textfield_bottomline.dart';
 import 'package:khulnaservice/widgets/customWdiget.dart';
 import 'package:provider/provider.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditImage extends StatefulWidget {
   @override
@@ -35,12 +36,21 @@ class _EditImageState extends State<EditImage> {
     return SafeArea(
       child: Scaffold(
         bottomNavigationBar: InkWell(
-          onTap: () {
+          onTap: () async {
+            SharedPreferences sp = await SharedPreferences.getInstance();
             CustomWidget.myDiaglog(context);
             fetchData.imageUpdate(filePath).then((value) {
-              Navigator.pop(context);
-              CustomWidget.myShowDialog(context, "Profile Image Updated");
+              print(value);
+              fetchData.profileData(context).then((value) {
+                print(value);
+                Navigator.pop(context);
+                CustomWidget.myShowDialog(context, "Profile Image Updated");
+              }).catchError((onError) {
+                print(onError);
+                CustomWidget.myShowDialog(context, "Something went wrong");
+              });
             }).catchError((onError) {
+              print(onError);
               Navigator.pop(context);
               CustomWidget.myShowDialog(context, "Something went wrong");
             });
@@ -85,21 +95,32 @@ class _EditImageState extends State<EditImage> {
                 SizedBox(
                   height: 16,
                 ),
+                Container(
+                    height: 220,
+                    width: 220,
+                    color: Colors.grey[300],
+                    child: filePath == null
+                        ? Icon(
+                            Icons.add,
+                            size: 50,
+                          )
+                        : Image.file(
+                            File(filePath),
+                            fit: BoxFit.cover,
+                          )),
                 GestureDetector(
                   onTap: getFile,
                   child: Container(
-                      height: 220,
-                      width: 220,
-                      color: Colors.grey[300],
-                      child: filePath == null
-                          ? Icon(
-                              Icons.add,
-                              size: 50,
-                            )
-                          : Image.file(
-                              File(filePath),
-                              fit: BoxFit.cover,
-                            )),
+                    height: 50,
+                    width: 220,
+                    color: themeColor.getColor(),
+                    child: Center(
+                        child: Text(
+                      "Change Image",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.white),
+                    )),
+                  ),
                 )
               ],
             ),

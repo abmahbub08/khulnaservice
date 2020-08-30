@@ -1,26 +1,28 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
-import 'package:khulnaservice/provider/place_order_provider.dart';
+import 'package:khulnaservice/provider/profile_data_provider.dart';
+import 'package:khulnaservice/utils/commons/colors.dart';
 import 'package:khulnaservice/utils/drop_down_menu/find_dropdown.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
 import 'package:khulnaservice/widgets/customWdiget.dart';
 import 'package:khulnaservice/widgets/new_adress_input.dart';
 import 'package:provider/provider.dart';
+import 'package:khulnaservice/models/profiledatamodel.dart' as profile;
 
-class NewAddressPage extends StatefulWidget {
-  var method;
-  bool dataLoad;
+class AddressAll extends StatefulWidget {
+  profile.Address method;
+  var title;
+  int type;
 
-  NewAddressPage(this.method, this.dataLoad);
+  AddressAll(this.method, this.title,this.type);
 
   @override
-  _NewAddressPageState createState() => _NewAddressPageState();
+  _AddressAllState createState() => _AddressAllState();
 }
 
-class _NewAddressPageState extends State<NewAddressPage> {
+class _AddressAllState extends State<AddressAll> {
   bool asTabs = false;
   String selectedValue;
   String preselectedValue = "dolor sit";
@@ -69,30 +71,18 @@ class _NewAddressPageState extends State<NewAddressPage> {
   }
 
   getData() {
-    var data =
-        Provider.of<placeOrderProvider>(context, listen: false).searchData;
-
-    if (widget.method == 2) {
-      try {
-        phoneCont.text = data.billingAddress.phone;
-        address1.text = data.billingAddress.address1;
-        address2.text = data.billingAddress.address2;
-        Division = data.billingAddress.city.name;
-        District = data.billingAddress.state.name;
-        StateId = data.billingAddress.state.id;
-        CityId = data.billingAddress.city.id;
-      } catch (e) {}
-    } else {
-      try {
-        phoneCont.text = data.shippingAddress.phone;
-        address1.text = data.shippingAddress.address1;
-        address2.text = data.shippingAddress.address2;
-        Division = data.shippingAddress.city.name;
-        District = data.shippingAddress.state.name;
-        StateId = data.shippingAddress.state.id;
-        CityId = data.shippingAddress.city.id;
-      } catch (e) {}
-    }
+    try {
+      var data = widget.method;
+      phoneCont.text = data.phone;
+      address1.text = data.address1;
+      address2.text = data.address2;
+      Division = data.city.name;
+      District = data.state.name;
+      StateId = data.state.id;
+      CityId = data.city.id;
+      isLoading = true;
+      setState(() {});
+    } catch (e) {}
   }
 
   @override
@@ -106,74 +96,42 @@ class _NewAddressPageState extends State<NewAddressPage> {
           statusBarBrightness: Brightness.dark,
           statusBarIconBrightness: Brightness.dark),
     );
-    var data = Provider.of<placeOrderProvider>(context, listen: false)
-        .searchData
+    var data = Provider.of<ProfileDataProvider>(context, listen: false)
+        .profileData
         .divisions;
+
     return SafeArea(
       child: Scaffold(
           bottomNavigationBar: InkWell(
             onTap: () {
 //            Nav.routeReplacement(context, CreditCartPage());
-
-              if (phoneCont.text.isEmpty) {
-                Customwidget.myShowDialog(context, "Set a number");
-              } else if (address1.text.isEmpty) {
-                Customwidget.myShowDialog(context, "Fill address");
-              } else {
-                Customwidget.myDiaglog(context);
-                fetchData
-                    .addressUpdate(
-                        context,
-                        phoneCont.text,
-                        address1.text,
-                        address2.text,
-                        StateId.toString(),
-                        CityId.toString(),
-                        widget.method.toString(),
-                        same == false ? 0.toString() : 1.toString())
-                    .then((value) {
-                  fetchData.getPlaceOrderData(context).then((value) {
-                    Navigator.pop(context);
-                    showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (context) => Dialog(
-                            child: Container(
-                                color: Colors.transparent,
-                                height: 170,
-                                width: 150,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                        width: 160,
-                                        child: Center(
-                                            child: Text("Address Updated"))),
-                                    Divider(),
-                                    RaisedButton(
-                                      color: themeColor.getColor(),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        "Ok",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    )
-                                  ],
-                                ))));
-                  }).catchError((onError) {
-                    print(onError);
-                    Navigator.pop(context);
-                    Customwidget.myShowDialog(context, "Something went wrong!");
-                  });
+              print(StateId);
+              print(CityId);
+              Customwidget.myDiaglog(context);
+              fetchData
+                  .addressUpdate(
+                      context,
+                      phoneCont.text,
+                      address1.text,
+                      address2.text,
+                      StateId.toString(),
+                      CityId.toString(),
+                      "${widget.type}",
+                      same == false ? 0.toString() : 1.toString())
+                  .then((value) {
+                fetchData.profileData(context).then((value) {
+                  Navigator.pop(context);
+                  Customwidget.myShowDialog(context, "Address Updated");
                 }).catchError((onError) {
                   print(onError);
                   Navigator.pop(context);
                   Customwidget.myShowDialog(context, "Something went wrong!");
                 });
-              }
+              }).catchError((onError) {
+                print(onError);
+                Navigator.pop(context);
+                Customwidget.myShowDialog(context, "Something went wrong!");
+              });
             },
             child: Container(
               margin: EdgeInsets.only(left: 14, right: 14),
@@ -199,18 +157,40 @@ class _NewAddressPageState extends State<NewAddressPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    "Provide ${widget.method == 2 ? "Billing" : "Shipping"} Address",
-                    style: GoogleFonts.poppins(
-                        fontSize: 18, color: Color(0xFF5D6A78)),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(
+                          Icons.chevron_left,
+                          color: textColor,
+                          size: 32,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Provide ${widget.title} address",
+                            style: GoogleFonts.poppins(
+                                fontSize: 18, color: Color(0xFF5D6A78)),
+                          ),
+                          Container(
+                              width: 28,
+                              child: Divider(
+                                color: themeColor.getColor(),
+                                height: 3,
+                                thickness: 2,
+                              )),
+                        ],
+                      )
+                    ],
                   ),
-                  Container(
-                      width: 28,
-                      child: Divider(
-                        color: themeColor.getColor(),
-                        height: 3,
-                        thickness: 2,
-                      )),
                   SizedBox(
                     height: 16,
                   ),
@@ -220,7 +200,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
                         textEditing: phoneCont,
                         labelText: "Phone",
                         hintText: '',
-                        isEmail: false,
+                        isEmail: true,
                         validator: (String value) {},
                         onSaved: (String value) {
 //                        model.email = value;
@@ -290,19 +270,21 @@ class _NewAddressPageState extends State<NewAddressPage> {
                           selectedItem: District,
                           isUnderLine: true),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Checkbox(
-                              value: same,
-                              onChanged: (v) {
-                                setState(() {
-                                  same = v;
-                                });
-                              }),
-                          Text("Make shipping and billing address same")
-                        ],
-                      )
+                      widget.type == 0
+                          ? SizedBox()
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Checkbox(
+                                    value: same,
+                                    onChanged: (v) {
+                                      setState(() {
+                                        same = v;
+                                      });
+                                    }),
+                                Text("Make shipping and billing address same")
+                              ],
+                            )
                     ],
                   )
                 ],

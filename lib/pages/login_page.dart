@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
     final themeColor = Provider.of<ThemeNotifier>(context);
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-          statusBarColor: mainColor,
+          statusBarColor: themeColor.getColor(),
           systemNavigationBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.dark,
           statusBarIconBrightness: Brightness.dark),

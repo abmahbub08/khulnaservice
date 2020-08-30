@@ -22,7 +22,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   final int _totalPages = 3;
   final PageController _pageController = PageController(initialPage: 0);
   int _currentPage = 0;
-  
+
   Widget _buildPageIndicator(bool isCurrentPage) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 350),
@@ -38,18 +38,19 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   void initState() {
-    _getUser();
-    saveOnboardPageShared();
+//    _getUser();
+
     super.initState();
   }
 
-  void _getUser() async {
-      SharedPreferences sp = await SharedPreferences.getInstance();
-      var token = sp.getString('token');
-      if(token != null) {
-        Nav.routeReplacement(context, InitPage());
-      }
-  } 
+//  void _getUser() async {
+//      SharedPreferences sp = await SharedPreferences.getInstance();
+//      var token = sp.getString('token');
+//      var onBoard = sp.getBool('onboard')==null?false :sp.getBool('onboard');
+//      if(token != null || onBoard) {
+//        Nav.routeReplacement(context, LoginPage());
+//      }
+//  }
 
   Future saveOnboardPageShared() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
@@ -159,6 +160,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     type: GFButtonType.outline,
                     shape: GFButtonShape.pills,
                     onPressed: () {
+                      saveOnboardPageShared();
                       Nav.routeReplacement(context, LoginPage());
                     },
                     child: Text(

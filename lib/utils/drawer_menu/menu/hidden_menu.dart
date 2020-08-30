@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/main.dart';
+import 'package:khulnaservice/provider/profile_data_provider.dart';
 import 'package:khulnaservice/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/pages/about_page.dart';
@@ -78,6 +79,11 @@ class _HiddenMenuState extends State<HiddenMenu> {
       isconfiguredListern = true;
     }
 
+    var user = Provider.of<ProfileDataProvider>(context, listen: false)
+        .profileData
+        .user;
+
+
     return Scaffold(
       body: Container(
         height: ScreenUtil.getHeight(context),
@@ -93,7 +99,7 @@ class _HiddenMenuState extends State<HiddenMenu> {
               ),
               ListTile(
                 title: Text(
-                  "ags",
+                  user.name,
                   style: GoogleFonts.poppins(color: Colors.white),
                 ),
                 leading: CircleAvatar(
@@ -215,40 +221,6 @@ class _HiddenMenuState extends State<HiddenMenu> {
                           colorLineSelected: Colors.orange,
                         ),
                       ),
-//                      InkWell(
-//                        onTap: () {
-//                          Nav.route(context, ChangePasswordPage());
-//                        },
-//                        child: ItemHiddenMenu(
-//                          icon: Icon(
-//                            Feather.lock,
-//                            size: 19,
-//                            color: Colors.white,
-//                          ),
-//                          name: 'Reset Password',
-//                          baseStyle: GoogleFonts.poppins(
-//                              color: Colors.white.withOpacity(0.6),
-//                              fontSize: 19.0),
-//                          colorLineSelected: Colors.orange,
-//                        ),
-//                      ),
-                      InkWell(
-                        onTap: () {
-                          Nav.route(context, MyProfileSettings());
-                        },
-                        child: ItemHiddenMenu(
-                          icon: Icon(
-                            Feather.mail,
-                            size: 19,
-                            color: Colors.white,
-                          ),
-                          name: 'Email Settings',
-                          baseStyle: GoogleFonts.poppins(
-                              color: Colors.white.withOpacity(0.6),
-                              fontSize: 19.0),
-                          colorLineSelected: Colors.orange,
-                        ),
-                      )
                     ],
                   ),
                 ),

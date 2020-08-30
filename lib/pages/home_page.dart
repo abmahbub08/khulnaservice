@@ -1,7 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:clippy_flutter/clippy_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/global.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:khulnaservice/api/api_services.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/provider/homepage_provider.dart';
 import 'package:provider/provider.dart';
@@ -51,11 +54,33 @@ class _HomePageState extends State<HomePage> {
 //              ),
 //                CategoryListView(),
             InkWell(
-              onTap: () {
-                Nav.route(context, ProductDetailPage());
-              },
+//              onTap: () {
+//                Nav.route(context, ProductDetailPage());
+//              },
               child: CarouselSlider(
-                items: imageSliders,
+                items: Provider.of<HomePageProvider>(context, listen: false)
+                    .HeaderBannerList
+                    .map((item) => Container(
+                        color: Colors.white,
+//                          decoration: BoxDecoration(
+//                            boxShadow: [
+//                              BoxShadow(
+//                                  color: Colors.grey[200],
+//                                  blurRadius: 5.0,
+//                                  spreadRadius: 1,
+//                                  offset: Offset(0.0, 1)),
+//                            ],
+//                          ),
+                        margin: EdgeInsets.only(
+                            left: 12.0, right: 16, top: 16, bottom: 16),
+                        child: Container(
+                            child: FadeInImage.assetNetwork(
+                          placeholder: "assets/images/produload.jpg",
+                          image:
+                              "${imageLink}uploads/setting/ecommerce/header_gallery/${item}",
+                          fit: BoxFit.cover,
+                        ))))
+                    .toList(),
                 options: CarouselOptions(
                     autoPlay: false,
                     height: 175,
@@ -76,7 +101,7 @@ class _HomePageState extends State<HomePage> {
               themeColor: themeColor,
               productListTitleBar: ProductListTitleBar(
                 themeColor: themeColor,
-                title: "Feature",
+                title: "Featured",
                 isCountShow: true,
               ),
             ),
@@ -103,57 +128,6 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 8,
             ),
-//                InkWell(
-//                  onTap: () {
-//                    Nav.route(context, ProductDetailPage());
-//                  },
-//                  child: CarouselSlider(
-//                    items: imageSliders,
-//                    options: CarouselOptions(
-//                        autoPlay: false,
-//                        height: 175,
-//                        viewportFraction: 1.0,
-//                        enlargeCenterPage: false,
-//                        onPageChanged: (index, reason) {
-//                          setState(() {
-//                            _carouselCurrentPage = index;
-//                          });
-//                        }),
-//                  ),
-//                ),
-//                SizedBox(
-//                  height: 8,
-//                ),
-//                ProductList(
-//                  themeColor: themeColor,
-//                  productListTitleBar: ProductListTitleBar(
-//                    themeColor: themeColor,
-//                    title: "Most Top Rated",
-//                    isCountShow: false,
-//                  ),
-//                ),
-//                DiscountList(
-//                  themeColor: themeColor,
-//                  productListTitleBar: ProductListTitleBar(
-//                    themeColor: themeColor,
-//                    title: "Low-Priced Products",
-//                    isCountShow: false,
-//                  ),
-//                ),
-//                SizedBox(
-//                  height: 8,
-//                ),
-//                ProductList(
-//                  themeColor: themeColor,
-//                  productListTitleBar: ProductListTitleBar(
-//                    themeColor: themeColor,
-//                    title: "Most recently looked",
-//                    isCountShow: false,
-//                  ),
-//                ),
-//                SizedBox(
-//                  height: 36,
-//                ),
           ],
         ));
   }

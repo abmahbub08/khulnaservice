@@ -36,18 +36,6 @@ class ProductList extends StatelessWidget {
                       imageUrl: "prodcut1.png");
                 },
               )),
-//          Container(
-//              height: 285.0,
-//              child: ListView(
-//                scrollDirection: Axis.horizontal,
-//                children: <Widget>[
-//                  ProductCard(themeColor: themeColor, imageUrl: "prodcut1.png"),
-//                  ProductCard(themeColor: themeColor, imageUrl: "prodcut2.png"),
-//                  ProductCard(themeColor: themeColor, imageUrl: "prodcut3.png"),
-//                  ProductCard(themeColor: themeColor, imageUrl: "prodcut4.png"),
-//                  ProductCard(themeColor: themeColor, imageUrl: "prodcut5.png"),
-//                ],
-//              )),
         ],
       ),
     );

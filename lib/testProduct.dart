@@ -6,7 +6,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
+import 'package:khulnaservice/api/api_services.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/models/CategoryPageModel.dart';
 import 'package:khulnaservice/provider/cart_provider.dart';
@@ -57,20 +57,10 @@ class _testProductState extends State<testProduct> {
     });
   }
 
-  Box myCartBox;
-
   var itemLength;
-
-  getItemLengt() {
-    itemLength = myCartBox.length;
-  }
 
   @override
   void initState() {
-    myCartBox = Hive.box("myCart");
-    setState(() {
-      getItemLengt();
-    });
     fetchData.getCart(context);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -132,16 +122,7 @@ class _testProductState extends State<testProduct> {
         systemNavigationBarIconBrightness: Brightness.dark,
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.dark));
-    List<String> prodcutListType = [
-      'Bestsellers',
-      'Favourites',
-      'The best',
-      'The most recent',
-      'Bestsellers',
-      'Favourites',
-      'The best',
-      'The most recent',
-    ];
+
     GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
     var size = MediaQuery.of(context).size;
     return SafeArea(
@@ -153,7 +134,7 @@ class _testProductState extends State<testProduct> {
                   Nav.route(context, ShoppingCartPage());
                 },
                 child: Container(
-                  height: size.height *0.08,
+                  height: size.height * 0.08,
                   width: size.width * 0.18,
                   child: Stack(
                     children: <Widget>[
@@ -353,7 +334,7 @@ class _testProductState extends State<testProduct> {
                           Navigator.push(
                             context,
                             PageRouteBuilder(
-                              pageBuilder: (c, a1, a2) => TestFilter(),
+                              pageBuilder: (c, a1, a2) => TestFilter(isFromSearch: false,),
                               transitionsBuilder: (c, anim, a2, child) =>
                                   FadeTransition(opacity: anim, child: child),
                               transitionDuration: Duration(milliseconds: 280),
@@ -408,41 +389,6 @@ class _testProductState extends State<testProduct> {
                   ],
                 ),
               ),
-//                  Container(
-//                    margin: EdgeInsets.only(top: 18, left: 16),
-//                    height: 42,
-//                    child: ListView.builder(
-//                      scrollDirection: Axis.horizontal,
-//                      itemCount: prodcutListType.length,
-//                      itemBuilder: (BuildContext context, int index) {
-//                        return GestureDetector(
-//                          onTap: () {},
-//                          child: Container(
-//                            margin: EdgeInsets.only(right: 8, bottom: 8),
-//                            padding: EdgeInsets.only(left: 12, right: 12),
-//                            decoration: BoxDecoration(
-//                              boxShadow: [
-//                                BoxShadow(
-//                                    color: Colors.grey[200],
-//                                    blurRadius: 8.0,
-//                                    spreadRadius: 1,
-//                                    offset: Offset(0.0, 3))
-//                              ],
-//                              color: Theme.of(context).bottomAppBarColor,
-//                              borderRadius: BorderRadius.circular(24),
-//                            ),
-//                            child: Align(
-//                                alignment: Alignment.center,
-//                                child: Text(
-//                                  prodcutListType[index],
-//                                  style: GoogleFonts.poppins(
-//                                      fontSize: 13, color: Color(0xFF5D6A78)),
-//                                )),
-//                          ),
-//                        );
-//                      },
-//                    ),
-//                  ),
               SizedBox(
                 height: 32,
               ),
@@ -623,7 +569,11 @@ class _testProductState extends State<testProduct> {
           },
           child: Container(
             width: ScreenUtil.getWidth(context) / 2,
-            margin: EdgeInsets.only(left: 16, top: 8, right: 12, bottom: 12),
+            margin: EdgeInsets.only(
+                left: size.width * 0.035,
+                top: size.height * 0.015,
+                right: size.width * 0.035,
+                bottom: size.height * 0.0045),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -647,7 +597,7 @@ class _testProductState extends State<testProduct> {
                       children: <Widget>[
                         Container(
                             width: size.width * 0.5,
-                            height: size.height * 0.16,
+                            height: size.height * 0.15,
                             child: ClipRRect(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(8),
@@ -656,13 +606,14 @@ class _testProductState extends State<testProduct> {
                                 child: FadeInImage.assetNetwork(
                                     placeholder: "assets/images/produload.jpg",
                                     image:
-                                        "https://khulnaservice.com/ims/?src=/uploads/product/$id/front/cropped/$image&p=small"))),
+                                        "${imageLink}ims/?src=/uploads/product/$id/front/cropped/$image&p=small"))),
                       ],
                     ),
                   ),
                   Container(
                     color: Colors.white,
-                    padding: EdgeInsets.only(left: 10, top: 4),
+                    padding: EdgeInsets.only(
+                        left: size.width * 0.035, top: size.height * 0.011),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -690,7 +641,12 @@ class _testProductState extends State<testProduct> {
                                   height: 5,
                                 ),
                                 double.parse(diPrice) == 0
-                                    ? Text("")
+                                    ? Text(
+                                        "",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      )
                                     : Text(
                                         "৳$diPrice",
                                         style: GoogleFonts.poppins(
@@ -719,8 +675,8 @@ class _testProductState extends State<testProduct> {
           ),
         ),
         Positioned(
-          bottom: size.height * 0.035,
-          right: size.width * 0.05,
+          bottom: size.height * 0.020,
+          right: size.width * 0.06,
           child: InkWell(
             onTap: () {
               CustomWidget.myDiaglog(context);
@@ -731,7 +687,11 @@ class _testProductState extends State<testProduct> {
               });
             },
             child: Container(
-              padding: EdgeInsets.only(top: 8, left: 8, bottom: 8, right: 8),
+              padding: EdgeInsets.only(
+                  top: size.height * 0.015,
+                  left: size.width * 0.025,
+                  bottom: size.height * 0.015,
+                  right: size.width * 0.025),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   color: themeColor.getColor(),
@@ -743,10 +703,11 @@ class _testProductState extends State<testProduct> {
                         offset: Offset(0.0, 1)),
                   ]),
               child: Container(
-                child: SvgPicture.asset(
-                  "assets/icons/ic_product_shopping_cart.svg",
-                  height: 12,
-                  color: Colors.white,
+                child: Center(
+                  child: SvgPicture.asset(
+                    "assets/icons/ic_product_shopping_cart.svg",
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

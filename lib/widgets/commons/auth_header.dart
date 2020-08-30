@@ -10,8 +10,13 @@ class AuthHeader extends StatelessWidget {
   final String headerTitle;
   final String headerBigTitle;
   final bool isLoginHeader;
+  bool iSFromLogin;
 
-  AuthHeader({this.headerTitle, this.headerBigTitle, this.isLoginHeader});
+  AuthHeader(
+      {this.headerTitle,
+      this.headerBigTitle,
+      this.isLoginHeader,
+      this.iSFromLogin});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +57,11 @@ class AuthHeader extends StatelessWidget {
                   alignment: Alignment.topLeft,
                   child: InkWell(
                     onTap: () {
-                      Nav.routeReplacement(context, LoginPage());
+                      if (iSFromLogin) {
+                        Nav.routeReplacement(context, LoginPage());
+                      } else {
+                        Navigator.pop(context);
+                      }
                     },
                     child: Icon(
                       Icons.arrow_back,

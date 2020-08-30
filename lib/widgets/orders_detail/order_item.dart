@@ -5,6 +5,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:khulnaservice/api/api_services.dart';
 import 'package:khulnaservice/config.dart';
 import 'package:khulnaservice/utils/screen.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
@@ -20,6 +21,7 @@ class OrderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size= MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.only(top: 8, left: 16, bottom: 8, right: 16),
       decoration: BoxDecoration(
@@ -37,214 +39,132 @@ class OrderItem extends StatelessWidget {
         children: <Widget>[
           Column(
             children: <Widget>[
+              SizedBox(height: 10,),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-//                  Container(
-//                    child: ClipRRect(
-//                        borderRadius: BorderRadius.circular(8),
-//                        child: Image.asset(
-//                          "assets/images/$imageUrl",
-//                          fit: BoxFit.cover,
-//                        )),
-//                    width: 110,
-//                    decoration: BoxDecoration(
-//                      color: Colors.white,
-//                      borderRadius: BorderRadius.circular(8),
-//                    ),
-//                    height: 160,
-//                    padding: EdgeInsets.all(10),
-//                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      AutoSizeText(
-                        "  Order id : ${order.id}",
-                        style: GoogleFonts.poppins(
-                          fontSize: 13,
-                          color: Color(0xFF5D6A78),
-                          fontWeight: FontWeight.w300,
-                        ),
-                        maxLines: 2,
-                        minFontSize: 11,
+
+               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: AutoSizeText(
+                      "  Order id : ${order.id}",
+                      style: GoogleFonts.poppins(
+                        fontSize: 13,
+                        color: Color(0xFF5D6A78),
+                        fontWeight: FontWeight.w300,
                       ),
-//                      SizedBox(
-//                        height: 2,
-//                      ),
-//                      AutoSizeText(
-//                        'Order Code : 5417527524722',
-//                        style: GoogleFonts.poppins(
-//                          fontSize: 12,
-//                          color: Color(0xFF5D6A78),
-//                          fontWeight: FontWeight.w300,
-//                        ),
-//                        maxLines: 2,
-//                        minFontSize: 11,
-//                      ),
-//                      SizedBox(
-//                        height: 2,
-//                      ),
-//                      AutoSizeText(
-//                        'Order Code : 5417527524722',
-//                        style: GoogleFonts.poppins(
-//                          fontSize: 12,
-//                          color: Color(0xFF5D6A78),
-//                          fontWeight: FontWeight.w300,
-//                        ),
-//                        maxLines: 2,
-//                        minFontSize: 11,
-//                      ),
-                      Row(
+                      maxLines: 2,
+                      minFontSize: 11,
+                    ),
+                  ),
+
+
+                  Padding(
+                    padding: EdgeInsets.only(right: 20),
+                    child: Text(
+                      "  ৳ ${order.total}",
+                      style: GoogleFonts.poppins(
+                          color: Colors.red,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w300),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 26),
+                child: Row(
+                  children: [
+                    Text("Payment :"),
+                    Container(
+
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(3),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(.2),
+                              blurRadius: 6.0, // soften the shadow
+                              spreadRadius: 0.0, //extend the shadow
+                              offset: Offset(
+                                0.0, // Move to right 10  horizontally
+                                1.0, // Move to bottom 10 Vertically
+                              ),
+                            )
+                          ]),
+                      child: Row(
                         children: <Widget>[
-//                          Text(
-//                            "\$89",
-//                            style: GoogleFonts.poppins(
-//                                decoration: TextDecoration.lineThrough,
-//                                fontSize: 14,
-//                                fontWeight: FontWeight.w300),
-//                          ),
-//                          SizedBox(
-//                            width: 4,
-//                          ),
                           Text(
-                            "  ৳ ${order.total}",
+                            "  ${order.paymentState}",
                             style: GoogleFonts.poppins(
-                                color: Colors.red,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w300),
+                                color: Color(0xFF5D6A78),
+                                fontSize: 10,
+                                fontWeight: FontWeight.w400),
                           ),
+                          SizedBox(
+                            width: 4,
+                          ),
+                          Icon(
+                            FontAwesome5.dot_circle,
+                            size: 12,
+                            color: Colors.blue,
+                          )
                         ],
                       ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Container(
+                    ),
+                  ],
+                ),
+              ),
+
+
+                Row(
+                  children: [
+                    Text("Order :"),
+                    Padding(
+                      padding: EdgeInsets.only(right: 20),
+                      child: Container(
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(3),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(.2),
+                                blurRadius: 6.0, // soften the shadow
+                                spreadRadius: 0.0, //extend the shadow
+                                offset: Offset(
+                                  0.0, // Move to right 10  horizontally
+                                  1.0, // Move to bottom 10 Vertically
+                                ),
+                              )
+                            ]),
                         child: Row(
                           children: <Widget>[
-                            Text("Payment :"),
-                            Container(
-                              padding: EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(3),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(.2),
-                                      blurRadius: 6.0, // soften the shadow
-                                      spreadRadius: 0.0, //extend the shadow
-                                      offset: Offset(
-                                        0.0, // Move to right 10  horizontally
-                                        1.0, // Move to bottom 10 Vertically
-                                      ),
-                                    )
-                                  ]),
-                              child: Row(
-                                children: <Widget>[
-                                  Text(
-                                    "  ${order.paymentState}",
-                                    style: GoogleFonts.poppins(
-                                        color: Color(0xFF5D6A78),
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Icon(
-                                    FontAwesome5.dot_circle,
-                                    size: 12,
-                                    color: Colors.blue,
-                                  )
-                                ],
-                              ),
+                            Text(
+                              "  ${order.orderState}",
+                              style: GoogleFonts.poppins(
+                                  color: Color(0xFF5D6A78),
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w400),
                             ),
-
                             SizedBox(
-                              width: 60,
+                              width: 4,
                             ),
-                            Text("Order :"),
-                            Container(
-                              padding: EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(3),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(.2),
-                                      blurRadius: 6.0, // soften the shadow
-                                      spreadRadius: 0.0, //extend the shadow
-                                      offset: Offset(
-                                        0.0, // Move to right 10  horizontally
-                                        1.0, // Move to bottom 10 Vertically
-                                      ),
-                                    )
-                                  ]),
-                              child: Row(
-                                children: <Widget>[
-                                  Text(
-                                    "  ${order.orderState}",
-                                    style: GoogleFonts.poppins(
-                                        color: Color(0xFF5D6A78),
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Icon(
-                                    FontAwesome5.dot_circle,
-                                    size: 12,
-                                    color: Colors.blue,
-                                  )
-                                ],
-                              ),
-                            ),
-//                            InkWell(
-//                              onTap: () {
-//                                openAlertBox(context, themeColor);
-//                              },
-//                              child: Container(
-//                                padding: EdgeInsets.all(4),
-//                                decoration: BoxDecoration(
-//                                    color: Colors.white,
-//                                    borderRadius: BorderRadius.circular(3),
-//                                    boxShadow: [
-//                                      BoxShadow(
-//                                        color: Colors.grey.withOpacity(.2),
-//                                        blurRadius: 6.0, // soften the shadow
-//                                        spreadRadius: 0.0, //extend the shadow
-//                                        offset: Offset(
-//                                          0.0, // Move to right 10  horizontally
-//                                          1.0, // Move to bottom 10 Vertically
-//                                        ),
-//                                      )
-//                                    ]),
-//                                child: RatingBar(
-//                                  initialRating: 3,
-//                                  itemSize: 14.0,
-//                                  minRating: 1,
-//                                  direction: Axis.horizontal,
-//                                  allowHalfRating: true,
-//                                  itemCount: 5,
-//                                  itemBuilder: (context, _) => Container(
-//                                    height: 12,
-//                                    child: SvgPicture.asset(
-//                                      "assets/icons/ic_star.svg",
-//                                      color: Colors.red,
-//                                      width: 9,
-//                                    ),
-//                                  ),
-//                                  onRatingUpdate: (rating) {
-//                                    print(rating);
-//                                  },
-//                                ),
-//                              ),
-//                            )
+                            Icon(
+                              FontAwesome5.dot_circle,
+                              size: 12,
+                              color: Colors.blue,
+                            )
                           ],
                         ),
                       ),
-                    ],
-                  )
+                    ),
+                  ],
+                )
+
                 ],
               ),
               Divider(),
@@ -277,7 +197,7 @@ class OrderItem extends StatelessWidget {
                                     ),
                                     SizedBox(width: 10,),
                                     SizedBox(
-                                      width: 240,
+                                      width: size.width *0.55,
                                       child: Column(
                                         children: [
                                           Text(order.cart[index].name),
@@ -306,17 +226,7 @@ class OrderItem extends StatelessWidget {
               )
             ],
           ),
-//          Positioned(
-//              top: 0,
-//              right: 0,
-//              child: IconButton(
-//                icon: Icon(
-//                  Feather.trash,
-//                  size: 18,
-//                  color: Color(0xFF5D6A78),
-//                ),
-//                onPressed: () {},
-//              ))
+
         ],
       ),
     );

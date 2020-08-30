@@ -6,9 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:getflutter/components/button/gf_button.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:khulnaservice/api/api_services.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:khulnaservice/provider/place_order_provider.dart';
+import 'package:khulnaservice/provider/profile_data_provider.dart';
 import 'package:khulnaservice/widgets/customWdiget.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/main.dart';
@@ -32,11 +34,24 @@ class OrderPage extends StatefulWidget {
 
 class _OrderPageState extends State<OrderPage> {
   FetchData fetchData = FetchData();
+  bool isCouponLoad = false;
 
   @override
   void initState() {
+    getData();
     super.initState();
   }
+
+  getData() {
+    var user =
+        Provider.of<ProfileDataProvider>(context, listen: false).profileData;
+
+    setState(() {
+      shipToController.text = user.user.name;
+    });
+  }
+
+  TextEditingController couponController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +67,7 @@ class _OrderPageState extends State<OrderPage> {
     var myCart =
         Provider.of<CartProvider>(context, listen: false).cartList.cart;
     GlobalKey<ScaffoldState> _Key = GlobalKey<ScaffoldState>();
-
-
+    var size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0xFFFCFCFC),
@@ -92,8 +106,8 @@ class _OrderPageState extends State<OrderPage> {
                                 children: [
                                   Image.network(
                                     "$imageLink/ims/?src=/uploads/product/${myCart[index].id}/front/cropped/${myCart[index].attributes.image}&p=small",
-                                    height: 50,
-                                    width: 50,
+                                    height: size.height * 0.075,
+                                    width: size.width * 0.14,
                                   ),
                                   SizedBox(
                                     width: 8,
@@ -110,7 +124,7 @@ class _OrderPageState extends State<OrderPage> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
-                                              width: 250,
+                                              width: size.width * 0.58,
                                               child: Text(myCart[index].name)),
                                           Text("৳ ${myCart[index].price}"),
                                         ],
@@ -128,6 +142,14 @@ class _OrderPageState extends State<OrderPage> {
                     }),
                 Divider(
                   thickness: 2,
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 10),
+                    child: Text(
+                        "Normal delivery charge : ${Provider.of<placeOrderProvider>(context, listen: false).searchData.shippingCondition == null ? "৳ 00" : Provider.of<placeOrderProvider>(context, listen: false).searchData.shippingCondition}"),
+                  ),
                 ),
                 Align(
                     alignment: Alignment.topRight,
@@ -161,11 +183,12 @@ class _OrderPageState extends State<OrderPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
-                        height: 40,
-                        width: 250,
+                        height: size.height * 0.05,
+                        width: size.width * 0.55,
                         child: Padding(
                           padding: EdgeInsets.only(left: 8, right: 8),
                           child: TextFormField(
+                            controller: couponController,
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide:
@@ -183,10 +206,25 @@ class _OrderPageState extends State<OrderPage> {
                         ),
                       ),
                       RaisedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            isCouponLoad = true;
+                          });
+                          fetchData.coupon(couponController.text).then((value) {
+                            setState(() {
+                              isCouponLoad = false;
+                            });
+                          }).catchError((onError) {
+                            setState(() {
+                              isCouponLoad = false;
+                            });
+                            CustomWidget.myShowDialog(
+                                context, "Invalid Coupon");
+                          });
+                        },
                         color: themeColor.getColor(),
                         child: Text(
-                          "Add coupon",
+                          isCouponLoad ? "Processing" : "Add coupon",
                           style: TextStyle(color: Colors.white),
                         ),
                       )
@@ -393,27 +431,41 @@ class _OrderPageState extends State<OrderPage> {
                     color: themeColor.getColor(),
                     onPressed: () {
 //                      Nav.route(context, CreditCartPage());
-
+                      var data = Provider.of<placeOrderProvider>(context,
+                              listen: false)
+                          .searchData;
                       if (shipToController.text.isEmpty) {
-                        _Key.currentState.showSnackBar(SnackBar(
-                            backgroundColor: themeColor.getColor(),
-                            content: Text('Enter the name who will receive')));
+                        CustomWidget.myShowDialog(
+                            context, "Enter the name who will receive");
+                      } else if (data.shippingAddress == null) {
+                        CustomWidget.myShowDialog(
+                            context, "Add your shipping address");
+                      } else if (data.billingAddress == null) {
+                        CustomWidget.myShowDialog(
+                            context, "Add your billing address");
                       } else {
                         CustomWidget.myDiaglog(context);
                         fetchData
                             .checkOut(context, shipToController.text,
-                                notesController.text, 1.toString())
+                                notesController.text, myMethod.toString())
                             .then((value) {
-                          Navigator.pop(context);
-                          var data = jsonDecode(value);
-                          Route route = MaterialPageRoute(
-                              builder: (context) => webView(
-                                  "${imageLink}/pay?order_id=${data["order_id"]}"));
-                          Navigator.push(context, route).then((value) {
+                          if (myMethod == 0) {
+                            Navigator.pop(context);
                             Route route = MaterialPageRoute(
-                                builder: (context) => OrdersDetailPage());
+                                builder: (context) => OrdersDetailPage(true));
                             Navigator.push(context, route);
-                          });
+                          } else {
+                            Navigator.pop(context);
+                            var data = jsonDecode(value);
+                            Route route = MaterialPageRoute(
+                                builder: (context) => webView(
+                                    "${imageLink}/pay?order_id=${data["order_id"]}"));
+                            Navigator.push(context, route).then((value) {
+                              Route route = MaterialPageRoute(
+                                  builder: (context) => OrdersDetailPage(true));
+                              Navigator.push(context, route);
+                            });
+                          }
                         }).catchError((onError) {
                           Navigator.pop(context);
                           Scaffold.of(context).showSnackBar(SnackBar(
@@ -468,6 +520,7 @@ class _OrderPageState extends State<OrderPage> {
   buildAddressItem(BuildContext context, themeColor) {
     var data =
         Provider.of<placeOrderProvider>(context, listen: false).searchData;
+
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
@@ -529,7 +582,17 @@ class _OrderPageState extends State<OrderPage> {
                     color: themeColor.getColor(),
                     type: GFButtonType.outline,
                     onPressed: () {
-                      Nav.route(context, NewAddressPage(1, false));
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (c, a1, a2) => NewAddressPage(1, false),
+                          transitionsBuilder: (c, anim, a2, child) =>
+                              FadeTransition(opacity: anim, child: child),
+                          transitionDuration: Duration(milliseconds: 280),
+                        ),
+                      ).then((value) {
+                        setState(() {});
+                      });
                     },
                     child: data.shippingAddress == null
                         ? Text("Add Shipping")

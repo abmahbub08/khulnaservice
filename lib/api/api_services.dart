@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 const Base = "https://home2globe.com/ks/public/api/";
+var imageLink = "https://home2globe.com/ks/public/";
 
 class ApiServices {
   Future<http.Response> regUrl(String param, name, email, password) async {
@@ -18,10 +19,24 @@ class ApiServices {
     }
   }
 
-  Future<http.Response> logUrl(String param, email, password) async {
+  Future<http.Response> regWithPhone(
+      String param, name, phone, password) async {
     try {
       final result = http.post(Base + '$param', body: {
-        "email": email,
+        "name": name,
+        "phone": phone,
+        "password": password,
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> logUrl(String param, method, email, password) async {
+    try {
+      final result = http.post(Base + '$param', body: {
+        "$method": email,
         "password": password,
         "password_confirmation": password
       });
@@ -241,5 +256,62 @@ class ApiServices {
     }
   }
 
+  Future<http.Response> couponRes(String param, coupon) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
+    try {
+      final result = http.post(Base + '$param', body: {
+        "Coupon": coupon
+      }, headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> profileData(String param) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.get(Base + '$param', headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> sendOtp(String param, phone) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.post(Base + '$param', body: {
+        "phone": phone
+      }, headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> verifyOTP(String param, phone, OTP) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.post(Base + '$param', body: {
+        "phone": phone,
+        "otp": OTP
+      }, headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
 }

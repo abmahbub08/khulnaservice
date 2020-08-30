@@ -1,38 +1,48 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
-import 'package:khulnaservice/pages/home_page.dart';
-import 'package:khulnaservice/widgets/register/registration_phone.dart';
-import 'package:provider/provider.dart';
 import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/screen.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
+import 'package:khulnaservice/widgets/commons/custom_textfield.dart';
 import 'package:khulnaservice/widgets/commons/shadow_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:validators/validators.dart' as validator;
+import 'package:khulnaservice/widgets/register/registration_phone.dart';
+import 'package:provider/provider.dart';
 
 import '../../main.dart';
-import '../commons/custom_textfield.dart';
 
-class RegisterForm extends StatefulWidget {
+class OtpDataForm extends StatefulWidget {
+  var number;
+
+  OtpDataForm(this.number);
+
   @override
-  _RegisterFormState createState() => _RegisterFormState();
+  _OtpDataFormState createState() => _OtpDataFormState();
 }
 
-class _RegisterFormState extends State<RegisterForm> {
+class _OtpDataFormState extends State<OtpDataForm> {
   TextEditingController fName = TextEditingController();
 
-  final _formKey = GlobalKey<FormState>();
+  final _form = GlobalKey<FormState>();
+
   bool passwordVisible = false;
+
   bool _isLoading = false;
 
   String name, email, password;
 
+  TextEditingController numberController = TextEditingController();
+
   @override
   void initState() {
+    getData();
     super.initState();
+  }
+
+  getData() {
+    setState(() {
+      numberController.text = widget.number;
+    });
   }
 
   @override
@@ -42,7 +52,7 @@ class _RegisterFormState extends State<RegisterForm> {
     return Container(
       padding: EdgeInsets.only(top: 24, right: 36, left: 48),
       child: Form(
-        key: _formKey,
+        key: _form,
         child: Column(
           children: <Widget>[
             Container(
@@ -63,15 +73,10 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
             ),
             MyTextFormField(
-              labelText: "Email",
-              hintText: 'Email',
-              isEmail: true,
-              validator: (String value) {
-                if (!validator.isEmail(value)) {
-                  return 'Please enter a valid email';
-                }
-                return null;
-              },
+              isFalse: false,
+              textEditingController: numberController,
+              labelText: "Mobile Number",
+              hintText: 'Mobile Number',
               onSaved: (String value) {
                 email = value;
               },
@@ -148,38 +153,12 @@ class _RegisterFormState extends State<RegisterForm> {
                   ),
                   color: themeColor.getColor(),
                   onPressed: () {
-                    _formKey.currentState.save();
-                    _formKey.currentState.validate();
+                    _form.currentState.save();
+                    _form.currentState.validate();
                     getReg(name, email, password);
                   },
                   child: Text(
                     _isLoading ? 'Creating.....' : 'Register',
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              height: 48,
-              width: ScreenUtil.getWidth(context),
-              margin: EdgeInsets.only(top: 12, bottom: 0),
-              child: ShadowButton(
-                borderRadius: 12,
-                height: 40,
-                child: FlatButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  color: themeColor.getColor(),
-                  onPressed: () {
-                    Nav.route(context, RegisterPhone());
-                  },
-                  child: Text(
-                    'Register With Phone',
                     style: GoogleFonts.poppins(
                       fontSize: 16,
                       color: Colors.white,
@@ -198,17 +177,26 @@ class _RegisterFormState extends State<RegisterForm> {
   FetchData fetchData = FetchData();
 
   getReg(String name, String email, String password) async {
-    _formKey.currentState.validate();
-    SharedPreferences Sp = await SharedPreferences.getInstance();
-    if (_formKey.currentState.validate()) {
+    _form.currentState.validate();
+    if (_form.currentState.validate()) {
       setState(() {
         _isLoading = true;
       });
 
-      fetchData.geReg(context, name, email, password).then((value) async {
+      fetchData.getRegPhone(context, name, email, password).then((value) async {
         fetchData.profileData(context).then((value) {
+          print("profile value $value");
+
+          setState(() {
+            _isLoading = false;
+          });
           Nav.routeReplacement(context, InitPage());
         }).catchError((onError) {
+          print(onError);
+          setState(() {
+            _isLoading = false;
+          });
+
           Scaffold.of(context).showSnackBar(SnackBar(
             content: Text("Something went wrong", textAlign: TextAlign.center),
           ));
@@ -217,6 +205,7 @@ class _RegisterFormState extends State<RegisterForm> {
         setState(() {
           _isLoading = false;
         });
+
         Scaffold.of(context).showSnackBar(SnackBar(
           content: Text("Something went wrong", textAlign: TextAlign.center),
         ));

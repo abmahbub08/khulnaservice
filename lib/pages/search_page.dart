@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:khulnaservice/api/api_services.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:khulnaservice/provider/category_provider.dart';
@@ -20,6 +21,10 @@ import '../testPrDEtails.dart';
 import 'package:khulnaservice/models/searchModel.dart';
 
 class SearchPage extends StatefulWidget {
+  var isBack = false;
+
+  SearchPage(this.isBack);
+
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -116,70 +121,64 @@ class _SearchPageState extends State<SearchPage> {
         systemNavigationBarIconBrightness: Brightness.dark,
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.dark));
-    List<String> prodcutListType = [
-      'Bestsellers',
-      'Favourites',
-      'The best',
-      'The most recent',
-      'Bestsellers',
-      'Favourites',
-      'The best',
-      'The most recent',
-    ];
+
     GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
     var size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         floatingActionButton: isLoading
             ? SizedBox()
-            : GestureDetector(
-          onTap: () {
-            Nav.route(context, ShoppingCartPage());
-          },
-          child: Container(
-            height: size.height *0.08,
-            width: size.width * 0.18,
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey[200],
-                            blurRadius: 5.0,
-                            spreadRadius: 1,
-                            offset: Offset(0.0, 1)),
-                      ],
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(32)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Align(
-                        child: Badge(
-                          badgeColor: themeColor.getColor(),
-                          padding: EdgeInsets.all(4),
-                          badgeContent: Text(
-                            '${context.watch<CartProvider>().cartList.cart.length}',
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 10),
+            : widget.isBack
+                ? GestureDetector(
+                    onTap: () {
+                      Nav.route(context, ShoppingCartPage());
+                    },
+                    child: Container(
+                      height: size.height * 0.08,
+                      width: size.width * 0.18,
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey[200],
+                                      blurRadius: 5.0,
+                                      spreadRadius: 1,
+                                      offset: Offset(0.0, 1)),
+                                ],
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(32)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Align(
+                                  child: Badge(
+                                    badgeColor: themeColor.getColor(),
+                                    padding: EdgeInsets.all(4),
+                                    badgeContent: Text(
+                                      '${context.watch<CartProvider>().cartList.cart.length}',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 10),
+                                    ),
+                                    child: SvgPicture.asset(
+                                        "assets/icons/ic_shopping_cart_bottom.svg"),
+                                  ),
+                                  alignment: Alignment.center,
+                                ),
+                                Text(
+                                  "৳${context.watch<CartProvider>().addAmount()}",
+                                  style:
+                                      TextStyle(color: themeColor.getColor()),
+                                )
+                              ],
+                            ),
                           ),
-                          child: SvgPicture.asset(
-                              "assets/icons/ic_shopping_cart_bottom.svg"),
-                        ),
-                        alignment: Alignment.center,
+                        ],
                       ),
-                      Text(
-                        "৳${context.watch<CartProvider>().addAmount()}",
-                        style: TextStyle(color: themeColor.getColor()),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+                    ),
+                  )
+                : SizedBox(),
         backgroundColor: Color.fromARGB(255, 252, 252, 252),
         body: SingleChildScrollView(
           controller: _scrollController,
@@ -188,92 +187,98 @@ class _SearchPageState extends State<SearchPage> {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  Container(
-                    width: 32,
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.chevron_left,
-                        color: themeColor.getColor(),
-                        size: 32,
+                  widget.isBack
+                      ? Container(
+                          width: 32,
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.chevron_left,
+                              color: themeColor.getColor(),
+                              size: 32,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        )
+                      : SizedBox(
+                          width: 32,
+                        ),
+                  Center(
+                    child: Container(
+                      width: ScreenUtil.getWidth(context) - 80,
+                      margin: EdgeInsets.only(left: 22, top: 14),
+                      padding: EdgeInsets.only(left: 18, right: 18),
+                      height: 44,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey[200],
+                              blurRadius: 8.0,
+                              spreadRadius: 1,
+                              offset: Offset(0.0, 3))
+                        ],
+                        color: Theme.of(context).bottomAppBarColor,
+                        borderRadius: BorderRadius.circular(24),
                       ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                  Container(
-                    width: ScreenUtil.getWidth(context) - 80,
-                    margin: EdgeInsets.only(left: 22, top: 14),
-                    padding: EdgeInsets.only(left: 18, right: 18),
-                    height: 44,
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey[200],
-                            blurRadius: 8.0,
-                            spreadRadius: 1,
-                            offset: Offset(0.0, 3))
-                      ],
-                      color: Theme.of(context).bottomAppBarColor,
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          "assets/icons/ic_search.svg",
-                          color: Colors.black45,
-                          height: 12,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.only(bottom: 4),
-                            height: 72,
-                            child: TextFormField(
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            "assets/icons/ic_search.svg",
+                            color: Colors.black45,
+                            height: 12,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.only(bottom: 4),
+                              height: 72,
+                              child: TextFormField(
 //                              onEditingComplete: () {
 //                                print("asg");
 //                              },
-                              onFieldSubmitted: (v) {
-                                setState(() {
-                                  SecondList = List<Datum>();
-                                  ProductLoading = "Loading";
-                                  myKeyWord = v;
-                                });
+                                onFieldSubmitted: (v) {
+                                  setState(() {
+                                    SecondList = List<Datum>();
+                                    ProductLoading = "Loading";
+                                    myKeyWord = v;
+                                  });
 
-                                fetchData
-                                    .searchData(
-                                  context,
-                                  v,
-                                  indexNUm,
-                                  Provider.of<CategoryProvider>(context,
-                                          listen: false)
-                                      .minPrice,
-                                  Provider.of<CategoryProvider>(context,
-                                          listen: false)
-                                      .maxPrice,
-                                )
-                                    .then((value) {
-                                  getList();
-                                });
-                              },
+                                  fetchData
+                                      .searchData(
+                                    context,
+                                    v,
+                                    indexNUm,
+                                    Provider.of<CategoryProvider>(context,
+                                            listen: false)
+                                        .minPrice,
+                                    Provider.of<CategoryProvider>(context,
+                                            listen: false)
+                                        .maxPrice,
+                                  )
+                                      .then((value) {
+                                    getList();
+                                  });
+                                },
 
-                              controller: searchController,
-                              key: _formKey,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "Brand Search",
-                                  hintStyle: GoogleFonts.poppins(
-                                    fontSize: 13,
-                                    color: Color(0xFF5D6A78),
-                                    fontWeight: FontWeight.w400,
-                                  )),
+                                controller: searchController,
+                                key: _formKey,
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "Brand Search",
+                                    hintStyle: GoogleFonts.poppins(
+                                      fontSize: 13,
+                                      color: Color(0xFF5D6A78),
+                                      fontWeight: FontWeight.w400,
+                                    )),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -336,7 +341,9 @@ class _SearchPageState extends State<SearchPage> {
                           Navigator.push(
                             context,
                             PageRouteBuilder(
-                              pageBuilder: (c, a1, a2) => TestFilter(),
+                              pageBuilder: (c, a1, a2) => TestFilter(
+                                isFromSearch: true,
+                              ),
                               transitionsBuilder: (c, anim, a2, child) =>
                                   FadeTransition(opacity: anim, child: child),
                               transitionDuration: Duration(milliseconds: 280),
@@ -600,7 +607,11 @@ class _SearchPageState extends State<SearchPage> {
           },
           child: Container(
             width: ScreenUtil.getWidth(context) / 2,
-            margin: EdgeInsets.only(left: 16, top: 8, right: 12, bottom: 12),
+            margin: EdgeInsets.only(
+                left: size.width * 0.035,
+                top: size.height * 0.015,
+                right: size.width * 0.035,
+                bottom: size.height * 0.0045),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -624,7 +635,7 @@ class _SearchPageState extends State<SearchPage> {
                       children: <Widget>[
                         Container(
                             width: size.width * 0.5,
-                            height: size.height * 0.16,
+                            height: size.height * 0.15,
                             child: ClipRRect(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(8),
@@ -633,36 +644,14 @@ class _SearchPageState extends State<SearchPage> {
                                 child: FadeInImage.assetNetwork(
                                     placeholder: "assets/images/produload.jpg",
                                     image:
-                                        "https://khulnaservice.com/ims/?src=/uploads/product/$id/front/cropped/$image&p=small")
-//                              Image.network(
-//                                "https://khulnaservice.com/ims/?src=/uploads/product/$id/front/cropped/$image&p=small",
-//                                fit: BoxFit.scaleDown,
-//                              ),
-                                )),
-//                        Positioned(
-//                          top: 0,
-//                          right: 8,
-//                          child: Container(
-//                            height: 38,
-//                            width: 32,
-//                            decoration: BoxDecoration(
-//                                color: Colors.white.withOpacity(0.4),
-//                                borderRadius: BorderRadius.only(
-//                                    bottomLeft: Radius.circular(8),
-//                                    bottomRight: Radius.circular(8))),
-//                            child: Icon(
-//                              Icons.favorite,
-//                              color: Colors.redAccent,
-//                              size: 18,
-//                            ),
-//                          ),
-//                        )
+                                        "${imageLink}ims/?src=/uploads/product/$id/front/cropped/$image&p=small"))),
                       ],
                     ),
                   ),
                   Container(
                     color: Colors.white,
-                    padding: EdgeInsets.only(left: 10, top: 4),
+                    padding: EdgeInsets.only(
+                        left: size.width * 0.035, top: size.height * 0.011),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -680,34 +669,6 @@ class _SearchPageState extends State<SearchPage> {
                         SizedBox(
                           height: 2,
                         ),
-//                        Row(
-//                          children: <Widget>[
-//                            RatingBar(
-//                              ignoreGestures: true,
-//                              initialRating: 3,
-//                              itemSize: 14.0,
-//                              minRating: 1,
-//                              direction: Axis.horizontal,
-//                              allowHalfRating: true,
-//                              itemCount: 5,
-//                              itemBuilder: (context, _) => Icon(
-//                                Ionicons.ios_star,
-//                                color: themeColor.getColor(),
-//                              ),
-//                              onRatingUpdate: (rating) {
-//                                print(rating);
-//                              },
-//                            ),
-//                            SizedBox(
-//                              width: 8,
-//                            ),
-//                            Text(
-//                              "(395)",
-//                              style: GoogleFonts.poppins(
-//                                  fontSize: 9, fontWeight: FontWeight.w400),
-//                            )
-//                          ],
-//                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -718,7 +679,12 @@ class _SearchPageState extends State<SearchPage> {
                                   height: 5,
                                 ),
                                 double.parse(diPrice) == 0
-                                    ? Text("")
+                                    ? Text(
+                                        "",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      )
                                     : Text(
                                         "৳$diPrice",
                                         style: GoogleFonts.poppins(
@@ -747,17 +713,10 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
         Positioned(
-          bottom: size.height * 0.035,
-          right: size.width * 0.05,
+          bottom: size.height * 0.020,
+          right: size.width * 0.06,
           child: InkWell(
             onTap: () {
-//              myCartBox.put(id, {
-//                "id": "$id",
-//                "price": "$price",
-//                "quantity": "1",
-//                "name": "$name",
-//                "image": "$image",
-//              });
               CustomWidget.myDiaglog(context);
               fetchData.getAddToCart(id.toString(), "1").then((value) {
                 fetchData.getCart(context).then((value) {
@@ -766,10 +725,14 @@ class _SearchPageState extends State<SearchPage> {
               });
             },
             child: Container(
-              padding: EdgeInsets.only(top: 8, left: 8, bottom: 8, right: 8),
+              padding: EdgeInsets.only(
+                  top: size.height * 0.015,
+                  left: size.width * 0.025,
+                  bottom: size.height * 0.015,
+                  right: size.width * 0.025),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: Colors.white,
+                  color: themeColor.getColor(),
                   boxShadow: [
                     BoxShadow(
                         color: Colors.grey[200],
@@ -778,9 +741,11 @@ class _SearchPageState extends State<SearchPage> {
                         offset: Offset(0.0, 1)),
                   ]),
               child: Container(
-                child: SvgPicture.asset(
-                  "assets/icons/ic_product_shopping_cart.svg",
-                  height: 12,
+                child: Center(
+                  child: SvgPicture.asset(
+                    "assets/icons/ic_product_shopping_cart.svg",
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

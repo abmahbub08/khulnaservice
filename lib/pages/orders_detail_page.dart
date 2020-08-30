@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
+import 'package:khulnaservice/main.dart';
 import 'package:khulnaservice/provider/place_order_provider.dart';
+import 'package:khulnaservice/utils/navigator.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/utils/commons/colors.dart';
 import 'package:khulnaservice/utils/screen.dart';
@@ -11,6 +13,10 @@ import 'package:khulnaservice/utils/theme_notifier.dart';
 import 'package:khulnaservice/widgets/orders_detail/order_item.dart';
 
 class OrdersDetailPage extends StatefulWidget {
+  bool isFromCart;
+
+  OrdersDetailPage(this.isFromCart);
+
   @override
   _OrdersDetailPageState createState() => _OrdersDetailPageState();
 }
@@ -56,7 +62,11 @@ class _OrdersDetailPageState extends State<OrdersDetailPage> {
               ),
               leading: GestureDetector(
                 onTap: () {
-                  Navigator.pop(context);
+                  if (widget.isFromCart) {
+                    Nav.routeReplacement(context, InitPage());
+                  } else {
+                    Navigator.pop(context);
+                  }
                 },
                 child: Icon(
                   Icons.chevron_left,

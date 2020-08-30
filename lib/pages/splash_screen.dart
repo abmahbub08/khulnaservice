@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:khulnaservice/api/fetchdata.dart';
+import 'package:khulnaservice/pages/login_page.dart';
 import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/screen.dart';
+import 'package:khulnaservice/widgets/customWdiget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config.dart';
@@ -24,11 +27,24 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
+  FetchData fetchData = FetchData();
+  var onBoard = false;
+  customWidget CustomWidget = customWidget();
+
   void _getUser() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     var token = sp.getString('token');
+    onBoard = sp.getBool('onboard') == null ? false : sp.getBool('onboard');
+
     if (token != null) {
-      Nav.routeReplacement(context, InitPage());
+      fetchData.profileData(context).then((value) {
+        Nav.routeReplacement(context, InitPage());
+      }).catchError((onError) {
+        print(sp.get("email"));
+        CustomWidget.myShowDialog(context, "Something went wrong");
+      });
+    } else if (onBoard) {
+      Nav.routeReplacement(context, LoginPage());
     } else {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (BuildContext context) => OnboardingPage()));
@@ -39,13 +55,13 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-          statusBarColor: mainColor,
+          statusBarColor: Colors.white,
           systemNavigationBarIconBrightness: Brightness.dark,
           statusBarBrightness: Brightness.dark,
           statusBarIconBrightness: Brightness.dark),
     );
     return Scaffold(
-      backgroundColor: mainColor,
+      backgroundColor: Colors.white,
       body: Center(
         child: Container(
           height: 240,

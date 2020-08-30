@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -15,6 +16,7 @@ import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:khulnaservice/provider/category_provider.dart';
 import 'package:khulnaservice/provider/homepage_provider.dart';
 import 'package:khulnaservice/provider/place_order_provider.dart';
+import 'package:khulnaservice/provider/profile_data_provider.dart';
 import 'package:khulnaservice/provider/user_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -64,6 +66,9 @@ void main() async {
         ),
         ChangeNotifierProvider<userProvider>(
           create: (_) => userProvider(),
+        ),
+        ChangeNotifierProvider<ProfileDataProvider>(
+          create: (_) => ProfileDataProvider(),
         ),
       ],
       child: Phoenix(
@@ -168,7 +173,7 @@ class _InitPageState extends State<InitPage> {
               color: Colors.white.withOpacity(0.6), fontSize: 19.0),
           colorLineSelected: Colors.orange,
         ),
-        SearchPage()));
+        SearchPage(false)));
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           icon: Icon(
@@ -189,7 +194,13 @@ class _InitPageState extends State<InitPage> {
   @override
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
-
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+          statusBarColor: Colors.white,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.dark,
+          statusBarIconBrightness: Brightness.dark),
+    );
     return HiddenDrawerMenu(
       iconMenuAppBar: Padding(
         padding: EdgeInsets.only(bottom: 6),

@@ -17,7 +17,7 @@ class SearchBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Nav.route(context, SearchPage());
+        Nav.route(context, SearchPage(true));
       },
       child: Container(
         margin: EdgeInsets.only(left: 18, right: 18, top: 14),

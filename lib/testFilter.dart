@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/provider/category_provider.dart';
+import 'package:khulnaservice/provider/profile_data_provider.dart';
+import 'package:khulnaservice/provider/search_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/pages/filter_detail_inner_page.dart';
 import 'package:khulnaservice/pages/search_page.dart';
@@ -12,6 +14,10 @@ import 'package:khulnaservice/utils/screen.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
 
 class TestFilter extends StatefulWidget {
+  var isFromSearch = false;
+
+  TestFilter({this.isFromSearch});
+
   @override
   _TestFilterState createState() => _TestFilterState();
 }
@@ -30,11 +36,17 @@ class _TestFilterState extends State<TestFilter> {
   }
 
   List myData = [];
+  var manList = [];
 
   getData() {
-    var manList = Provider.of<CategoryProvider>(context, listen: false)
-        .getPage()
-        .manufacturers;
+    print(widget.isFromSearch);
+    manList = widget.isFromSearch
+        ? Provider.of<searchProvider>(context, listen: false)
+            .searchData
+            .manufacturers
+        : Provider.of<CategoryProvider>(context, listen: false)
+            .getPage()
+            .manufacturers;
     minPrice.text =
         Provider.of<CategoryProvider>(context, listen: false).minPrice;
     maxPrice.text =
@@ -57,9 +69,6 @@ class _TestFilterState extends State<TestFilter> {
           statusBarIconBrightness: Brightness.dark),
     );
 
-    var manList = Provider.of<CategoryProvider>(context, listen: false)
-        .getPage()
-        .manufacturers;
     return SafeArea(
       child: Scaffold(
         bottomNavigationBar: InkWell(

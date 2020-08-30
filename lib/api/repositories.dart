@@ -12,9 +12,17 @@ class Repositories {
     }
   }
 
-  Future<http.Response> getLoginHttp(String param, email, password) {
+  Future<http.Response> getRegPhoneHttp(String param, name, phone, password) {
     try {
-      return apiService.logUrl(param, email, password);
+      return apiService.regWithPhone(param, name, phone, password);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> getLoginHttp(String param, method,email, password) {
+    try {
+      return apiService.logUrl(param, method,email, password);
     } catch (e) {
       throw Exception();
     }
@@ -123,6 +131,38 @@ class Repositories {
   Future<http.Response> nameUpdateHttp(String param, name) {
     try {
       return apiService.nameUpdate(param, name);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> couponHttp(String param, coupon) {
+    try {
+      return apiService.couponRes(param, coupon);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> profileHttp(String param) {
+    try {
+      return apiService.profileData(param);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> sendOTPHttp(String param, phone) {
+    try {
+      return apiService.sendOtp(param, phone);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> otpVerify(String param, phone, OTP) {
+    try {
+      return apiService.verifyOTP(param, phone, OTP);
     } catch (e) {
       throw Exception();
     }

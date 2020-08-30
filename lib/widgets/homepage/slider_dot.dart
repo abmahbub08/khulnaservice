@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:khulnaservice/provider/homepage_provider.dart';
 import 'package:khulnaservice/utils/commons/colors.dart';
 import 'package:khulnaservice/utils/dummy_data/discountImages.dart';
+import 'package:provider/provider.dart';
 
 class SliderDot extends StatelessWidget {
   const SliderDot({
@@ -15,8 +17,10 @@ class SliderDot extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: discountImageList.map((url) {
-        int index = discountImageList.indexOf(url);
+      children: Provider.of<HomePageProvider>(context, listen: false)
+          .HeaderBannerList.map((url) {
+        int index = Provider.of<HomePageProvider>(context, listen: false)
+            .HeaderBannerList.indexOf(url);
         return Container(
           width: 12.0,
           height: 2.0,

@@ -198,7 +198,17 @@ class DiscountItem extends StatelessWidget {
                                       .then((value) {
                                     fetchData.getCart(context).then((value) {
                                       Navigator.pop(context);
+                                    }).catchError((onError) {
+                                      print(onError);
+                                      Navigator.pop(context);
+                                      CustomWidget.myShowDialog(
+                                          context, "Something went wrong");
                                     });
+                                  }).catchError((onError) {
+                                    print(onError);
+                                    Navigator.pop(context);
+                                    CustomWidget.myShowDialog(
+                                        context, "Something went wrong");
                                   });
                                 },
                                 icon: SvgPicture.asset(

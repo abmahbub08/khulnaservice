@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
+import 'package:khulnaservice/provider/profile_data_provider.dart';
+import 'package:khulnaservice/provider/user_provider.dart';
 import 'package:khulnaservice/widgets/customWdiget.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/utils/commons/colors.dart';
 import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
 import 'package:khulnaservice/widgets/commons/textfield_bottomline.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:validators/validators.dart' as validator;
 
 import '../main.dart';
@@ -19,6 +22,21 @@ class ChangePasswordPage extends StatefulWidget {
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
   bool isLoading = false;
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
+  getData() {
+    var user = Provider.of<ProfileDataProvider>(context, listen: false)
+        .profileData
+        .user;
+    setState(() {
+      nameController.text = user.name;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +53,19 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     return SafeArea(
       child: Scaffold(
         bottomNavigationBar: InkWell(
-          onTap: () {
+          onTap: () async {
+            SharedPreferences sp = await SharedPreferences.getInstance();
             CustomWidget.myDiaglog(context);
             fetchData.nameUpdate(nameController.text).then((value) {
+              fetchData.profileData(context).then((value) {
+                Navigator.pop(context);
+                CustomWidget.myShowDialog(context, "Profile Name Updated");
+              }).catchError((onError) {
+                CustomWidget.myShowDialog(context, "Something went wrong");
+              });
+            }).catchError((e) {
               Navigator.pop(context);
-              CustomWidget.myShowDialog(context, "Profile Name Updated");
+              CustomWidget.myShowDialog(context, "Something went wrong");
             });
           },
           child: isLoading
@@ -68,17 +94,40 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  "Change Name",
-                  style: GoogleFonts.poppins(fontSize: 18, color: textColor),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.chevron_left,
+                        color: textColor,
+                        size: 32,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      crossAxisAlignment:CrossAxisAlignment.start ,
+                      children: [
+                        Text(
+                          "Change Name",
+                          style: GoogleFonts.poppins(
+                              fontSize: 18, color: textColor),
+                        ),
+                        Container(
+                            width: 28,
+                            child: Divider(
+                              color: themeColor.getColor(),
+                              height: 3,
+                              thickness: 2,
+                            )),
+                      ],
+                    )
+                  ],
                 ),
-                Container(
-                    width: 28,
-                    child: Divider(
-                      color: themeColor.getColor(),
-                      height: 3,
-                      thickness: 2,
-                    )),
                 SizedBox(
                   height: 16,
                 ),

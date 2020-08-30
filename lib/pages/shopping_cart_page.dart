@@ -9,6 +9,7 @@ import 'package:getflutter/components/button/gf_button.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:getflutter/types/gf_button_type.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:khulnaservice/api/api_services.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:khulnaservice/utils/drop_down_menu/find_dropdown.dart';
@@ -40,6 +41,8 @@ class HomeWidgetState extends State<ShoppingCartPage>
   FetchData fetchData = FetchData();
   customWidget CustomWidget = customWidget();
 
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
@@ -61,6 +64,7 @@ class HomeWidgetState extends State<ShoppingCartPage>
     });
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
         bottomSheet: shoppingCartBottomSummary(themeColor),
         backgroundColor: whiteColor,
         body: Stack(
@@ -351,10 +355,8 @@ class HomeWidgetState extends State<ShoppingCartPage>
             ),
             onPressed: () {
               if (data.length == 0) {
-                Scaffold.of(context).showSnackBar(SnackBar(
-                    duration: Duration(seconds: 2),
-                    backgroundColor: themeColor.getColor(),
-                    content: Text('Your cart is empty')));
+                CustomWidget.myShowDialog(context, "Your cart is empty");
+
               } else {
                 CustomWidget.myDiaglog(context);
                 fetchData.getPlaceOrderData(context).then((value) {
@@ -363,10 +365,7 @@ class HomeWidgetState extends State<ShoppingCartPage>
                 }).catchError((e) {
                   print(e);
                   Navigator.pop(context);
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                      duration: Duration(seconds: 2),
-                      backgroundColor: themeColor.getColor(),
-                      content: Text('Something went wrong')));
+                 CustomWidget.myShowDialog(context, "Something went wrong");
                 });
               }
             },

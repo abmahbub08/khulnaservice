@@ -11,6 +11,7 @@ import 'package:getflutter/getflutter.dart';
 import 'package:getflutter/shape/gf_button_shape.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
+import 'package:khulnaservice/api/api_services.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/models/CategoryPageModel.dart';
 import 'package:khulnaservice/pages/shopping_cart_page.dart';
@@ -142,10 +143,13 @@ class _testPrDetailsState extends State<testPrDetails>
 //                    }),
 //              ),
 
-              Image.network(
-                "https://khulnaservice.com/ims/?src=/uploads/product/${widget.data.id}/front/cropped/${widget.data.image}&p=small",
+              FadeInImage.assetNetwork(
+                placeholder: "assets/images/produload.jpg",
+                image:
+                    "${imageLink}ims/?src=/uploads/product/${widget.data.id}/front/cropped/${widget.data.image}&p=small",
                 height: ScreenUtil.getHeight(context) / 1.9,
               ),
+
               Positioned(
                 left: 9,
                 top: 32,
@@ -175,8 +179,8 @@ class _testPrDetailsState extends State<testPrDetails>
                     Nav.route(context, ShoppingCartPage());
                   },
                   child: Container(
-                    height: 42,
-                    width: 48,
+                    height: 60,
+                    width: 55,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(8),
@@ -187,7 +191,7 @@ class _testPrDetailsState extends State<testPrDetails>
                       animationDuration: Duration(milliseconds: 1500),
                       badgeColor: themeColor.getColor(),
                       alignment: Alignment(0, 0),
-                      position: BadgePosition.bottomRight(),
+                      position: BadgePosition.topRight(),
                       padding: EdgeInsets.all(8),
                       badgeContent: Text(
                         context
@@ -198,10 +202,21 @@ class _testPrDetailsState extends State<testPrDetails>
                             .toString(),
                         style: TextStyle(color: whiteColor, fontSize: 10),
                       ),
-                      child: SvgPicture.asset(
-                        "assets/icons/ic_shopping_cart.svg",
-                        color: Colors.grey[400],
-                        height: 26,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            "assets/icons/ic_shopping_cart.svg",
+                            color: Colors.grey[400],
+                            height: 26,
+                          ),
+                          Center(
+                            child: Text(
+                              "৳${context.watch<CartProvider>().addAmount()}",
+                              style: TextStyle(color: themeColor.getColor()),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
@@ -444,7 +459,7 @@ class _testPrDetailsState extends State<testPrDetails>
                                                   fontSize: 18),
                                             ),
                                             Text(
-                                              "\$ ${double.parse(widget.data.price).toStringAsFixed(1)}",
+                                              "৳ ${double.parse(widget.data.price).toStringAsFixed(1)}",
                                               style: GoogleFonts.poppins(
                                                   color: themeColor.getColor(),
                                                   fontSize: 18),

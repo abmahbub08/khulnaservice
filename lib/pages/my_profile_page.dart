@@ -56,7 +56,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 ),
                 ListTile(
                   onTap: () {
-                    Nav.route(context, OrdersDetailPage());
+                    Nav.route(context, OrdersDetailPage(false));
                   },
                   leading: Icon(
                     Feather.box,

@@ -21,7 +21,7 @@ class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   bool passwordVisible = false;
   bool _isLoading = false;
-  String email, password;
+  var email, password;
 
   @override
   void initState() {
@@ -39,20 +39,23 @@ class _LoginFormState extends State<LoginForm> {
         child: Column(
           children: <Widget>[
             MyTextFormField(
-              labelText: "Email",
-              hintText: 'Email',
+              labelText: "Email OR Mobile Number",
+              hintText: 'Email OR Mobile Number',
               isEmail: true,
-              validator: (String value) {
-                if (!validator.isEmail(value)) {
-                  return 'Please enter a valid email';
-                }
-                return null;
-              },
+
+
+//              validator: (String value) {
+//                if (!validator.isEmail(value)) {
+//                  return 'Please enter a valid email';
+//                }
+//                return null;
+//              },
               onSaved: (String value) {
                 email = value;
               },
             ),
             MyTextFormField(
+              isEmail: true,
               labelText: "Password",
               hintText: 'Password',
               suffixIcon: IconButton(
@@ -121,27 +124,79 @@ class _LoginFormState extends State<LoginForm> {
         _isLoading = true;
       });
 
-      fetchData.getLog(context, email, password).then((value) {
-        var body = jsonDecode(value);
-        if (body['message'] == 'success') {
-          Nav.routeReplacement(context, InitPage());
-        } else {
+      try {
+        int.parse(email);
+
+        fetchData.getLog(context, "phone", email, password).then((value) {
+          var body = jsonDecode(value);
+          if (body['message'] == 'success') {
+            fetchData.profileData(context).then((value) {
+              setState(() {
+                _isLoading = false;
+              });
+              Nav.routeReplacement(context, InitPage());
+            }).catchError((onError) {
+              setState(() {
+                _isLoading = false;
+              });
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content:
+                    Text("Something Went Wrong", textAlign: TextAlign.center),
+              ));
+            });
+          } else {
+            setState(() {
+              _isLoading = false;
+            });
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text(body['message'], textAlign: TextAlign.center),
+            ));
+          }
+        }).catchError((e) {
           setState(() {
             _isLoading = false;
           });
+
           Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text(body['message'], textAlign: TextAlign.center),
+            content: Text("Something Went Wrong", textAlign: TextAlign.center),
           ));
-        }
-      }).catchError((e) {
-        setState(() {
-          _isLoading = false;
         });
-        var body = jsonDecode(e);
-        Scaffold.of(context).showSnackBar(SnackBar(
-          content: Text("Something Went Wrong", textAlign: TextAlign.center),
-        ));
-      });
+      } catch (e) {
+        fetchData.getLog(context, "email", email, password).then((value) {
+          var body = jsonDecode(value);
+          if (body['message'] == 'success') {
+            fetchData.profileData(context).then((value) {
+              setState(() {
+                _isLoading = false;
+              });
+              Nav.routeReplacement(context, InitPage());
+            }).catchError((onError) {
+              setState(() {
+                _isLoading = false;
+              });
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content:
+                    Text("Something Went Wrong", textAlign: TextAlign.center),
+              ));
+            });
+          } else {
+            setState(() {
+              _isLoading = false;
+            });
+            Scaffold.of(context).showSnackBar(SnackBar(
+              content: Text(body['message'], textAlign: TextAlign.center),
+            ));
+          }
+        }).catchError((e) {
+          setState(() {
+            _isLoading = false;
+          });
+
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text("Something Went Wrong", textAlign: TextAlign.center),
+          ));
+        });
+      }
     }
   }
 }

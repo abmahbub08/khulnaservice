@@ -28,20 +28,21 @@ class customWidget {
   }
 
   myShowDialog(ctx, value) {
-    final themeColor = Provider.of<ThemeNotifier>(ctx,listen: false);
+    final themeColor = Provider.of<ThemeNotifier>(ctx, listen: false);
     return showDialog(
         barrierDismissible: false,
         context: ctx,
         builder: (context) => Dialog(
-            insetPadding: EdgeInsets.symmetric(horizontal: 120),
             child: Container(
                 color: Colors.transparent,
-                height: 180,
-                width: 80,
+                height: 170,
+                width: 150,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(value),
+                    SizedBox(
+                        width:160,
+                        child: Center(child: Text(value))),
                     Divider(),
                     RaisedButton(
                       color: themeColor.getColor(),

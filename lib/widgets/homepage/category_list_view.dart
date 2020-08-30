@@ -65,7 +65,7 @@ class CategoriesListView extends StatelessWidget {
                 context,
                 PageTransition(
                   type: PageTransitionType.fade,
-                  child: SearchPage(),
+                  child: SearchPage(false),
                 ),
               );
             },

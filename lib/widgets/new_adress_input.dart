@@ -10,21 +10,20 @@ class NewAddressInput extends StatelessWidget {
   final bool isPassword;
   final bool isEmail;
   final TextEditingController textEditing;
-  NewAddressInput({
-    this.hintText,
-    this.validator,
-    this.onSaved,
-    this.isPassword = false,
-    this.isEmail = false,
-    this.labelText,
-    this.suffixIcon,
-    this.textEditing
-  });
+
+  NewAddressInput(
+      {this.hintText,
+      this.validator,
+      this.onSaved,
+      this.isPassword = false,
+      this.isEmail = false,
+      this.labelText,
+      this.suffixIcon,
+      this.textEditing});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-
       controller: textEditing,
       decoration: InputDecoration(
           hintText: hintText,
@@ -34,6 +33,7 @@ class NewAddressInput extends StatelessWidget {
           labelText: labelText),
       validator: validator,
       onSaved: onSaved,
+      keyboardType: isEmail ? TextInputType.text : TextInputType.number,
     );
   }
 }

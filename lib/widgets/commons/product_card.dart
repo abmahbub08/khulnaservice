@@ -109,47 +109,6 @@ class ProductCard extends StatelessWidget {
                                     placeholder: "assets/images/produload.jpg",
                                     image:
                                         "https://khulnaservice.com/ims/?src=/uploads/product/${product.id}/front/cropped/${product.image}&p=small"))),
-//                        Align(
-//                          alignment: Alignment.bottomLeft,
-//                          child: Container(
-//                            decoration: BoxDecoration(
-//                                color: Colors.redAccent.withOpacity(0.2),
-//                                borderRadius: BorderRadius.only(
-//                                    topLeft: Radius.circular(8),
-//                                    topRight: Radius.circular(8))),
-//                            width: 140,
-//                            height: 20,
-//                            child: Align(
-//                              alignment: Alignment.center,
-//                              child: Text(
-//                                "FREE CARGO",
-//                                style: GoogleFonts.poppins(
-//                                  fontSize: 12,
-//                                  color: Colors.black,
-//                                  fontWeight: FontWeight.w300,
-//                                ),
-//                              ),
-//                            ),
-//                          ),
-//                        ),
-//                        Positioned(
-//                          top: 0,
-//                          right: 8,
-//                          child: Container(
-//                            height: 38,
-//                            width: 32,
-//                            decoration: BoxDecoration(
-//                                color: Colors.white.withOpacity(0.4),
-//                                borderRadius: BorderRadius.only(
-//                                    bottomLeft: Radius.circular(8),
-//                                    bottomRight: Radius.circular(8))),
-//                            child: Icon(
-//                              Icons.favorite,
-//                              color: Colors.white,
-//                              size: 18,
-//                            ),
-//                          ),
-//                        )
                       ],
                     ),
                   ),
@@ -255,7 +214,13 @@ class ProductCard extends StatelessWidget {
               fetchData.getAddToCart(product.id.toString(), "1").then((value) {
                 fetchData.getCart(context).then((value) {
                   Navigator.pop(context);
+                }).catchError((onError) {
+                  Navigator.pop(context);
+                  CustomWidget.myShowDialog(context, "Something went wrong");
                 });
+              }).catchError((onError) {
+                Navigator.pop(context);
+                CustomWidget.myShowDialog(context, "Something went wrong");
               });
             },
             child: Container(
@@ -277,16 +242,6 @@ class ProductCard extends StatelessWidget {
                     height: 12,
                     color: Colors.white,
                   ),
-//                  SizedBox(
-//                    width: 8,
-//                  ),
-//                  Text(
-//                    "Add to Basket",
-//                    style: GoogleFonts.poppins(
-//                        color: Color(0xFF5D6A78),
-//                        fontSize: 10,
-//                        fontWeight: FontWeight.w400),
-//                  )
                 ],
               ),
             ),

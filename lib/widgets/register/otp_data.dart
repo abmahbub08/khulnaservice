@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:khulnaservice/pages/login_page.dart';
 import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
 import 'package:khulnaservice/widgets/commons/auth_header.dart';
 import 'package:khulnaservice/widgets/register/register_form.dart';
 import 'package:khulnaservice/widgets/register/social_auth_register.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
-import '../main.dart';
+import 'otp_form.dart';
 
-class RegisterPage extends StatefulWidget {
+class OtpData extends StatefulWidget {
+  var number;
+
+  OtpData(this.number);
+
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _OtpDataState createState() => _OtpDataState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _OtpDataState extends State<OtpData> {
   @override
   void initState() {
     super.initState();
@@ -26,7 +29,6 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: themeColor.getColor(),
@@ -46,50 +48,18 @@ class _RegisterPageState extends State<RegisterPage> {
                   AuthHeader(
                     headerTitle: "Register",
                     headerBigTitle: "New",
-                    isLoginHeader: false,
+                    isLoginHeader: true,
                   ),
-                  RegisterForm(),
-                  routeLoginWidget(themeColor, context),
-                  SocialRegisterButtons(themeColor: themeColor)
+                  OtpDataForm(widget.number),
+                  SizedBox(
+                    height: 450,
+                    width: double.infinity,
+                  )
                 ],
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget routeLoginWidget(ThemeNotifier themeColor, BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(right: 36, left: 48, bottom: 12),
-      child: Row(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Text(
-              "Do you have an account?",
-              style: GoogleFonts.poppins(
-                fontSize: 14,
-                color: Colors.black,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-          ),
-          FlatButton(
-            child: Text(
-              "Login",
-              style: GoogleFonts.poppins(
-                fontSize: 14,
-                color: themeColor.getColor(),
-                fontWeight: FontWeight.w300,
-              ),
-            ),
-            onPressed: () {
-              Nav.routeReplacement(context, LoginPage());
-            },
-          )
-        ],
       ),
     );
   }

@@ -7,11 +7,13 @@ import 'package:khulnaservice/models/cartListModel.dart';
 import 'package:khulnaservice/models/homePageDataModel.dart';
 import 'package:khulnaservice/models/orderListModel.dart';
 import 'package:khulnaservice/models/placeOrderModel.dart';
+import 'package:khulnaservice/models/profiledatamodel.dart';
 import 'package:khulnaservice/models/userModel.dart';
 import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:khulnaservice/provider/category_provider.dart';
 import 'package:khulnaservice/provider/homepage_provider.dart';
 import 'package:khulnaservice/provider/place_order_provider.dart';
+import 'package:khulnaservice/provider/profile_data_provider.dart';
 import 'package:khulnaservice/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/api/repositories.dart';
@@ -23,24 +25,46 @@ import 'package:http/http.dart' as http;
 class FetchData {
   Repositories repositories = Repositories();
 
-  Future geReg(name, email, password) async {
+  Future geReg(context, name, email, password) async {
     final regRep = repositories.getRegHttp("register", name, email, password);
     var results = await Future.wait([regRep]);
     SharedPreferences Sp = await SharedPreferences.getInstance();
     if (results[0].statusCode == 200) {
       var data = jsonDecode(results[0].body);
-      print(data);
       Sp.setString('token', data['access_token']);
       Sp.setString('name', data['name']);
-
+      Sp.setString('email', email);
+      Sp.setString('password', password);
+      Provider.of<userProvider>(context, listen: false)
+          .addData(userDataModelFromJson(results[0].body));
       return results[0].body;
     } else {
       throw results[0].body;
     }
   }
 
-  Future getLog(context, email, password) async {
-    final loginRep = repositories.getLoginHttp("login", email, password);
+  Future getRegPhone(context, name, phone, password) async {
+    final regRep =
+        repositories.getRegPhoneHttp("register", name, phone, password);
+    var results = await Future.wait([regRep]);
+    SharedPreferences Sp = await SharedPreferences.getInstance();
+    if (results[0].statusCode == 200) {
+      var data = jsonDecode(results[0].body);
+      Sp.setString('token', data['access_token']);
+      Sp.setString('name', data['name']);
+      Sp.setString('email', phone);
+      Sp.setString('password', password);
+      Provider.of<userProvider>(context, listen: false)
+          .addData(userDataModelFromJson(results[0].body));
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future getLog(context, method, email, password) async {
+    final loginRep =
+        repositories.getLoginHttp("login", method, email, password);
     var results = await Future.wait([loginRep]);
     SharedPreferences Sp = await SharedPreferences.getInstance();
     if (results[0].statusCode == 200) {
@@ -48,6 +72,8 @@ class FetchData {
 
       Sp.setString('token', data['access_token']);
       Sp.setString('name', data['name']);
+      Sp.setString('email', email);
+      Sp.setString('password', password);
       Provider.of<userProvider>(context, listen: false)
           .addData(userDataModelFromJson(results[0].body));
       return results[0].body;
@@ -90,10 +116,20 @@ class FetchData {
     final catRep = repositories.getCategoryHttp("homeProducts");
     var results = await Future.wait([catRep]);
     if (results[0].statusCode == 200) {
+      var data = jsonDecode(results[0].body);
+      List myList = [];
+      data['header_key'].values.toList().forEach((e) {
+        if (data["ecommerceSetting"]['$e']['show'] == "on") {
+          print(data["ecommerceSetting"]['$e']);
+
+          myList.add(data["ecommerceSetting"]['$e']['image']);
+        }
+      });
+
+      Provider.of<HomePageProvider>(context, listen: false)
+          .setHeaderData(myList);
       Provider.of<HomePageProvider>(context, listen: false)
           .setHomeData(homePageDataModelFromJson(results[0].body));
-      var data =jsonDecode(results[0].body);
-      print(data['header_key'].values.toList());
       return results[0].body;
     } else {
       throw results[0].body;
@@ -232,16 +268,62 @@ class FetchData {
       "Content-Type": "application/x-www-form-urlencoded"
     };
     var url = Base + "info";
-    var request = http.MultipartRequest("PUT",
-        Uri.parse("https://home2globe.com/ks/public/api/profileImageUpdate"));
+    var request =
+        http.MultipartRequest("PUT", Uri.parse("${Base}profileImageUpdate"));
     request.files.add(await http.MultipartFile.fromPath('Image', filepath));
     request.headers.addAll(headers);
 
     var response = await request.send();
     if (response.statusCode == 200) {
+      print(response);
       return "success";
     } else {
       throw "error";
+    }
+  }
+
+  Future coupon(coupon) async {
+    final catRep = repositories.couponHttp("profileUpdate", coupon);
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      print(results[0].body);
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future profileData(context) async {
+    final catRep = repositories.profileHttp("profile");
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      Provider.of<ProfileDataProvider>(context, listen: false)
+          .addDaa(profileDataModelFromJson(results[0].body));
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future sendOTP(phone) async {
+    final catRep = repositories.sendOTPHttp("sendOTP", phone);
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      print(results[0].body);
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future verifyOTP(phone, OTP) async {
+    final catRep = repositories.otpVerify("verifyOTP", phone, OTP);
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      print(results[0].body);
+      return results[0].body;
+    } else {
+      throw results[0].body;
     }
   }
 }

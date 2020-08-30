@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/utils/commons/colors.dart';
+import 'package:khulnaservice/utils/theme_notifier.dart';
+import 'package:provider/provider.dart';
 
 class ContactPage extends StatefulWidget {
   @override
@@ -16,19 +18,26 @@ class _ContactPageState extends State<ContactPage> {
         systemNavigationBarIconBrightness: Brightness.dark,
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.dark));
+    final themeColor = Provider.of<ThemeNotifier>(context);
     return Scaffold(
-//      appBar: buildAppBar(),
+      appBar: buildAppBar(themeColor),
       backgroundColor: greyBackground,
       body: Container(
         padding: EdgeInsets.only(left: 16, right: 16, top: 4),
         child: ListView(
           children: <Widget>[
-            contactItem("E Mail", "rosen@gmail.com", "rosen@gmail.com"),
-            contactItem("E Mail", "rosen@gmail.com", "rosen@gmail.com"),
-            contactItem("E Mail", "rosen@gmail.com", "rosen@gmail.com"),
-            contactItem("E Mail", "rosen@gmail.com", "rosen@gmail.com"),
-            contactItem("E Mail", "rosen@gmail.com", "rosen@gmail.com"),
-            contactItem("E Mail", "rosen@gmail.com", "rosen@gmail.com"),
+            contactItem(
+                "Corporate Office",
+                """KhulnaService.com
+
+Road No # 12, House No # 244 (Ground floor)
+
+Nirala R/A , Khulna.Bangladesh.
+
+Email : info@khulnaservice.com
+
+Cell : 0088 01711 423333""",
+                "rosen@gmail.com"),
           ],
         ),
       ),
@@ -46,9 +55,14 @@ class _ContactPageState extends State<ContactPage> {
             color: themeColor.getColor(), fontWeight: FontWeight.bold),
       ),
       backgroundColor: Colors.white,
-      leading: Icon(
-        Icons.chevron_left,
-        color: themeColor.getColor(),
+      leading: GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Icon(
+          Icons.chevron_left,
+          color: textColor,
+        ),
       ),
     );
   }
@@ -57,7 +71,7 @@ class _ContactPageState extends State<ContactPage> {
       String title, String description, String secondDescription) {
     return Container(
       margin: EdgeInsets.only(bottom: 16, left: 8, right: 8, top: 8),
-      height: 84,
+      height: 380,
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(12),
@@ -89,12 +103,6 @@ class _ContactPageState extends State<ContactPage> {
                     color: textColor, fontWeight: FontWeight.w400),
               ),
             ),
-            RichText(
-              text: TextSpan(
-                text: secondDescription,
-                style: GoogleFonts.poppins(color: textColor),
-              ),
-            )
           ],
         ),
       ),

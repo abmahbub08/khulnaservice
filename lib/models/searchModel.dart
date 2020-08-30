@@ -11,16 +11,68 @@ String searchModelToJson(SearchModel data) => json.encode(data.toJson());
 class SearchModel {
   SearchModel({
     this.products,
+    this.manufacturers,
   });
 
   Products products;
+  List<Manufacturer> manufacturers;
 
   factory SearchModel.fromJson(Map<String, dynamic> json) => SearchModel(
     products: Products.fromJson(json["products"]),
+    manufacturers: List<Manufacturer>.from(json["manufacturers"].map((x) => Manufacturer.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "products": products.toJson(),
+    "manufacturers": List<dynamic>.from(manufacturers.map((x) => x.toJson())),
+  };
+}
+
+class Manufacturer {
+  Manufacturer({
+    this.id,
+    this.name,
+    this.description,
+    this.image,
+    this.count,
+    this.state,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  int id;
+  String name;
+  String description;
+  dynamic image;
+  String count;
+  String state;
+  dynamic deletedAt;
+  DateTime createdAt;
+  DateTime updatedAt;
+
+  factory Manufacturer.fromJson(Map<String, dynamic> json) => Manufacturer(
+    id: json["id"],
+    name: json["name"],
+    description: json["description"] == null ? null : json["description"],
+    image: json["image"],
+    count: json["count"],
+    state: json["state"],
+    deletedAt: json["deleted_at"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "description": description == null ? null : description,
+    "image": image,
+    "count": count,
+    "state": state,
+    "deleted_at": deletedAt,
+    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt.toIso8601String(),
   };
 }
 
@@ -337,53 +389,5 @@ class CommentStats {
     "commentable_id": commentableId,
     "totalComments": totalComments,
     "averageRating": averageRating,
-  };
-}
-
-class Manufacturer {
-  Manufacturer({
-    this.id,
-    this.name,
-    this.description,
-    this.image,
-    this.count,
-    this.state,
-    this.deletedAt,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  int id;
-  String name;
-  String description;
-  dynamic image;
-  String count;
-  String state;
-  dynamic deletedAt;
-  DateTime createdAt;
-  DateTime updatedAt;
-
-  factory Manufacturer.fromJson(Map<String, dynamic> json) => Manufacturer(
-    id: json["id"],
-    name: json["name"],
-    description: json["description"] == null ? null : json["description"],
-    image: json["image"],
-    count: json["count"],
-    state: json["state"],
-    deletedAt: json["deleted_at"],
-    createdAt: DateTime.parse(json["created_at"]),
-    updatedAt: DateTime.parse(json["updated_at"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "description": description == null ? null : description,
-    "image": image,
-    "count": count,
-    "state": state,
-    "deleted_at": deletedAt,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
   };
 }
