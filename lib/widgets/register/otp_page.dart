@@ -15,9 +15,10 @@ import 'package:provider/provider.dart';
 import 'otp_data.dart';
 
 class OtpPage extends StatefulWidget {
+  var referral;
   var number;
 
-  OtpPage(this.number);
+  OtpPage(this.referral, this.number);
 
   @override
   _OtpPageState createState() => _OtpPageState();
@@ -84,6 +85,10 @@ class _OtpPageState extends State<OtpPage> {
                     )
                   ],
                 ),
+
+                SizedBox(height: 5),
+                Text("Please check your mobile message"),
+
                 SizedBox(
                   height: 20,
                 ),
@@ -111,8 +116,8 @@ class _OtpPageState extends State<OtpPage> {
                 MyTextFormField(
                   textEditingController: otpController,
                   isEmail: true,
-                  labelText: "OTP",
-                  hintText: 'OTP',
+                  labelText: "Ex:1234",
+                  hintText: 'Ex:1234',
                 ),
                 SizedBox(
                   height: 20,
@@ -174,7 +179,7 @@ class _OtpPageState extends State<OtpPage> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              fetchData.sendOTP(widget.number);
+                              fetchData.sendOTP(widget.referral,widget.number);
                               setState(() {
                                 isTry = false;
                               });
@@ -187,7 +192,7 @@ class _OtpPageState extends State<OtpPage> {
                           ),
                         ],
                       )
-                    : Text("Send OTP again ($_start)")
+                    : Text("Send OTP again ($_start s)")
               ],
             ),
           ),
@@ -200,7 +205,7 @@ class _OtpPageState extends State<OtpPage> {
 
   FetchData fetchData = FetchData();
   Timer _timer;
-  int _start = 59;
+  int _start = 120;
 
   void startTimer() {
     const oneSec = const Duration(seconds: 1);
@@ -211,7 +216,7 @@ class _OtpPageState extends State<OtpPage> {
           if (_start < 1) {
             isTry = true;
             timer.cancel();
-            _start = 59;
+            _start = 120;
           } else {
             _start = _start - 1;
           }

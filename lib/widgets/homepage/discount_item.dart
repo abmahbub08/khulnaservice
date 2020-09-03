@@ -36,6 +36,7 @@ class DiscountItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return InkWell(
       onTap: () {
         Nav.route(
@@ -102,7 +103,7 @@ class DiscountItem extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  height: 160,
+                  height: size.height * 0.15,
                   padding: EdgeInsets.all(10),
                 ),
                 Container(
@@ -112,7 +113,7 @@ class DiscountItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       SizedBox(
-                        width: 170,
+                        width: size.width * 0.50,
                         child: AutoSizeText(
                           '${product.name}',
                           style: GoogleFonts.poppins(
@@ -183,18 +184,95 @@ class DiscountItem extends StatelessWidget {
 //                            fontSize: 10,
 //                            fontWeight: FontWeight.w300),
 //                      ),
+
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              context
+                                  .read<CartProvider>()
+                                  .removeQuantity(product.id);
+                            },
+                            child: Container(
+                              height: 22,
+                              width: 22,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  shape: BoxShape.circle),
+                              child: Center(
+                                  child: Icon(
+                                Icons.remove,
+                                size: 15,
+                              )),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Container(
+                            height: 22,
+                            width: 40,
+                            color: themeColor.getColor().withOpacity(0.2),
+                            child: Center(
+                              child: Text(context
+                                          .watch<CartProvider>()
+                                          .getQuantity(product.id) ==
+                                      null
+                                  ? "1"
+                                  : context
+                                      .watch<CartProvider>()
+                                      .getQuantity(product.id)
+                                      .toString()),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              context
+                                  .read<CartProvider>()
+                                  .addQuantity(product.id);
+                            },
+                            child: Container(
+                              height: 22,
+                              width: 22,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  shape: BoxShape.circle),
+                              child: Center(
+                                  child: Icon(
+                                Icons.add,
+                                size: 15,
+                              )),
+                            ),
+                          ),
+                        ],
+                      ),
                       Container(
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                              width: 150,
+                              width: size.width * 0.35,
                               child: GFButton(
                                 onPressed: () {
                                   CustomWidget.myDiaglog(context);
                                   fetchData
-                                      .getAddToCart(product.id.toString(), "1")
+                                      .getAddToCart(
+                                          product.id.toString(),
+                                          Provider.of<CartProvider>(context,
+                                                          listen: false)
+                                                      .getQuantity(
+                                                          product.id) ==
+                                                  null
+                                              ? "1"
+                                              : Provider.of<CartProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .getQuantity(product.id)
+                                                  .toString())
                                       .then((value) {
                                     fetchData.getCart(context).then((value) {
                                       Navigator.pop(context);
@@ -217,7 +295,7 @@ class DiscountItem extends StatelessWidget {
                                   height: 12,
                                 ),
                                 child: Text(
-                                  "Add to Basket",
+                                  "Buy Now",
                                   style: GoogleFonts.poppins(
                                       color: Colors.white,
                                       fontSize: 10,

@@ -305,8 +305,8 @@ class FetchData {
     }
   }
 
-  Future sendOTP(phone) async {
-    final catRep = repositories.sendOTPHttp("sendOTP", phone);
+  Future sendOTP(referral, phone) async {
+    final catRep = repositories.sendOTPHttp("sendOTP", referral, phone);
     var results = await Future.wait([catRep]);
     if (results[0].statusCode == 200) {
       print(results[0].body);
@@ -318,6 +318,17 @@ class FetchData {
 
   Future verifyOTP(phone, OTP) async {
     final catRep = repositories.otpVerify("verifyOTP", phone, OTP);
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      print(results[0].body);
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future IndividualOrder(orderID) async {
+    final catRep = repositories.otpVerify("verifyOTP");
     var results = await Future.wait([catRep]);
     if (results[0].statusCode == 200) {
       print(results[0].body);

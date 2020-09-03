@@ -3,18 +3,20 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/pages/search_page.dart';
 import 'package:khulnaservice/utils/navigator.dart';
+import 'package:khulnaservice/utils/theme_notifier.dart';
+import 'package:provider/provider.dart';
 
 class SearchBox extends StatelessWidget {
-   SearchBox({
+  SearchBox({
     Key key,
   }) : super(key: key);
-
 
   ScrollController _scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final themeColor = Provider.of<ThemeNotifier>(context);
     return InkWell(
       onTap: () {
         Nav.route(context, SearchPage(true));
@@ -24,6 +26,7 @@ class SearchBox extends StatelessWidget {
         padding: EdgeInsets.only(left: 18, right: 18),
         height: 44,
         decoration: BoxDecoration(
+          border: Border.all(color: themeColor.getColor().withOpacity(0.3)),
           boxShadow: [
             BoxShadow(
                 color: Color(0xFFA1B1C2).withOpacity(0.2),

@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage> {
     final themeColor = Provider.of<ThemeNotifier>(context);
     var MyData =
         Provider.of<HomePageProvider>(context, listen: false).homePageData;
+    var size = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Color.fromARGB(255, 252, 252, 252),
         body: ListView(
@@ -83,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                     .toList(),
                 options: CarouselOptions(
                     autoPlay: false,
-                    height: 175,
+                    height: size.height *0.22,
                     viewportFraction: 1.0,
                     enlargeCenterPage: false,
                     onPageChanged: (index, reason) {

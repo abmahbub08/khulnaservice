@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/provider/category_provider.dart';
+import 'package:khulnaservice/utils/navigator.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/utils/commons/colors.dart';
 import 'package:khulnaservice/utils/dummy_data/category.dart';
@@ -28,8 +29,6 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   var indexTab = 0;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -122,14 +121,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     .children[indexThird]
                     .slug);
 
-            Route route =
-                MaterialPageRoute(builder: (context) => testProduct());
-            Navigator.push(context, route);
-            print(Provider.of<CategoryProvider>(context, listen: false)
-                .myCategory
-                .category[indexTab]
-                .children[indexThird]
-                .slug);
+            Nav.route(context, testProduct());
           }
         },
         title: Text(
@@ -160,57 +152,52 @@ class _CategoryPageState extends State<CategoryPage> {
                         .children
                         .length, (index) {
                   return Column(
-
-
                     children: [
                       Align(
                         alignment: Alignment.topLeft,
-                        child: GestureDetector(
-                          onTap: () {
-                            print(
-                                Provider.of<CategoryProvider>(context, listen: false)
-                                    .myCategory
-                                    .category[indexTab]
-                                    .children[indexThird]
-                                    .children[index]
-                                    .slug);
+                        child: InkWell(
+                            onTap: () {
+                              print(Provider.of<CategoryProvider>(context,
+                                      listen: false)
+                                  .myCategory
+                                  .category[indexTab]
+                                  .children[indexThird]
+                                  .children[index]
+                                  .slug);
 
-                            Provider.of<CategoryProvider>(context, listen: false)
-                                .addCatSlug(Provider.of<CategoryProvider>(context,
+                              Provider.of<CategoryProvider>(context,
+                                      listen: false)
+                                  .addCatSlug(Provider.of<CategoryProvider>(
+                                          context,
+                                          listen: false)
+                                      .myCategory
+                                      .category[indexTab]
+                                      .children[indexThird]
+                                      .children[index]
+                                      .slug);
+
+                              Nav.route(context, testProduct());
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  left: 64, top: 2.0, bottom: 1.0),
+                              child: AutoSizeText(
+                                Provider.of<CategoryProvider>(context,
                                         listen: false)
                                     .myCategory
                                     .category[indexTab]
                                     .children[indexThird]
                                     .children[index]
-                                    .slug);
-
-                            Route route = MaterialPageRoute(
-                                builder: (context) => testProduct());
-                            Navigator.push(context, route);
-                          },
-                          child:  Padding(
-                            padding:
-                            EdgeInsets.only(left:64,top: 2.0, bottom: 1.0),
-                            child: AutoSizeText(
-
-                              Provider.of<CategoryProvider>(context,
-                                  listen: false)
-                                  .myCategory
-                                  .category[indexTab]
-                                  .children[indexThird]
-                                  .children[index]
-                                  .name,
-                              textDirection: TextDirection.ltr,
-                              maxLines: 2,
-                              minFontSize: 7,
-                              style: GoogleFonts.poppins(
-
-                                color: Color(0xFF5D6A78),
-                                fontWeight: FontWeight.w400,
+                                    .name,
+                                textDirection: TextDirection.ltr,
+                                maxLines: 2,
+                                minFontSize: 7,
+                                style: GoogleFonts.poppins(
+                                  color: Color(0xFF5D6A78),
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                          )
-                        ),
+                            )),
                       ),
                       Divider()
                     ],
@@ -225,6 +212,5 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
 //
-
 
 }

@@ -9,22 +9,25 @@ class customWidget {
     return showDialog(
         barrierDismissible: false,
         context: ctx,
-        builder: (context) => Dialog(
-            insetPadding: EdgeInsets.symmetric(horizontal: 120),
-            child: Container(
-              color: Colors.transparent,
-              height: 100,
-              width: 50,
-              child: Center(
-                child: PumpingHeart(
-                  image: Image.asset(
-                    "assets/images/produload.jpg",
-                    width: 90,
-                    height: 90,
-                  ),
-                ),
-              ),
-            )));
+        builder: (context) => WillPopScope(
+              onWillPop: () {},
+              child: Dialog(
+                  insetPadding: EdgeInsets.symmetric(horizontal: 120),
+                  child: Container(
+                    color: Colors.transparent,
+                    height: 100,
+                    width: 50,
+                    child: Center(
+                      child: PumpingHeart(
+                        image: Image.asset(
+                          "assets/images/produload.jpg",
+                          width: 90,
+                          height: 90,
+                        ),
+                      ),
+                    ),
+                  )),
+            ));
   }
 
   myShowDialog(ctx, value) {
@@ -40,9 +43,7 @@ class customWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                        width:160,
-                        child: Center(child: Text(value))),
+                    SizedBox(width: 160, child: Center(child: Text(value))),
                     Divider(),
                     RaisedButton(
                       color: themeColor.getColor(),

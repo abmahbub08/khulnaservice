@@ -121,8 +121,6 @@ class _testPrDetailsState extends State<testPrDetails>
 //            ))
 //        .toList();
 
-    print(widget.data.name);
-
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -532,58 +530,72 @@ class _testPrDetailsState extends State<testPrDetails>
                                         color: themeColor.getColor(),
                                       ),
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: <Widget>[
+                                        children: [
                                           InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  piece--;
-                                                });
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 16.0),
-                                                child: Text(
-                                                  "-",
-                                                  style: TextStyle(
-                                                      fontSize: 24,
-                                                      color: Colors.white),
-                                                ),
-                                              )),
-                                          Container(
+                                            onTap: () {
+                                              context
+                                                  .read<CartProvider>()
+                                                  .removeQuantity(
+                                                      widget.data.id);
+                                            },
+                                            child: Container(
+                                              height: 22,
+                                              width: 22,
                                               decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(18),
-                                                color: Color(0xFF707070),
-                                              ),
-                                              child: Container(
-                                                alignment: Alignment.center,
-                                                width: 24,
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text('$piece',
-                                                    style: GoogleFonts.poppins(
-                                                        color: Colors.white,
-                                                        fontSize: 16)),
+                                                  color: Colors.grey[300],
+                                                  shape: BoxShape.circle),
+                                              child: Center(
+                                                  child: Icon(
+                                                Icons.remove,
+                                                size: 15,
                                               )),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Container(
+                                            height: 22,
+                                            width: 40,
+                                            color: themeColor
+                                                .getColor()
+                                                .withOpacity(0.2),
+                                            child: Center(
+                                              child: Text(context
+                                                          .watch<CartProvider>()
+                                                          .getQuantity(
+                                                              widget.data.id) ==
+                                                      null
+                                                  ? "1"
+                                                  : context
+                                                      .watch<CartProvider>()
+                                                      .getQuantity(
+                                                          widget.data.id)
+                                                      .toString()),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
                                           InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  if (piece < 9) {
-                                                    piece++;
-                                                  }
-                                                });
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 16.0),
-                                                child: Text("+",
-                                                    style: TextStyle(
-                                                        color: Colors.white)),
+                                            onTap: () {
+                                              context
+                                                  .read<CartProvider>()
+                                                  .addQuantity(widget.data.id);
+                                            },
+                                            child: Container(
+                                              height: 22,
+                                              width: 22,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.grey[300],
+                                                  shape: BoxShape.circle),
+                                              child: Center(
+                                                  child: Icon(
+                                                Icons.add,
+                                                size: 15,
                                               )),
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     )
@@ -616,7 +628,22 @@ class _testPrDetailsState extends State<testPrDetails>
                                             fetchData
                                                 .getAddToCart(
                                                     widget.data.id.toString(),
-                                                    "$piece")
+                                                    Provider.of<CartProvider>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .getQuantity(
+                                                                    widget.data
+                                                                        .id) ==
+                                                            null
+                                                        ? "1"
+                                                        : Provider.of<
+                                                                    CartProvider>(
+                                                                context,
+                                                                listen: false)
+                                                            .getQuantity(
+                                                                widget.data.id)
+                                                            .toString())
                                                 .then((value) {
                                               fetchData
                                                   .getCart(context)
@@ -625,7 +652,7 @@ class _testPrDetailsState extends State<testPrDetails>
                                               });
                                             });
                                           },
-                                          child: Text("Add to Basket",
+                                          child: Text("Buy Now",
                                               style: GoogleFonts.poppins(
                                                   fontWeight: FontWeight.w400)),
                                           shape: GFButtonShape.pills,
@@ -675,20 +702,20 @@ class _testPrDetailsState extends State<testPrDetails>
 //                                      shape: GFButtonShape.pills,
 //                                      color: Color(0xFFB3C0C8),
 //                                    ),
-                                    GFButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.share,
-                                        color: Color(0xFFB3C0C8),
-                                        size: 16,
-                                      ),
-                                      child: Text("Share",
-                                          style: GoogleFonts.poppins(
-                                              fontWeight: FontWeight.w400)),
-                                      type: GFButtonType.transparent,
-                                      shape: GFButtonShape.pills,
-                                      color: Color(0xFFB3C0C8),
-                                    )
+//                                    GFButton(
+//                                      onPressed: () {},
+//                                      icon: Icon(
+//                                        Icons.share,
+//                                        color: Color(0xFFB3C0C8),
+//                                        size: 16,
+//                                      ),
+//                                      child: Text("Share",
+//                                          style: GoogleFonts.poppins(
+//                                              fontWeight: FontWeight.w400)),
+//                                      type: GFButtonType.transparent,
+//                                      shape: GFButtonShape.pills,
+//                                      color: Color(0xFFB3C0C8),
+//                                    )
                                   ],
                                 )
                               ],

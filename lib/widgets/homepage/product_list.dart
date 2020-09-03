@@ -17,6 +17,7 @@ class ProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Container(
       child: ListView(
         shrinkWrap: true,
@@ -24,7 +25,7 @@ class ProductList extends StatelessWidget {
         children: <Widget>[
           productListTitleBar,
           Container(
-              height: 285.0,
+              height: size.height *0.215,
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: product.length,

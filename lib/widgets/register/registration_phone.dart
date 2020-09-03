@@ -25,6 +25,7 @@ class _RegisterPhoneState extends State<RegisterPhone> {
   bool passwordVisible = false;
   bool _isLoading = false;
   TextEditingController NumberController = TextEditingController();
+  TextEditingController ReferralController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +40,27 @@ class _RegisterPhoneState extends State<RegisterPhone> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                Text(
+                  "Verify your phone number",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 26,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "You will receive a ontime PIN as an SMS",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+                SizedBox(height: 15),
+                MyTextFormField(
+                  howMany: 11,
+                  textEditingController: ReferralController,
+                  labelText: "Referral Code",
+                  hintText: 'Referral Code',
+                ),
                 MyTextFormField(
                   howMany: 11,
                   textEditingController: NumberController,
@@ -63,7 +85,8 @@ class _RegisterPhoneState extends State<RegisterPhone> {
                         });
                         if (NumberController.text.length == 11) {
                           fetchData
-                              .sendOTP(NumberController.text)
+                              .sendOTP(ReferralController.text,
+                                  NumberController.text)
                               .then((value) {
                             var data = jsonDecode(value);
                             setState(() {
@@ -74,7 +97,9 @@ class _RegisterPhoneState extends State<RegisterPhone> {
                                 _isLoading = false;
                               });
                               Nav.route(
-                                  context, OtpPage(NumberController.text));
+                                  context,
+                                  OtpPage(ReferralController.text,
+                                      NumberController.text));
                             } else if (data['status_code'] == 8888) {
                               setState(() {
                                 _isLoading = false;

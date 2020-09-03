@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:khulnaservice/api/api_services.dart';
 import 'package:khulnaservice/main.dart';
 import 'package:khulnaservice/provider/profile_data_provider.dart';
 import 'package:khulnaservice/provider/user_provider.dart';
@@ -83,7 +84,6 @@ class _HiddenMenuState extends State<HiddenMenu> {
         .profileData
         .user;
 
-
     return Scaffold(
       body: Container(
         height: ScreenUtil.getHeight(context),
@@ -98,14 +98,15 @@ class _HiddenMenuState extends State<HiddenMenu> {
                 height: 36,
               ),
               ListTile(
-                title: Text(
-                  user.name,
-                  style: GoogleFonts.poppins(color: Colors.white),
-                ),
-                leading: CircleAvatar(
-                  backgroundImage: AssetImage("assets/images/man.png"),
-                ),
-              ),
+                  title: Text(
+                    user.name,
+                    style: GoogleFonts.poppins(color: Colors.white),
+                  ),
+                  leading: FadeInImage.assetNetwork(
+
+                      placeholder: "assets/images/man.png",
+                      image:
+                          "${imageLink}ims/?src=/uploads/user/${user.id}/profile/cropped/${user.image}&p=small",height: 40,width: 40,)),
               Container(
                 padding: EdgeInsets.only(
                   top: 20.0,

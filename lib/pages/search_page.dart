@@ -3,7 +3,10 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:getflutter/components/button/gf_button.dart';
+import 'package:getflutter/types/gf_button_type.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/api/api_services.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
@@ -212,6 +215,8 @@ class _SearchPageState extends State<SearchPage> {
                       padding: EdgeInsets.only(left: 18, right: 18),
                       height: 44,
                       decoration: BoxDecoration(
+                        border: Border.all(
+                            color: themeColor.getColor().withOpacity(0.3)),
                         boxShadow: [
                           BoxShadow(
                               color: Colors.grey[200],
@@ -289,6 +294,8 @@ class _SearchPageState extends State<SearchPage> {
                 padding: EdgeInsets.only(left: 18, right: 22),
                 height: 44,
                 decoration: BoxDecoration(
+                  border: Border.all(
+                      color: themeColor.getColor().withOpacity(0.3)),
                   boxShadow: [
                     BoxShadow(
                         color: Colors.grey[200],
@@ -441,20 +448,17 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       ),
                     )
-                  : GridView.builder(
+                  : ListView.builder(
                       itemCount: SecondList.length + 1,
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          new SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, childAspectRatio: 0.8),
                       itemBuilder: (BuildContext context, index) {
                         if (index == SecondList.length) {
                           return Center(
                             child: Text(ProductLoading),
                           );
                         }
-                        return productSearchItem(
+                        return Center(child: productSearchItem(
                             context,
                             SecondList[index],
                             themeColor,
@@ -462,7 +466,7 @@ class _SearchPageState extends State<SearchPage> {
                             SecondList[index].price,
                             SecondList[index].discountedPrice,
                             SecondList[index].id,
-                            SecondList[index].image);
+                            SecondList[index].image),);
                       },
 //                    crossAxisCount: 2,
 //                    childAspectRatio: 0.7,
@@ -596,162 +600,307 @@ class _SearchPageState extends State<SearchPage> {
         });
   }
 
-  Stack productSearchItem(BuildContext context, data, ThemeNotifier themeColor,
-      name, price, diPrice, id, image) {
+  productSearchItem(BuildContext context, data, ThemeNotifier themeColor, name,
+      price, diPrice, id, image) {
     var size = MediaQuery.of(context).size;
-    return Stack(
-      children: <Widget>[
-        InkWell(
-          onTap: () {
-            Nav.route(context, testPrDetails(data));
-          },
-          child: Container(
-            width: ScreenUtil.getWidth(context) / 2,
-            margin: EdgeInsets.only(
-                left: size.width * 0.035,
-                top: size.height * 0.015,
-                right: size.width * 0.035,
-                bottom: size.height * 0.0045),
+    return InkWell(
+      onTap: () {
+        Nav.route(context, testPrDetails(data));
+      },
+      child: Stack(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(top: 8, left: 16, bottom: 8),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey[200],
-                        blurRadius: 5.0,
-                        spreadRadius: 1,
-                        offset: Offset(0.0, 2)),
-                  ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                            width: size.width * 0.5,
-                            height: size.height * 0.15,
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(8),
-                                ),
-                                child: FadeInImage.assetNetwork(
-                                    placeholder: "assets/images/produload.jpg",
-                                    image:
-                                        "${imageLink}ims/?src=/uploads/product/$id/front/cropped/$image&p=small"))),
-                      ],
-                    ),
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey[200],
+                      blurRadius: 5.0,
+                      spreadRadius: 1,
+                      offset: Offset(0.0, 1)),
+                ]),
+            width: ScreenUtil.getWidth(context) / 1.24,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: FadeInImage.assetNetwork(
+                          placeholder: "assets/images/produload.jpg",
+                          image:
+                              "https://khulnaservice.com/ims/?src=/uploads/product/${id}/front/cropped/${image}&p=small")),
+                  width: ScreenUtil.getWidth(context) * 0.30,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  Container(
-                    color: Colors.white,
-                    padding: EdgeInsets.only(
-                        left: size.width * 0.035, top: size.height * 0.011),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        AutoSizeText(
-                          '$name',
+
+                  padding: EdgeInsets.all(10),
+                ),
+                Container(
+                  height: 140,
+                  margin: EdgeInsets.only(top: 8, bottom: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      SizedBox(
+
+                        width: 170,
+                        child: AutoSizeText(
+                          '${name}',
                           style: GoogleFonts.poppins(
                             fontSize: 12,
                             color: Color(0xFF5D6A78),
                             fontWeight: FontWeight.w300,
                           ),
-                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                           minFontSize: 11,
                         ),
-                        SizedBox(
-                          height: 2,
-                        ),
-                        Row(
+                      ),
+                      Row(
+                        children: <Widget>[
+                          RatingBar(
+                            ignoreGestures: true,
+                            initialRating: 5,
+                            itemSize: 14.0,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemBuilder: (context, _) => Icon(
+                              Ionicons.ios_star,
+                              color: themeColor.getColor(),
+                            ),
+                            onRatingUpdate: (rating) {
+                              print(rating);
+                            },
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+//                          Text(
+//                            "(395)",
+//                            style: GoogleFonts.poppins(
+//                                fontSize: 9, fontWeight: FontWeight.w400),
+//                          )
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          double.parse(diPrice) != 0
+                              ? Text(
+                                  "${price}",
+                                  style: GoogleFonts.poppins(
+                                      decoration: TextDecoration.lineThrough,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w300),
+                                )
+                              : Container(),
+                          SizedBox(
+                            width: 4,
+                          ),
+                          Text(
+                            "৳ ${double.parse(diPrice) == 0 ? price : diPrice}",
+                            style: GoogleFonts.poppins(
+                                color: themeColor.getColor(),
+                                fontSize: 18,
+                                fontWeight: FontWeight.w300),
+                          ),
+                        ],
+                      ),
+//                      Text(
+//                        "Free Cargo",
+//                        style: GoogleFonts.poppins(
+//                            color: themeColor.getColor(),
+//                            fontSize: 10,
+//                            fontWeight: FontWeight.w300),
+//                      ),
+
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              context.read<CartProvider>().removeQuantity(id);
+                            },
+                            child: Container(
+                              height: 22,
+                              width: 22,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  shape: BoxShape.circle),
+                              child: Center(
+                                  child: Icon(
+                                Icons.remove,
+                                size: 15,
+                              )),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Container(
+                            height: 22,
+                            width: 40,
+                            color: themeColor.getColor().withOpacity(0.2),
+                            child: Center(
+                              child: Text(context
+                                          .watch<CartProvider>()
+                                          .getQuantity(id) ==
+                                      null
+                                  ? "1"
+                                  : context
+                                      .watch<CartProvider>()
+                                      .getQuantity(id)
+                                      .toString()),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              context.read<CartProvider>().addQuantity(id);
+                            },
+                            child: Container(
+                              height: 22,
+                              width: 22,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  shape: BoxShape.circle),
+                              child: Center(
+                                  child: Icon(
+                                Icons.add,
+                                size: 15,
+                              )),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 5,
+                            Container(
+                              width: 150,
+                              child: GFButton(
+                                onPressed: () {
+                                  CustomWidget.myDiaglog(context);
+                                  fetchData
+                                      .getAddToCart(id.toString(), Provider.of<CartProvider>(context,
+                                      listen: false)
+                                      .getQuantity(id) ==
+                                      null
+                                      ? "1"
+                                      : Provider.of<CartProvider>(
+                                      context,
+                                      listen: false)
+                                      .getQuantity(id)
+                                      .toString())
+                                      .then((value) {
+                                    fetchData.getCart(context).then((value) {
+                                      Navigator.pop(context);
+                                    }).catchError((onError) {
+                                      print(onError);
+                                      Navigator.pop(context);
+                                      CustomWidget.myShowDialog(
+                                          context, "Something went wrong");
+                                    });
+                                  }).catchError((onError) {
+                                    print(onError);
+                                    Navigator.pop(context);
+                                    CustomWidget.myShowDialog(
+                                        context, "Something went wrong");
+                                  });
+                                },
+                                icon: SvgPicture.asset(
+                                  "assets/icons/ic_product_shopping_cart.svg",
+                                  color: Colors.white,
+                                  height: 12,
                                 ),
-                                double.parse(diPrice) == 0
-                                    ? Text(
-                                        "",
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                        ),
-                                      )
-                                    : Text(
-                                        "৳$diPrice",
-                                        style: GoogleFonts.poppins(
-                                            decoration:
-                                                TextDecoration.lineThrough,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                Text(
-                                  "৳${double.parse(price).toStringAsFixed(0)}",
+                                child: Text(
+                                  "Buy Now",
                                   style: GoogleFonts.poppins(
-                                      color: themeColor.getColor(),
-                                      fontSize: 18,
+                                      color: Colors.white,
+                                      fontSize: 10,
                                       fontWeight: FontWeight.w400),
-                                )
-                              ],
+                                ),
+                                type: GFButtonType.transparent,
+                              ),
+                              decoration: BoxDecoration(
+                                  color: themeColor.getColor(),
+                                  borderRadius: BorderRadius.circular(3),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(.2),
+                                      blurRadius: 6.0, // soften the shadow
+                                      spreadRadius: 0.0, //extend the shadow
+                                      offset: Offset(
+                                        0.0, // Move to right 10  horizontally
+                                        1.0, // Move to bottom 10 Vertically
+                                      ),
+                                    )
+                                  ]),
+                              height: 32,
+                              margin: EdgeInsets.only(right: 2),
                             ),
                           ],
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: size.height * 0.020,
-          right: size.width * 0.06,
-          child: InkWell(
-            onTap: () {
-              CustomWidget.myDiaglog(context);
-              fetchData.getAddToCart(id.toString(), "1").then((value) {
-                fetchData.getCart(context).then((value) {
-                  Navigator.pop(context);
-                });
-              });
-            },
-            child: Container(
-              padding: EdgeInsets.only(
-                  top: size.height * 0.015,
-                  left: size.width * 0.025,
-                  bottom: size.height * 0.015,
-                  right: size.width * 0.025),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: themeColor.getColor(),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey[200],
-                        blurRadius: 5.0,
-                        spreadRadius: 1,
-                        offset: Offset(0.0, 1)),
-                  ]),
-              child: Container(
-                child: Center(
-                  child: SvgPicture.asset(
-                    "assets/icons/ic_product_shopping_cart.svg",
-                    color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ),
+                )
+              ],
             ),
           ),
-        )
-      ],
+//          Positioned(
+//            bottom: 16,
+//            right: 8,
+//            child: Container(
+//              child: GFButton(
+//                onPressed: () {
+//                  Scaffold.of(context).showSnackBar(SnackBar(
+//                      backgroundColor: mainColor,
+//                      content: Text('Product added to cart')));
+//                  Nav.route(context, ShoppingCartPage());
+//                },
+//                icon: SvgPicture.asset(
+//                  "assets/icons/ic_product_shopping_cart.svg",
+//                  height: 12,
+//                ),
+//                child: Text(
+//                  "Add to Basket",
+//                  style: GoogleFonts.poppins(
+//                      color: Color(0xFF5D6A78),
+//                      fontSize: 10,
+//                      fontWeight: FontWeight.w400),
+//                ),
+//                type: GFButtonType.transparent,
+//              ),
+//              decoration: BoxDecoration(
+//                  color: Colors.white,
+//                  borderRadius: BorderRadius.circular(3),
+//                  boxShadow: [
+//                    BoxShadow(
+//                      color: Colors.grey.withOpacity(.2),
+//                      blurRadius: 6.0, // soften the shadow
+//                      spreadRadius: 0.0, //extend the shadow
+//                      offset: Offset(
+//                        0.0, // Move to right 10  horizontally
+//                        1.0, // Move to bottom 10 Vertically
+//                      ),
+//                    )
+//                  ]),
+//              height: 32,
+//              margin: EdgeInsets.only(right: 2),
+//            ),
+//          )
+        ],
+      ),
     );
   }
 }

@@ -284,11 +284,12 @@ class ApiServices {
     }
   }
 
-  Future<http.Response> sendOtp(String param, phone) async {
+  Future<http.Response> sendOtp(String param, referral, phone) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     try {
       final result = http.post(Base + '$param', body: {
+        "referral": referral,
         "phone": phone
       }, headers: {
         "Authorization": "Bearer ${sharedPreferences.get("token")}",
@@ -307,6 +308,19 @@ class ApiServices {
         "phone": phone,
         "otp": OTP
       }, headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> individualOrder(String param) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.get(Base + '$param', headers: {
         "Authorization": "Bearer ${sharedPreferences.get("token")}",
       });
       return result;

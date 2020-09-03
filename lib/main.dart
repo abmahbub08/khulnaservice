@@ -214,14 +214,7 @@ class _InitPageState extends State<InitPage> {
       elevationAppBar: 0.0,
       backgroundColorAppBar: Color.fromARGB(255, 252, 252, 252),
       tittleAppBar: Padding(
-        child: Text(
-          "Khulna Service",
-          style: GoogleFonts.poppins(
-            fontSize: 26,
-            color: themeColor.getColor(),
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        child: Image.asset("assets/images/ksappbar.png",height: 110,width: 185,),
         padding: EdgeInsets.only(bottom: 18),
       ),
 //      actionsAppBar: <Widget>[

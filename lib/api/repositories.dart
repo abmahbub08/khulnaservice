@@ -152,9 +152,9 @@ class Repositories {
     }
   }
 
-  Future<http.Response> sendOTPHttp(String param, phone) {
+  Future<http.Response> sendOTPHttp(String param,referral, phone) {
     try {
-      return apiService.sendOtp(param, phone);
+      return apiService.sendOtp(param,referral, phone);
     } catch (e) {
       throw Exception();
     }
@@ -163,6 +163,14 @@ class Repositories {
   Future<http.Response> otpVerify(String param, phone, OTP) {
     try {
       return apiService.verifyOTP(param, phone, OTP);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> IndividualOrder(String param) {
+    try {
+      return apiService.individualOrder(param);
     } catch (e) {
       throw Exception();
     }

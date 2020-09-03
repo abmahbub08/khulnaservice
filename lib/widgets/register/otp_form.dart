@@ -185,8 +185,6 @@ class _OtpDataFormState extends State<OtpDataForm> {
 
       fetchData.getRegPhone(context, name, email, password).then((value) async {
         fetchData.profileData(context).then((value) {
-          print("profile value $value");
-
           setState(() {
             _isLoading = false;
           });
