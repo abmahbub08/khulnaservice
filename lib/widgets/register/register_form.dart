@@ -44,125 +44,126 @@ class _RegisterFormState extends State<RegisterForm> {
       child: Form(
         key: _formKey,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
-              alignment: Alignment.topCenter,
-              child: MyTextFormField(
-                isEmail: true,
-                labelText: "Full Name",
-                hintText: 'Full Name',
-                validator: (String value) {
-                  if (value.isEmpty) {
-                    return 'Enter your last name';
-                  }
-                  return null;
-                },
-                onSaved: (String value) {
-                  name = value;
-                },
-              ),
-            ),
-            MyTextFormField(
-              labelText: "Email",
-              hintText: 'Email',
-              isEmail: true,
-              validator: (String value) {
-                if (!validator.isEmail(value)) {
-                  return 'Please enter a valid email';
-                }
-                return null;
-              },
-              onSaved: (String value) {
-                email = value;
-              },
-            ),
-            MyTextFormField(
-              isEmail: true,
-              labelText: "Password",
-              hintText: 'Password',
-              suffixIcon: IconButton(
-                icon: Icon(
-                  // Based on passwordVisible state choose the icon
-                  passwordVisible ? Icons.visibility : Icons.visibility_off,
-                  color: themeColor.getColor(),
-                ),
-                onPressed: () {
-                  // Update the state i.e. toogle the state of passwordVisible variable
-                  setState(() {
-                    passwordVisible = !passwordVisible;
-                  });
-                },
-              ),
-              isPassword: passwordVisible,
-              validator: (String value) {
-                if (value.length < 7) {
-                  return 'Password should be minimum 7 characters';
-                } else if (value != password) {
-                  return "password don't match";
-                }
-
-                return null;
-              },
-              onSaved: (String value) {
-                password = value;
-              },
-            ),
-            MyTextFormField(
-              isEmail: true,
-              labelText: "Re-Password",
-              hintText: 'Re-Password',
-              suffixIcon: IconButton(
-                icon: Icon(
-                  // Based on passwordVisible state choose the icon
-                  passwordVisible ? Icons.visibility : Icons.visibility_off,
-                  color: themeColor.getColor(),
-                ),
-                onPressed: () {
-                  // Update the state i.e. toogle the state of passwordVisible variable
-                  setState(() {
-                    passwordVisible = !passwordVisible;
-                  });
-                },
-              ),
-              isPassword: passwordVisible,
-              validator: (String value) {
-                if (value.length < 7) {
-                  return 'Password should be minimum 7 characters';
-                } else if (value != password) {
-                  return "password don't match";
-                }
-
-                return null;
-              },
-            ),
-            Container(
-              height: 48,
-              width: ScreenUtil.getWidth(context),
-              margin: EdgeInsets.only(top: 12, bottom: 0),
-              child: ShadowButton(
-                borderRadius: 12,
-                height: 40,
-                child: FlatButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  color: themeColor.getColor(),
-                  onPressed: () {
-                    _formKey.currentState.save();
-                    _formKey.currentState.validate();
-                    getReg(name, email, password);
-                  },
-                  child: Text(
-                    _isLoading ? 'Creating.....' : 'Register',
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            // Container(
+            //   alignment: Alignment.topCenter,
+            //   child: MyTextFormField(
+            //     isEmail: true,
+            //     labelText: "Full Name",
+            //     hintText: 'Full Name',
+            //     validator: (String value) {
+            //       if (value.isEmpty) {
+            //         return 'Enter your last name';
+            //       }
+            //       return null;
+            //     },
+            //     onSaved: (String value) {
+            //       name = value;
+            //     },
+            //   ),
+            // ),
+            // MyTextFormField(
+            //   labelText: "Email",
+            //   hintText: 'Email',
+            //   isEmail: true,
+            //   validator: (String value) {
+            //     if (!validator.isEmail(value)) {
+            //       return 'Please enter a valid email';
+            //     }
+            //     return null;
+            //   },
+            //   onSaved: (String value) {
+            //     email = value;
+            //   },
+            // ),
+            // MyTextFormField(
+            //   isEmail: true,
+            //   labelText: "Password",
+            //   hintText: 'Password',
+            //   suffixIcon: IconButton(
+            //     icon: Icon(
+            //       // Based on passwordVisible state choose the icon
+            //       passwordVisible ? Icons.visibility : Icons.visibility_off,
+            //       color: themeColor.getColor(),
+            //     ),
+            //     onPressed: () {
+            //       // Update the state i.e. toogle the state of passwordVisible variable
+            //       setState(() {
+            //         passwordVisible = !passwordVisible;
+            //       });
+            //     },
+            //   ),
+            //   isPassword: passwordVisible,
+            //   validator: (String value) {
+            //     if (value.length < 7) {
+            //       return 'Password should be minimum 7 characters';
+            //     } else if (value != password) {
+            //       return "password don't match";
+            //     }
+            //
+            //     return null;
+            //   },
+            //   onSaved: (String value) {
+            //     password = value;
+            //   },
+            // ),
+            // MyTextFormField(
+            //   isEmail: true,
+            //   labelText: "Re-Password",
+            //   hintText: 'Re-Password',
+            //   suffixIcon: IconButton(
+            //     icon: Icon(
+            //       // Based on passwordVisible state choose the icon
+            //       passwordVisible ? Icons.visibility : Icons.visibility_off,
+            //       color: themeColor.getColor(),
+            //     ),
+            //     onPressed: () {
+            //       // Update the state i.e. toogle the state of passwordVisible variable
+            //       setState(() {
+            //         passwordVisible = !passwordVisible;
+            //       });
+            //     },
+            //   ),
+            //   isPassword: passwordVisible,
+            //   validator: (String value) {
+            //     if (value.length < 7) {
+            //       return 'Password should be minimum 7 characters';
+            //     } else if (value != password) {
+            //       return "password don't match";
+            //     }
+            //
+            //     return null;
+            //   },
+            // ),
+            // Container(
+            //   height: 48,
+            //   width: ScreenUtil.getWidth(context),
+            //   margin: EdgeInsets.only(top: 12, bottom: 0),
+            //   child: ShadowButton(
+            //     borderRadius: 12,
+            //     height: 40,
+            //     child: FlatButton(
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(8.0),
+            //       ),
+            //       color: themeColor.getColor(),
+            //       onPressed: () {
+            //         _formKey.currentState.save();
+            //         _formKey.currentState.validate();
+            //         getReg(name, email, password);
+            //       },
+            //       child: Text(
+            //         _isLoading ? 'Creating.....' : 'Register',
+            //         style: GoogleFonts.poppins(
+            //           fontSize: 16,
+            //           color: Colors.white,
+            //           fontWeight: FontWeight.w400,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Container(
               height: 48,
               width: ScreenUtil.getWidth(context),

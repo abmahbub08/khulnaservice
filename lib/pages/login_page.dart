@@ -20,7 +20,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   @override
   void initState() {
     _getUser();
@@ -28,20 +27,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _getUser() async {
-      SharedPreferences sp = await SharedPreferences.getInstance();
-      var token = sp.getString('token');
-      if(token != null) {
-        Nav.routeReplacement(context, InitPage());
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    var token = sp.getString('token');
+    if (token != null) {
+      Nav.routeReplacement(context, InitPage());
 
-        print(token);
-      }
-      else {
-        print('nothing');
-      }
-  } 
-
-
-
+      print(token);
+    } else {
+      print('nothing');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
             children: <Widget>[
               AuthHeader(
                   headerTitle: "Login",
-                  headerBigTitle: "New",
+                  headerBigTitle: "Login",
                   isLoginHeader: true),
               SizedBox(
                 height: 36,
@@ -71,11 +66,12 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 8,
               ),
-              routeRegisterWidget(themeColor, context),
+
               SocialLoginButtons(themeColor: themeColor)
             ],
           ),
         ),
+        bottomNavigationBar: routeRegisterWidget(themeColor, context),
       ),
     );
   }
@@ -93,13 +89,17 @@ class _LoginPageState extends State<LoginPage> {
               fontWeight: FontWeight.w200,
             ),
           ),
-          FlatButton(
+          SizedBox(
+            width: 15,
+          ),
+          RaisedButton(
+            color: themeColor.getColor(),
             child: Text(
               "Register",
               style: GoogleFonts.poppins(
                 fontSize: 14,
-                color: themeColor.getColor(),
-                fontWeight: FontWeight.w300,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
             onPressed: () {

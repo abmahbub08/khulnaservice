@@ -328,7 +328,7 @@ class FetchData {
   }
 
   Future IndividualOrder(orderID) async {
-    final catRep = repositories.otpVerify("verifyOTP");
+    final catRep = repositories.IndividualOrder("showOrder/$orderID");
     var results = await Future.wait([catRep]);
     if (results[0].statusCode == 200) {
       print(results[0].body);

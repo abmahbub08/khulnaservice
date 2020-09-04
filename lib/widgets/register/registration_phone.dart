@@ -31,6 +31,7 @@ class _RegisterPhoneState extends State<RegisterPhone> {
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
           width: double.infinity,
@@ -41,10 +42,10 @@ class _RegisterPhoneState extends State<RegisterPhone> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  "Verify your phone number",
+                  "Register with your phone number",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 26,
+                    fontSize: 20,
                   ),
                 ),
                 SizedBox(height: 10),
@@ -130,7 +131,7 @@ class _RegisterPhoneState extends State<RegisterPhone> {
                         }
                       },
                       child: Text(
-                        _isLoading ? "Processing" : 'Submit',
+                        _isLoading ? "Processing" : 'Register',
                         style: GoogleFonts.poppins(
                           fontSize: 16,
                           color: Colors.white,

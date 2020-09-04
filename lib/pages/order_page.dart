@@ -25,6 +25,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import '../config.dart';
 import '../webView.dart';
 import 'new_adress_page.dart';
+import 'order_confirm.dart';
 import 'orders_detail_page.dart';
 
 class OrderPage extends StatefulWidget {
@@ -450,9 +451,13 @@ class _OrderPageState extends State<OrderPage> {
                                 notesController.text, myMethod.toString())
                             .then((value) {
                           if (myMethod == 0) {
+                            var data = jsonDecode(value);
                             Navigator.pop(context);
                             Route route = MaterialPageRoute(
-                                builder: (context) => OrdersDetailPage(true));
+                                builder: (context) => OrderConfirm(
+                                    data["order_id"],
+                                    "Your order has been placed. We would like to extend a very heartfelt thanks for placing your order. - KhulnaService Team",
+                                    Colors.green[100]));
                             Navigator.push(context, route);
                           } else {
                             Navigator.pop(context);
@@ -461,9 +466,42 @@ class _OrderPageState extends State<OrderPage> {
                                 builder: (context) => webView(
                                     "${imageLink}/pay?order_id=${data["order_id"]}"));
                             Navigator.push(context, route).then((value) {
-                              Route route = MaterialPageRoute(
-                                  builder: (context) => OrdersDetailPage(true));
-                              Navigator.push(context, route);
+                              print(value);
+
+                              if (value
+                                  .toString()
+                                  .split("/")
+                                  .contains('success')) {
+                                Route route = MaterialPageRoute(
+                                    builder: (context) => OrderConfirm(
+                                        data["order_id"],
+                                        "Your order has been placed. We would like to extend a very heartfelt thanks for placing your order. - KhulnaService Team",
+                                        Colors.green[100]));
+                                Navigator.push(context, route);
+                              } else if (value
+                                  .toString()
+                                  .split("/")
+                                  .contains('cancel')) {
+                                Route route = MaterialPageRoute(
+                                    builder: (context) => OrderConfirm(
+                                        data["order_id"],
+                                        "Your order has been canceled",
+                                        Colors.red[100]));
+                                Navigator.push(context, route);
+                              } else if (value
+                                  .toString()
+                                  .split("/")
+                                  .contains('fail')) {
+                                Route route = MaterialPageRoute(
+                                    builder: (context) => OrderConfirm(
+                                        data["order_id"],
+                                        "Your order has been failed",
+                                        Colors.orange[100]));
+                                Navigator.push(context, route);
+                              } else {
+                                CustomWidget.myShowDialog(
+                                    context, "Something Went Wrong");
+                              }
                             });
                           }
                         }).catchError((onError) {

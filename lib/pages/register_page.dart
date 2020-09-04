@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:khulnaservice/widgets/register/registration_phone.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/pages/login_page.dart';
 import 'package:khulnaservice/utils/navigator.dart';
@@ -26,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
-
+    var size = MediaQuery.of(context).size;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: themeColor.getColor(),
@@ -44,16 +45,19 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 children: <Widget>[
                   AuthHeader(
-                    headerTitle: "Register",
-                    headerBigTitle: "New",
+                    headerTitle: "Registration",
+                    headerBigTitle: "Register",
                     isLoginHeader: false,
                   ),
-                  RegisterForm(),
-                  routeLoginWidget(themeColor, context),
+                  SizedBox(
+                    height: size.height *0.45,
+                    child: RegisterPhone(),
+                  ),
                   SocialRegisterButtons(themeColor: themeColor)
                 ],
               ),
             ),
+            bottomNavigationBar: routeLoginWidget(themeColor, context),
           ),
         ),
       ),
@@ -76,13 +80,17 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
           ),
-          FlatButton(
+          SizedBox(
+            width: 15,
+          ),
+          RaisedButton(
+            color: themeColor.getColor(),
             child: Text(
               "Login",
               style: GoogleFonts.poppins(
                 fontSize: 14,
-                color: themeColor.getColor(),
-                fontWeight: FontWeight.w300,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
             onPressed: () {
