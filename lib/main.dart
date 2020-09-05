@@ -10,7 +10,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:flutter_translate/localization_delegate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/pages/search_page.dart';
 import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:khulnaservice/provider/category_provider.dart';
@@ -18,7 +17,6 @@ import 'package:khulnaservice/provider/homepage_provider.dart';
 import 'package:khulnaservice/provider/place_order_provider.dart';
 import 'package:khulnaservice/provider/profile_data_provider.dart';
 import 'package:khulnaservice/provider/user_provider.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:khulnaservice/pages/category_page.dart';
@@ -86,7 +84,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
     var localizationDelegate = LocalizedApp.of(context).delegate;
-
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return LocalizationProvider(
       state: LocalizationProvider.of(context).state,
       child: MaterialApp(
@@ -173,7 +171,7 @@ class _InitPageState extends State<InitPage> {
               color: Colors.white.withOpacity(0.6), fontSize: 19.0),
           colorLineSelected: Colors.orange,
         ),
-        SearchPage(false)));
+        SearchPage(false,true)));
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           icon: Icon(
@@ -214,7 +212,11 @@ class _InitPageState extends State<InitPage> {
       elevationAppBar: 0.0,
       backgroundColorAppBar: Color.fromARGB(255, 252, 252, 252),
       tittleAppBar: Padding(
-        child: Image.asset("assets/images/ksappbar.png",height: 110,width: 185,),
+        child: Image.asset(
+          "assets/images/ksappbar.png",
+          height: 110,
+          width: 185,
+        ),
         padding: EdgeInsets.only(bottom: 18),
       ),
 //      actionsAppBar: <Widget>[

@@ -70,14 +70,14 @@ class Address {
   });
 
   int id;
-  String modelId;
+  int modelId;
   String modelType;
-  String addressType;
+  int addressType;
   String phone;
   String address1;
-  dynamic address2;
-  String cityId;
-  String stateId;
+  String address2;
+  int cityId;
+  int stateId;
   String countryCode;
   DateTime createdAt;
   DateTime updatedAt;
@@ -134,11 +134,11 @@ class City {
   });
 
   int id;
-  String divisionId;
+  int divisionId;
   String name;
   String bnName;
-  String lat;
-  String lon;
+  double lat;
+  double lon;
   String website;
 
   factory City.fromJson(Map<String, dynamic> json) => City(
@@ -146,8 +146,8 @@ class City {
         divisionId: json["division_id"],
         name: json["name"],
         bnName: json["bn_name"],
-        lat: json["lat"],
-        lon: json["lon"],
+        lat: json["lat"].toDouble(),
+        lon: json["lon"].toDouble(),
         website: json["website"],
       );
 
@@ -223,9 +223,9 @@ class User {
     this.id,
     this.name,
     this.email,
-    this.phone,
     this.verified,
     this.verificationToken,
+    this.phone,
     this.phoneVerified,
     this.emailVerifiedAt,
     this.image,
@@ -239,12 +239,12 @@ class User {
   int id;
   String name;
   dynamic email;
-  String phone;
-  String verified;
+  int verified;
   dynamic verificationToken;
-  String phoneVerified;
+  String phone;
+  int phoneVerified;
   dynamic emailVerifiedAt;
-  String image;
+  dynamic image;
   DateTime createdAt;
   DateTime updatedAt;
   dynamic bannedAt;
@@ -255,9 +255,9 @@ class User {
         id: json["id"],
         name: json["name"],
         email: json["email"],
-        phone: json["phone"],
         verified: json["verified"],
         verificationToken: json["verification_token"],
+        phone: json["phone"],
         phoneVerified: json["phone_verified"],
         emailVerifiedAt: json["email_verified_at"],
         image: json["image"],
@@ -272,9 +272,9 @@ class User {
         "id": id,
         "name": name,
         "email": email,
-        "phone": phone,
         "verified": verified,
         "verification_token": verificationToken,
+        "phone": phone,
         "phone_verified": phoneVerified,
         "email_verified_at": emailVerifiedAt,
         "image": image,

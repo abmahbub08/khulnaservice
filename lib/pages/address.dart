@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:khulnaservice/models/profiledatamodel.dart' as profile;
 
 class AddressAll extends StatefulWidget {
-  profile.Address method;
+  var method;
   var title;
   int type;
 

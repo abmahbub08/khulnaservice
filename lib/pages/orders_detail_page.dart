@@ -44,9 +44,15 @@ class _OrdersDetailPageState extends State<OrdersDetailPage> {
         systemNavigationBarIconBrightness: Brightness.dark,
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.dark));
-
+    var dataList;
     GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
-    var dataList = Provider.of<placeOrderProvider>(context).orderList;
+    if (isLoading) {
+      dataList = Provider.of<placeOrderProvider>(context)
+          .orderList
+          .orders
+          .reversed
+          .toList();
+    }
     return SafeArea(
       child: Scaffold(
           appBar: PreferredSize(
@@ -86,7 +92,7 @@ class _OrdersDetailPageState extends State<OrdersDetailPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          dataList.orders.length == 0
+                          dataList.length == 0
                               ? Container(
                                   height: MediaQuery.of(context).size.height,
                                   width: double.infinity,
@@ -95,12 +101,12 @@ class _OrdersDetailPageState extends State<OrdersDetailPage> {
                                   ),
                                 )
                               : ListView.builder(
-                                  itemCount: dataList.orders.length,
+                                  itemCount: dataList.length,
                                   shrinkWrap: true,
                                   physics: NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) {
                                     return OrderItem(
-                                        order: dataList.orders[index],
+                                        order: dataList[index],
                                         themeColor: themeColor,
                                         imageUrl: "prodcut1.png");
                                   },

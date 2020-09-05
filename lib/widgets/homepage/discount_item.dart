@@ -7,17 +7,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:getflutter/components/button/gf_button.dart';
 import 'package:getflutter/types/gf_button_type.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hive/hive.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
-import 'package:khulnaservice/models/CategoryPageModel.dart';
+import 'package:khulnaservice/models/CategoryPageModel.dart' as cat;
 import 'package:khulnaservice/models/homePageDataModel.dart';
 import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:khulnaservice/testPrDEtails.dart';
 import 'package:khulnaservice/widgets/customWdiget.dart';
-import 'package:like_button/like_button.dart';
-import 'package:khulnaservice/pages/product_detail.dart';
-import 'package:khulnaservice/pages/shopping_cart_page.dart';
-import 'package:khulnaservice/utils/commons/colors.dart';
 import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/screen.dart';
 import 'package:provider/provider.dart';
@@ -41,7 +36,7 @@ class DiscountItem extends StatelessWidget {
       onTap: () {
         Nav.route(
             context,
-            testPrDetails(Datum(
+            testPrDetails(cat.Datum(
               image: product.image,
               name: product.name,
               backImage: product.backImage,
@@ -70,8 +65,8 @@ class DiscountItem extends StatelessWidget {
               variationCount: product.variationCount,
               vat: product.vat,
               visited: product.visited,
-              manufacturer: Manufacturer(),
-              categories: List<Category>(),
+              manufacturer: cat.Manufacturer(),
+              categories: List<cat.Category>(),
             )));
       },
       child: Stack(

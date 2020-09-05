@@ -1,8 +1,9 @@
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-const Base = "https://home2globe.com/ks/public/api/";
-var imageLink = "https://home2globe.com/ks/public/";
+const Base = "https://app.khulnaservice.com/api/";
+var imageLink = "https://khulnaservice.com/";
+var paymentUrl = "https://app.khulnaservice.com/";
 
 class ApiServices {
   Future<http.Response> regUrl(String param, name, email, password) async {
@@ -24,7 +25,7 @@ class ApiServices {
     try {
       final result = http.post(Base + '$param', body: {
         "name": name,
-        "phone": phone,
+        "phone": "+88$phone",
         "password": password,
       });
       return result;

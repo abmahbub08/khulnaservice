@@ -37,9 +37,9 @@ class User {
     this.id,
     this.name,
     this.email,
-    this.phone,
     this.verified,
     this.verificationToken,
+    this.phone,
     this.phoneVerified,
     this.emailVerifiedAt,
     this.image,
@@ -52,13 +52,13 @@ class User {
 
   int id;
   String name;
-  String email;
-  dynamic phone;
-  String verified;
-  String verificationToken;
-  String phoneVerified;
+  dynamic email;
+  int verified;
+  dynamic verificationToken;
+  String phone;
+  int phoneVerified;
   dynamic emailVerifiedAt;
-  String image;
+  dynamic image;
   DateTime createdAt;
   DateTime updatedAt;
   dynamic bannedAt;
@@ -69,9 +69,9 @@ class User {
     id: json["id"],
     name: json["name"],
     email: json["email"],
-    phone: json["phone"],
     verified: json["verified"],
     verificationToken: json["verification_token"],
+    phone: json["phone"],
     phoneVerified: json["phone_verified"],
     emailVerifiedAt: json["email_verified_at"],
     image: json["image"],
@@ -86,9 +86,9 @@ class User {
     "id": id,
     "name": name,
     "email": email,
-    "phone": phone,
     "verified": verified,
     "verification_token": verificationToken,
+    "phone": phone,
     "phone_verified": phoneVerified,
     "email_verified_at": emailVerifiedAt,
     "image": image,

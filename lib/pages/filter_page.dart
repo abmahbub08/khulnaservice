@@ -34,7 +34,7 @@ class _FilterPageState extends State<FilterPage> {
       child: Scaffold(
         bottomNavigationBar: InkWell(
           onTap: () {
-            Nav.routeReplacement(context, SearchPage(false));
+            Nav.routeReplacement(context, SearchPage(false,true));
           },
           child: Container(
             decoration: BoxDecoration(

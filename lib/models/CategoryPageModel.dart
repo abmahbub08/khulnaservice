@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final categoryPageModel = categoryPageModelFromJson(jsonString);
+
 import 'dart:convert';
 
 CategoryPageModel categoryPageModelFromJson(String str) => CategoryPageModel.fromJson(json.decode(str));
@@ -64,30 +68,30 @@ class Category {
   int id;
   Name name;
   Slug slug;
-  Description description;
+  String description;
   dynamic image;
   dynamic backImage;
-  String count;
-  String state;
-  String parentId;
-  String position;
-  String realDepth;
-  String serial;
-  String shipsInsideOnly;
+  int count;
+  int state;
+  int parentId;
+  int position;
+  int realDepth;
+  int serial;
+  int shipsInsideOnly;
   dynamic deletedAt;
   DateTime createdAt;
   DateTime updatedAt;
-  String closureId;
-  String ancestor;
-  String descendant;
-  String depth;
+  int closureId;
+  int ancestor;
+  int descendant;
+  int depth;
   Pivot pivot;
 
   factory Category.fromJson(Map<String, dynamic> json) => Category(
     id: json["id"],
     name: nameValues.map[json["name"]],
     slug: slugValues.map[json["slug"]],
-    description: descriptionValues.map[json["description"]],
+    description: json["description"] == null ? null : json["description"],
     image: json["image"],
     backImage: json["back_image"],
     count: json["count"],
@@ -111,7 +115,7 @@ class Category {
     "id": id,
     "name": nameValues.reverse[name],
     "slug": slugValues.reverse[slug],
-    "description": descriptionValues.reverse[description],
+    "description": description == null ? null : description,
     "image": image,
     "back_image": backImage,
     "count": count,
@@ -132,18 +136,12 @@ class Category {
   };
 }
 
-enum Description { ALL_KINDS_OF_BEAUTY_HEALTH, L_KIND_OF_BATH_ITEM }
-
-final descriptionValues = EnumValues({
-  "All kinds of Beauty & Health": Description.ALL_KINDS_OF_BEAUTY_HEALTH,
-  "l kind of Bath item": Description.L_KIND_OF_BATH_ITEM
-});
-
-enum Name { BEAUTY_HEALTH, BATH_BODY }
+enum Name { GROCERIES, COOKING_INGREDIENTS, SPICES }
 
 final nameValues = EnumValues({
-  "Bath & Body": Name.BATH_BODY,
-  "Beauty & Health": Name.BEAUTY_HEALTH
+  "Cooking Ingredients( রান্নার উপকরন)": Name.COOKING_INGREDIENTS,
+  "Groceries": Name.GROCERIES,
+  "Spices (মশলা)": Name.SPICES
 });
 
 class Pivot {
@@ -152,8 +150,8 @@ class Pivot {
     this.categoryId,
   });
 
-  String productId;
-  String categoryId;
+  int productId;
+  int categoryId;
 
   factory Pivot.fromJson(Map<String, dynamic> json) => Pivot(
     productId: json["product_id"],
@@ -166,11 +164,12 @@ class Pivot {
   };
 }
 
-enum Slug { BEAUTY_HEALTH, BATH_BODY }
+enum Slug { GROCERIES, COOKING_INGREDIENTS, SPICES }
 
 final slugValues = EnumValues({
-  "bath-body": Slug.BATH_BODY,
-  "beauty-health": Slug.BEAUTY_HEALTH
+  "cooking-ingredients": Slug.COOKING_INGREDIENTS,
+  "groceries": Slug.GROCERIES,
+  "spices": Slug.SPICES
 });
 
 class Manufacturer {
@@ -190,8 +189,8 @@ class Manufacturer {
   String name;
   String description;
   dynamic image;
-  String count;
-  String state;
+  int count;
+  int state;
   dynamic deletedAt;
   DateTime createdAt;
   DateTime updatedAt;
@@ -316,8 +315,8 @@ class Datum {
   });
 
   int id;
-  String storeId;
-  String manufacturerId;
+  int storeId;
+  int manufacturerId;
   String sku;
   String name;
   String description;
@@ -328,16 +327,16 @@ class Datum {
   String backImage;
   String price;
   String discountedPrice;
-  String state;
-  String featured;
-  String taxFree;
+  int state;
+  int featured;
+  int taxFree;
   String vat;
   String shipping;
   String commission;
-  String stock;
-  String variationCount;
-  String visited;
-  String decorationState;
+  int stock;
+  int variationCount;
+  int visited;
+  int decorationState;
   dynamic bannedAt;
   dynamic deletedAt;
   DateTime createdAt;
@@ -363,7 +362,7 @@ class Datum {
     state: json["state"],
     featured: json["featured"],
     taxFree: json["tax_free"],
-    vat: json["vat"],
+    vat: json["vat"] == null ? null : json["vat"],
     shipping: json["shipping"],
     commission: json["commission"],
     stock: json["stock"],
@@ -396,7 +395,7 @@ class Datum {
     "state": state,
     "featured": featured,
     "tax_free": taxFree,
-    "vat": vat,
+    "vat": vat == null ? null : vat,
     "shipping": shipping,
     "commission": commission,
     "stock": stock,

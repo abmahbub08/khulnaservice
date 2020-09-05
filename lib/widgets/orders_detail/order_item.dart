@@ -80,7 +80,7 @@ class OrderItem extends StatelessWidget {
                   children: [
                     Text("Payment :"),
                     Container(
-
+                      padding: EdgeInsets.all(4),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(3),

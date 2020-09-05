@@ -420,104 +420,105 @@ class _OrderPageState extends State<OrderPage> {
                 SizedBox(
                   height: 16,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8),
-                  child: GFButton(
-                    borderShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        6,
-                      ),
-                    ),
-                    child: Text("Confirm Order"),
-                    color: themeColor.getColor(),
-                    onPressed: () {
-//                      Nav.route(context, CreditCartPage());
-                      var data = Provider.of<placeOrderProvider>(context,
-                              listen: false)
-                          .searchData;
-                      if (shipToController.text.isEmpty) {
-                        CustomWidget.myShowDialog(
-                            context, "Enter the name who will receive");
-                      } else if (data.shippingAddress == null) {
-                        CustomWidget.myShowDialog(
-                            context, "Add your shipping address");
-                      } else if (data.billingAddress == null) {
-                        CustomWidget.myShowDialog(
-                            context, "Add your billing address");
-                      } else {
-                        CustomWidget.myDiaglog(context);
-                        fetchData
-                            .checkOut(context, shipToController.text,
-                                notesController.text, myMethod.toString())
-                            .then((value) {
-                          if (myMethod == 0) {
-                            var data = jsonDecode(value);
-                            Navigator.pop(context);
-                            Route route = MaterialPageRoute(
-                                builder: (context) => OrderConfirm(
-                                    data["order_id"],
-                                    "Your order has been placed. We would like to extend a very heartfelt thanks for placing your order. - KhulnaService Team",
-                                    Colors.green[100]));
-                            Navigator.push(context, route);
-                          } else {
-                            Navigator.pop(context);
-                            var data = jsonDecode(value);
-                            Route route = MaterialPageRoute(
-                                builder: (context) => webView(
-                                    "${imageLink}/pay?order_id=${data["order_id"]}"));
-                            Navigator.push(context, route).then((value) {
-                              print(value);
 
-                              if (value
-                                  .toString()
-                                  .split("/")
-                                  .contains('success')) {
-                                Route route = MaterialPageRoute(
-                                    builder: (context) => OrderConfirm(
-                                        data["order_id"],
-                                        "Your order has been placed. We would like to extend a very heartfelt thanks for placing your order. - KhulnaService Team",
-                                        Colors.green[100]));
-                                Navigator.push(context, route);
-                              } else if (value
-                                  .toString()
-                                  .split("/")
-                                  .contains('cancel')) {
-                                Route route = MaterialPageRoute(
-                                    builder: (context) => OrderConfirm(
-                                        data["order_id"],
-                                        "Your order has been canceled",
-                                        Colors.red[100]));
-                                Navigator.push(context, route);
-                              } else if (value
-                                  .toString()
-                                  .split("/")
-                                  .contains('fail')) {
-                                Route route = MaterialPageRoute(
-                                    builder: (context) => OrderConfirm(
-                                        data["order_id"],
-                                        "Your order has been failed",
-                                        Colors.orange[100]));
-                                Navigator.push(context, route);
-                              } else {
-                                CustomWidget.myShowDialog(
-                                    context, "Something Went Wrong");
-                              }
-                            });
-                          }
-                        }).catchError((onError) {
-                          Navigator.pop(context);
-                          Scaffold.of(context).showSnackBar(SnackBar(
-                              backgroundColor: themeColor.getColor(),
-                              content: Text('Something went wrong')));
-                        });
-                      }
-                    },
-                    type: GFButtonType.solid,
-                    fullWidthButton: true,
-                  ),
-                )
               ],
             ),
+          ),
+        ),
+        bottomNavigationBar:  Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8),
+          child: GFButton(
+            borderShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(
+                6,
+              ),
+            ),
+            child: Text("Confirm Order"),
+            color: themeColor.getColor(),
+            onPressed: () {
+//                      Nav.route(context, CreditCartPage());
+              var data = Provider.of<placeOrderProvider>(context,
+                  listen: false)
+                  .searchData;
+              if (shipToController.text.isEmpty) {
+                CustomWidget.myShowDialog(
+                    context, "Enter the name who will receive");
+              } else if (data.shippingAddress == null) {
+                CustomWidget.myShowDialog(
+                    context, "Add your shipping address");
+              } else if (data.billingAddress == null) {
+                CustomWidget.myShowDialog(
+                    context, "Add your billing address");
+              } else {
+                CustomWidget.myDiaglog(context);
+                fetchData
+                    .checkOut(context, shipToController.text,
+                    notesController.text, myMethod.toString())
+                    .then((value) {
+                  if (myMethod == 0) {
+                    var data = jsonDecode(value);
+                    Navigator.pop(context);
+                    Route route = MaterialPageRoute(
+                        builder: (context) => OrderConfirm(
+                            data["order_id"],
+                            "Your order has been placed. We would like to extend a very heartfelt thanks for placing your order. - KhulnaService Team",
+                            Colors.green[100]));
+                    Navigator.push(context, route);
+                  } else {
+                    Navigator.pop(context);
+                    var data = jsonDecode(value);
+                    Route route = MaterialPageRoute(
+                        builder: (context) => webView(
+                            "${paymentUrl}/pay?order_id=${data["order_id"]}"));
+                    Navigator.push(context, route).then((value) {
+                      print(value);
+
+                      if (value
+                          .toString()
+                          .split("/")
+                          .contains('success')) {
+                        Route route = MaterialPageRoute(
+                            builder: (context) => OrderConfirm(
+                                data["order_id"],
+                                "Your order has been placed. We would like to extend a very heartfelt thanks for placing your order. - KhulnaService Team",
+                                Colors.green[100]));
+                        Navigator.push(context, route);
+                      } else if (value
+                          .toString()
+                          .split("/")
+                          .contains('cancel')) {
+                        Route route = MaterialPageRoute(
+                            builder: (context) => OrderConfirm(
+                                data["order_id"],
+                                "Your order has been canceled",
+                                Colors.red[100]));
+                        Navigator.push(context, route);
+                      } else if (value
+                          .toString()
+                          .split("/")
+                          .contains('fail')) {
+                        Route route = MaterialPageRoute(
+                            builder: (context) => OrderConfirm(
+                                data["order_id"],
+                                "Your order has been failed",
+                                Colors.orange[100]));
+                        Navigator.push(context, route);
+                      } else {
+                        CustomWidget.myShowDialog(
+                            context, "Something Went Wrong");
+                      }
+                    });
+                  }
+                }).catchError((onError) {
+                  Navigator.pop(context);
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                      backgroundColor: themeColor.getColor(),
+                      content: Text('Something went wrong')));
+                });
+              }
+            },
+            type: GFButtonType.solid,
+            fullWidthButton: true,
           ),
         ),
       ),

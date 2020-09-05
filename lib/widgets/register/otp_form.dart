@@ -176,21 +176,21 @@ class _OtpDataFormState extends State<OtpDataForm> {
 
   FetchData fetchData = FetchData();
 
-  getReg(String name, String email, String password) async {
+  getReg(String name,  email, password) async {
     _form.currentState.validate();
     if (_form.currentState.validate()) {
       setState(() {
         _isLoading = true;
       });
 
-      fetchData.getRegPhone(context, name, email, password).then((value) async {
+      fetchData.getRegPhone(context, name, numberController.text, password).then((value) async {
         fetchData.profileData(context).then((value) {
           setState(() {
             _isLoading = false;
           });
           Nav.routeReplacement(context, InitPage());
         }).catchError((onError) {
-          print(onError);
+          print("Here $onError");
           setState(() {
             _isLoading = false;
           });
@@ -200,6 +200,8 @@ class _OtpDataFormState extends State<OtpDataForm> {
           ));
         });
       }).catchError((onError) {
+
+        print("reg $onError");
         setState(() {
           _isLoading = false;
         });

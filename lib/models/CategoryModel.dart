@@ -49,15 +49,15 @@ class Category {
   String name;
   String slug;
   String description;
-  String image;
+  dynamic image;
   dynamic backImage;
-  String count;
-  String state;
-  String parentId;
-  String position;
-  String realDepth;
-  String serial;
-  String shipsInsideOnly;
+  int count;
+  int state;
+  int parentId;
+  int position;
+  int realDepth;
+  int serial;
+  int shipsInsideOnly;
   dynamic deletedAt;
   DateTime createdAt;
   DateTime updatedAt;
@@ -68,7 +68,7 @@ class Category {
     name: json["name"],
     slug: json["slug"],
     description: json["description"] == null ? null : json["description"],
-    image: json["image"] == null ? null : json["image"],
+    image: json["image"],
     backImage: json["back_image"],
     count: json["count"],
     state: json["state"],
@@ -80,7 +80,7 @@ class Category {
     deletedAt: json["deleted_at"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
-    children: json["children"] == null ? null : List<Category>.from(json["children"].map((x) => Category.fromJson(x))),
+    children: List<Category>.from(json["children"].map((x) => Category.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -88,7 +88,7 @@ class Category {
     "name": name,
     "slug": slug,
     "description": description == null ? null : description,
-    "image": image == null ? null : image,
+    "image": image,
     "back_image": backImage,
     "count": count,
     "state": state,
@@ -100,6 +100,6 @@ class Category {
     "deleted_at": deletedAt,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
-    "children": children == null ? null : List<dynamic>.from(children.map((x) => x.toJson())),
+    "children": List<dynamic>.from(children.map((x) => x.toJson())),
   };
 }

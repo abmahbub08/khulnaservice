@@ -11,6 +11,7 @@ import 'package:getflutter/getflutter.dart';
 import 'package:getflutter/shape/gf_button_shape.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
+import 'package:html/parser.dart';
 import 'package:khulnaservice/api/api_services.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
 import 'package:khulnaservice/models/CategoryPageModel.dart';
@@ -429,7 +430,11 @@ class _testPrDetailsState extends State<testPrDetails>
                                           fontSize: 12),
                                     ),
                                     expanded: Text(
-                                      widget.data.description,
+                                      parse(parse(widget.data.description)
+                                              .body
+                                              .text)
+                                          .documentElement
+                                          .text,
                                       softWrap: true,
                                       style: GoogleFonts.poppins(
                                         fontWeight: FontWeight.w300,

@@ -45,8 +45,8 @@ class Manufacturer {
   String name;
   String description;
   dynamic image;
-  String count;
-  String state;
+  int count;
+  int state;
   dynamic deletedAt;
   DateTime createdAt;
   DateTime updatedAt;
@@ -171,8 +171,8 @@ class Datum {
   });
 
   int id;
-  String storeId;
-  String manufacturerId;
+  int storeId;
+  int manufacturerId;
   String sku;
   String name;
   String description;
@@ -183,16 +183,16 @@ class Datum {
   String backImage;
   String price;
   String discountedPrice;
-  String state;
-  String featured;
-  String taxFree;
+  int state;
+  int featured;
+  int taxFree;
   String vat;
   String shipping;
   String commission;
-  String stock;
-  String variationCount;
-  String visited;
-  String decorationState;
+  int stock;
+  int variationCount;
+  int visited;
+  int decorationState;
   dynamic bannedAt;
   dynamic deletedAt;
   DateTime createdAt;
@@ -295,13 +295,13 @@ class Category {
   String description;
   dynamic image;
   dynamic backImage;
-  String count;
-  String state;
-  String parentId;
-  String position;
-  String realDepth;
-  String serial;
-  dynamic shipsInsideOnly;
+  int count;
+  int state;
+  int parentId;
+  int position;
+  int realDepth;
+  int serial;
+  int shipsInsideOnly;
   dynamic deletedAt;
   DateTime createdAt;
   DateTime updatedAt;
@@ -311,12 +311,12 @@ class Category {
     id: json["id"],
     name: json["name"],
     slug: json["slug"],
-    description: json["description"],
+    description: json["description"] == null ? null : json["description"],
     image: json["image"],
     backImage: json["back_image"],
     count: json["count"],
     state: json["state"],
-    parentId: json["parent_id"],
+    parentId: json["parent_id"] == null ? null : json["parent_id"],
     position: json["position"],
     realDepth: json["real_depth"],
     serial: json["serial"],
@@ -331,12 +331,12 @@ class Category {
     "id": id,
     "name": name,
     "slug": slug,
-    "description": description,
+    "description": description == null ? null : description,
     "image": image,
     "back_image": backImage,
     "count": count,
     "state": state,
-    "parent_id": parentId,
+    "parent_id": parentId == null ? null : parentId,
     "position": position,
     "real_depth": realDepth,
     "serial": serial,
@@ -354,8 +354,8 @@ class Pivot {
     this.categoryId,
   });
 
-  String productId;
-  String categoryId;
+  int productId;
+  int categoryId;
 
   factory Pivot.fromJson(Map<String, dynamic> json) => Pivot(
     productId: json["product_id"],
@@ -376,7 +376,7 @@ class CommentStats {
   });
 
   String commentableId;
-  String totalComments;
+  int totalComments;
   String averageRating;
 
   factory CommentStats.fromJson(Map<String, dynamic> json) => CommentStats(

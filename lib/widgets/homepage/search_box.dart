@@ -19,7 +19,7 @@ class SearchBox extends StatelessWidget {
     final themeColor = Provider.of<ThemeNotifier>(context);
     return InkWell(
       onTap: () {
-        Nav.route(context, SearchPage(true));
+        Nav.route(context, SearchPage(true, true));
       },
       child: Container(
         margin: EdgeInsets.only(left: 18, right: 18, top: 14),

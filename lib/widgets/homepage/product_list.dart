@@ -25,7 +25,7 @@ class ProductList extends StatelessWidget {
         children: <Widget>[
           productListTitleBar,
           Container(
-              height: size.height *0.215,
+              height: size.height *0.225,
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: product.length,

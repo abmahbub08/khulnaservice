@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
 
   routeRegisterWidget(ThemeNotifier themeColor, BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(right: 42, left: 42, bottom: 12),
+      padding: EdgeInsets.only(right: 36, left: 35, bottom: 12),
       child: Row(
         children: <Widget>[
           Text(

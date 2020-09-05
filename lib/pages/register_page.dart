@@ -49,10 +49,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     headerBigTitle: "Register",
                     isLoginHeader: false,
                   ),
-                  SizedBox(
-                    height: size.height *0.45,
-                    child: RegisterPhone(),
-                  ),
+                  RegisterPhone(),
                   SocialRegisterButtons(themeColor: themeColor)
                 ],
               ),
@@ -66,7 +63,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget routeLoginWidget(ThemeNotifier themeColor, BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(right: 36, left: 48, bottom: 12),
+      padding: EdgeInsets.only(right: 36, left: 35, bottom: 12),
       child: Row(
         children: <Widget>[
           Padding(

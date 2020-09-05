@@ -24,9 +24,11 @@ import '../testPrDEtails.dart';
 import 'package:khulnaservice/models/searchModel.dart';
 
 class SearchPage extends StatefulWidget {
-  var isBack = false;
+  var isBack;
 
-  SearchPage(this.isBack);
+  bool IsFloat;
+
+  SearchPage(this.isBack, this.IsFloat);
 
   @override
   _SearchPageState createState() => _SearchPageState();
@@ -64,6 +66,8 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   void initState() {
+    print(widget.isBack);
+
     fetchData.getCart(context);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -131,7 +135,7 @@ class _SearchPageState extends State<SearchPage> {
       child: Scaffold(
         floatingActionButton: isLoading
             ? SizedBox()
-            : widget.isBack
+            : widget.IsFloat
                 ? GestureDetector(
                     onTap: () {
                       Nav.route(context, ShoppingCartPage());
@@ -294,8 +298,8 @@ class _SearchPageState extends State<SearchPage> {
                 padding: EdgeInsets.only(left: 18, right: 22),
                 height: 44,
                 decoration: BoxDecoration(
-                  border: Border.all(
-                      color: themeColor.getColor().withOpacity(0.3)),
+                  border:
+                      Border.all(color: themeColor.getColor().withOpacity(0.3)),
                   boxShadow: [
                     BoxShadow(
                         color: Colors.grey[200],
@@ -458,15 +462,17 @@ class _SearchPageState extends State<SearchPage> {
                             child: Text(ProductLoading),
                           );
                         }
-                        return Center(child: productSearchItem(
-                            context,
-                            SecondList[index],
-                            themeColor,
-                            SecondList[index].name,
-                            SecondList[index].price,
-                            SecondList[index].discountedPrice,
-                            SecondList[index].id,
-                            SecondList[index].image),);
+                        return Center(
+                          child: productSearchItem(
+                              context,
+                              SecondList[index],
+                              themeColor,
+                              SecondList[index].name,
+                              SecondList[index].price,
+                              SecondList[index].discountedPrice,
+                              SecondList[index].id,
+                              SecondList[index].image),
+                        );
                       },
 //                    crossAxisCount: 2,
 //                    childAspectRatio: 0.7,
@@ -636,7 +642,6 @@ class _SearchPageState extends State<SearchPage> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                   ),
-
                   padding: EdgeInsets.all(10),
                 ),
                 Container(
@@ -647,7 +652,6 @@ class _SearchPageState extends State<SearchPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       SizedBox(
-
                         width: 170,
                         child: AutoSizeText(
                           '${name}',
@@ -791,16 +795,18 @@ class _SearchPageState extends State<SearchPage> {
                                 onPressed: () {
                                   CustomWidget.myDiaglog(context);
                                   fetchData
-                                      .getAddToCart(id.toString(), Provider.of<CartProvider>(context,
-                                      listen: false)
-                                      .getQuantity(id) ==
-                                      null
-                                      ? "1"
-                                      : Provider.of<CartProvider>(
-                                      context,
-                                      listen: false)
-                                      .getQuantity(id)
-                                      .toString())
+                                      .getAddToCart(
+                                          id.toString(),
+                                          Provider.of<CartProvider>(context,
+                                                          listen: false)
+                                                      .getQuantity(id) ==
+                                                  null
+                                              ? "1"
+                                              : Provider.of<CartProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .getQuantity(id)
+                                                  .toString())
                                       .then((value) {
                                     fetchData.getCart(context).then((value) {
                                       Navigator.pop(context);

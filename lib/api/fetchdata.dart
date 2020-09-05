@@ -50,6 +50,8 @@ class FetchData {
     SharedPreferences Sp = await SharedPreferences.getInstance();
     if (results[0].statusCode == 200) {
       var data = jsonDecode(results[0].body);
+
+      print(data);
       Sp.setString('token', data['access_token']);
       Sp.setString('name', data['name']);
       Sp.setString('email', phone);
@@ -119,13 +121,13 @@ class FetchData {
       var data = jsonDecode(results[0].body);
       List myList = [];
       data['header_key'].values.toList().forEach((e) {
-        if (data["ecommerceSetting"]['$e']['show'] == "on") {
+        if (data["ecommerceSetting"]['$e']['link'] == null) {
           print(data["ecommerceSetting"]['$e']);
 
           myList.add(data["ecommerceSetting"]['$e']['image']);
         }
       });
-
+      print(data['header_key']);
       Provider.of<HomePageProvider>(context, listen: false)
           .setHeaderData(myList);
       Provider.of<HomePageProvider>(context, listen: false)

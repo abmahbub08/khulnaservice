@@ -43,7 +43,6 @@ class _LoginFormState extends State<LoginForm> {
               hintText: 'Email OR Mobile Number',
               isEmail: true,
 
-
 //              validator: (String value) {
 //                if (!validator.isEmail(value)) {
 //                  return 'Please enter a valid email';
@@ -127,7 +126,7 @@ class _LoginFormState extends State<LoginForm> {
       try {
         int.parse(email);
 
-        fetchData.getLog(context, "phone", email, password).then((value) {
+        fetchData.getLog(context, "phone", "+88$email", password).then((value) {
           var body = jsonDecode(value);
           if (body['message'] == 'success') {
             fetchData.profileData(context).then((value) {
@@ -136,6 +135,7 @@ class _LoginFormState extends State<LoginForm> {
               });
               Nav.routeReplacement(context, InitPage());
             }).catchError((onError) {
+
               setState(() {
                 _isLoading = false;
               });
@@ -153,6 +153,7 @@ class _LoginFormState extends State<LoginForm> {
             ));
           }
         }).catchError((e) {
+          print("login $e");
           setState(() {
             _isLoading = false;
           });

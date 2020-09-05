@@ -24,9 +24,9 @@ class PlaceOrderModel {
   List<CartItem> cartItems;
   IngAddress shippingAddress;
   IngAddress billingAddress;
-  var shippingCondition;
+  String shippingCondition;
   dynamic couponCondition;
-  var total;
+  String total;
   List<State> divisions;
 
   factory PlaceOrderModel.fromJson(Map<String, dynamic> json) =>
@@ -39,13 +39,9 @@ class PlaceOrderModel {
         billingAddress: json["billingAddress"] != null
             ? IngAddress.fromJson(json["billingAddress"])
             : null,
-        shippingCondition: json["shippingCondition"] != null
-            ? json["shippingCondition"]
-            : null,
+        shippingCondition: json["shippingCondition"],
         couponCondition: json["couponCondition"],
-        total: json["total"] != null
-            ? json["total"]
-            : null,
+        total: json["total"],
         divisions:
             List<State>.from(json["divisions"].map((x) => State.fromJson(x))),
       );
@@ -54,9 +50,9 @@ class PlaceOrderModel {
         "cartItems": List<dynamic>.from(cartItems.map((x) => x.toJson())),
         "shippingAddress": shippingAddress.toJson(),
         "billingAddress": billingAddress.toJson(),
-        "shippingCondition": shippingCondition.toJson(),
+        "shippingCondition": shippingCondition,
         "couponCondition": couponCondition,
-        "total": total.toJson(),
+        "total": total,
         "divisions": List<dynamic>.from(divisions.map((x) => x.toJson())),
       };
 }
@@ -81,14 +77,14 @@ class IngAddress {
   });
 
   int id;
-  String modelId;
+  int modelId;
   String modelType;
-  String addressType;
+  int addressType;
   String phone;
   String address1;
   String address2;
-  String cityId;
-  String stateId;
+  int cityId;
+  int stateId;
   String countryCode;
   DateTime createdAt;
   DateTime updatedAt;
@@ -145,11 +141,11 @@ class City {
   });
 
   int id;
-  String divisionId;
+  int divisionId;
   String name;
   String bnName;
-  String lat;
-  String lon;
+  double lat;
+  double lon;
   String website;
 
   factory City.fromJson(Map<String, dynamic> json) => City(
@@ -157,8 +153,8 @@ class City {
         divisionId: json["division_id"],
         name: json["name"],
         bnName: json["bn_name"],
-        lat: json["lat"],
-        lon: json["lon"],
+        lat: json["lat"].toDouble(),
+        lon: json["lon"].toDouble(),
         website: json["website"],
       );
 
@@ -242,7 +238,7 @@ class CartItem {
   int id;
   String name;
   int price;
-  var quantity;
+  String quantity;
   Attributes attributes;
   List<Condition> conditions;
 
@@ -285,7 +281,7 @@ class Attributes {
   int storeId;
   String shipping;
   int vat;
-  double commission;
+  dynamic commission;
   List<int> categoryIds;
   int shipsInsideOnly;
   String price;
@@ -298,7 +294,7 @@ class Attributes {
         storeId: json["store_id"],
         shipping: json["shipping"],
         vat: json["vat"],
-        commission: json["commission"].toDouble(),
+        commission: json["commission"],
         categoryIds: List<int>.from(json["category_ids"].map((x) => x)),
         shipsInsideOnly: json["ships_inside_only"],
         price: json["price"],

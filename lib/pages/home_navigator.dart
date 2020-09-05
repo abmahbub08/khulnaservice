@@ -27,7 +27,7 @@ class _HomeNavigatorState extends State<HomeNavigator> {
     HomePage(),
     CategoryPage(),
     ShoppingCartPage(),
-    SearchPage(false),
+    SearchPage(false,false),
     MyProfilePage()
   ];
   bool IsLoading = false;

@@ -22,6 +22,7 @@ class DiscountList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.only(right: 16, top: 16, bottom: 8),
       child: ListView(
@@ -30,7 +31,7 @@ class DiscountList extends StatelessWidget {
         children: <Widget>[
           productListTitleBar,
           Container(
-              height: 170.0,
+              height: size.height *0.225,
               child: new ListView.builder(
                 itemCount: myData.length,
                 scrollDirection: Axis.horizontal,
