@@ -58,13 +58,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             CustomWidget.myDiaglog(context);
             fetchData.nameUpdate(nameController.text).then((value) {
               fetchData.profileData(context).then((value) {
-                Navigator.pop(context);
+                Navigator.of(context, rootNavigator: true).pop();
                 CustomWidget.myShowDialog(context, "Profile Name Updated");
               }).catchError((onError) {
                 CustomWidget.myShowDialog(context, "Something went wrong");
               });
             }).catchError((e) {
-              Navigator.pop(context);
+              Navigator.of(context, rootNavigator: true).pop();
               CustomWidget.myShowDialog(context, "Something went wrong");
             });
           },

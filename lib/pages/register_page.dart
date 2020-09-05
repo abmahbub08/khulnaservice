@@ -27,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
-    var size = MediaQuery.of(context).size;
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: themeColor.getColor(),

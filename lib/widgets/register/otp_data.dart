@@ -29,34 +29,29 @@ class _OtpDataState extends State<OtpData> {
   @override
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        statusBarColor: themeColor.getColor(),
-      ),
-      child: SafeArea(
-        child: WillPopScope(
-          // ignore: missing_return
-          onWillPop: () {
-            Nav.routeReplacement(context, LoginPage());
-          },
-          child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: Colors.white,
-            body: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  AuthHeader(
-                    headerTitle: "Register",
-                    headerBigTitle: "New",
-                    isLoginHeader: true,
-                  ),
-                  OtpDataForm(widget.number),
-                  SizedBox(
-                    height: 450,
-                    width: double.infinity,
-                  )
-                ],
-              ),
+    return SafeArea(
+      child: WillPopScope(
+        // ignore: missing_return
+        onWillPop: () {
+          Nav.routeReplacement(context, LoginPage());
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Colors.white,
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                AuthHeader(
+                  headerTitle: "Register",
+                  headerBigTitle: "New",
+                  isLoginHeader: true,
+                ),
+                OtpDataForm(widget.number),
+                SizedBox(
+                  height: 450,
+                  width: double.infinity,
+                )
+              ],
             ),
           ),
         ),

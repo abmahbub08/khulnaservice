@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 const Base = "https://app.khulnaservice.com/api/";
 var imageLink = "https://khulnaservice.com/";
-var paymentUrl = "https://app.khulnaservice.com/";
+var paymentUrl = "https://khulnaservice.com/";
 
 class ApiServices {
   Future<http.Response> regUrl(String param, name, email, password) async {

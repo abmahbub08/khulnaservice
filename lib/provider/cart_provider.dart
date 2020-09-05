@@ -30,9 +30,14 @@ class CartProvider extends ChangeNotifier {
     qunaModify.clear();
     quantity.forEach((element) {
       if (element['id'] == ProductID) {
-        element['quantity'] = element['quantity'] + 1;
+        print(element['quantity'].runtimeType);
+        try {
+          element['quantity'] = int.parse(element['quantity']) + 1;
+        } catch (e) {
+          element['quantity'] = element['quantity'] + 1;
+        }
       } else {
-        qunaModify.add({"id": ProductID, "quantity": 2});
+        qunaModify.add({"id": ProductID, "quantity": "2"});
       }
     });
 
@@ -53,11 +58,19 @@ class CartProvider extends ChangeNotifier {
 
   removeQuantity(ProductID) {
     quantity.forEach((element) {
-      if (element['id'] == ProductID) {
-        if (element['quantity'] > 1) {
-          element['quantity'] = element['quantity'] - 1;
-        }
-      } else {}
+      try {
+        if (element['id'] == ProductID) {
+          if (int.parse(element['quantity']) > 1) {
+            element['quantity'] = int.parse(element['quantity']) - 1;
+          }
+        } else {}
+      } catch (e) {
+        if (element['id'] == ProductID) {
+          if ((element['quantity']) > 1) {
+            element['quantity'] = element['quantity'] - 1;
+          }
+        } else {}
+      }
     });
 
     print(quantity);
@@ -81,14 +94,13 @@ class CartProvider extends ChangeNotifier {
 
   myCartItemQuantityAdd() {
     cartList.cart.forEach((element) {
-      quantity.add({"id": element.id, "quantity": element.quantity});
+      print(element.quantity.runtimeType);
+      quantity.add({"id": element.id, "quantity": element.quantity.toString()});
     });
 
     var seen = Set<int>();
     var unique = quantity.where((str) => seen.add(str['id'])).toList();
     quantity = unique;
     notifyListeners();
-
-
   }
 }

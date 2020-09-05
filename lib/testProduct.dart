@@ -772,16 +772,16 @@ class _testProductState extends State<testProduct> {
                                                   .toString())
                                       .then((value) {
                                     fetchData.getCart(context).then((value) {
-                                      Navigator.pop(context);
+                                      Navigator.of(context, rootNavigator: true).pop();
                                     }).catchError((onError) {
                                       print(onError);
-                                      Navigator.pop(context);
+                                      Navigator.of(context, rootNavigator: true).pop();
                                       CustomWidget.myShowDialog(
                                           context, "Something went wrong");
                                     });
                                   }).catchError((onError) {
                                     print(onError);
-                                    Navigator.pop(context);
+                                    Navigator.of(context, rootNavigator: true).pop();
                                     CustomWidget.myShowDialog(
                                         context, "Something went wrong");
                                   });

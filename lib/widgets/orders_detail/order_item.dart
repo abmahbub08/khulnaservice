@@ -167,6 +167,16 @@ class OrderItem extends StatelessWidget {
 
                 ],
               ),
+
+              Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        top: 5,
+                        bottom: 5,
+                        right: 26),
+                    child: Text("Delivery Charge ${order.shipping}"),
+                  )),
               Divider(),
               Container(
                 margin: EdgeInsets.only(left: 16, right: 16),

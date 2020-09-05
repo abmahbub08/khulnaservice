@@ -145,7 +145,7 @@ class _OtpPageState extends State<OtpPage> {
                             isLoading = false;
                           });
                           if (data['msg'] == "Success") {
-                            Nav.routeReplacement(
+                            Nav.route(
                                 context, OtpData(widget.number));
                           } else {
                             CustomWidget.myShowDialog(context, "Invalid OTP");
@@ -177,7 +177,7 @@ class _OtpPageState extends State<OtpPage> {
                             "Did'nt get the code?",
                             style: TextStyle(color: Colors.grey),
                           ),
-                          GestureDetector(
+                          InkWell(
                             onTap: () {
                               fetchData.sendOTP(widget.referral,widget.number);
                               setState(() {

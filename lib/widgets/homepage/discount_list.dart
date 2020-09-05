@@ -31,7 +31,7 @@ class DiscountList extends StatelessWidget {
         children: <Widget>[
           productListTitleBar,
           Container(
-              height: size.height *0.225,
+              height: size.height *0.250,
               child: new ListView.builder(
                 itemCount: myData.length,
                 scrollDirection: Axis.horizontal,
@@ -41,18 +41,7 @@ class DiscountList extends StatelessWidget {
                     themeColor: themeColor,
                   );
                 },
-//                children: <Widget>[
-//                  DiscountItem(
-//                      title: title,
-//                      themeColor: themeColor,
-//                      imageUrl: "prodcut1.png"),
-//                  DiscountItem(
-//                      title: title,
-//                      themeColor: themeColor, imageUrl: "prodcut2.png"),
-//                  DiscountItem(
-//                      title: title,
-//                      themeColor: themeColor, imageUrl: "prodcut3.png"),
-//                ],
+
               )),
         ],
       ),

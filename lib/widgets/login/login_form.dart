@@ -133,7 +133,7 @@ class _LoginFormState extends State<LoginForm> {
               setState(() {
                 _isLoading = false;
               });
-              Nav.routeReplacement(context, InitPage());
+              Navigator.pushReplacementNamed(context, "/myApp");
             }).catchError((onError) {
 
               setState(() {

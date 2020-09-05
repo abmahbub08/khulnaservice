@@ -26,7 +26,7 @@ class PlaceOrderModel {
   IngAddress billingAddress;
   String shippingCondition;
   dynamic couponCondition;
-  String total;
+  dynamic total;
   List<State> divisions;
 
   factory PlaceOrderModel.fromJson(Map<String, dynamic> json) =>
@@ -76,15 +76,15 @@ class IngAddress {
     this.country,
   });
 
-  int id;
-  int modelId;
+  dynamic id;
+  dynamic modelId;
   String modelType;
-  int addressType;
+  dynamic addressType;
   String phone;
   String address1;
   String address2;
-  int cityId;
-  int stateId;
+  dynamic cityId;
+  dynamic stateId;
   String countryCode;
   DateTime createdAt;
   DateTime updatedAt;
@@ -140,8 +140,8 @@ class City {
     this.website,
   });
 
-  int id;
-  int divisionId;
+  dynamic id;
+  dynamic divisionId;
   String name;
   String bnName;
   double lat;
@@ -176,7 +176,7 @@ class Country {
     this.name,
   });
 
-  int id;
+  dynamic id;
   String code;
   String name;
 
@@ -201,7 +201,7 @@ class State {
     this.districts,
   });
 
-  int id;
+  dynamic id;
   String name;
   String bnName;
   List<City> districts;
@@ -235,14 +235,14 @@ class CartItem {
     this.conditions,
   });
 
-  int id;
-  String name;
-  int price;
-  String quantity;
+  dynamic id;
+  dynamic name;
+  dynamic price;
+  dynamic quantity;
   Attributes attributes;
   List<Condition> conditions;
 
-  factory CartItem.fromJson(Map<String, dynamic> json) => CartItem(
+  factory CartItem.fromJson(Map<dynamic, dynamic> json) => CartItem(
         id: json["id"],
         name: json["name"],
         price: json["price"],
@@ -252,7 +252,7 @@ class CartItem {
             json["conditions"].map((x) => Condition.fromJson(x))),
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<dynamic, dynamic> toJson() => {
         "id": id,
         "name": name,
         "price": price,
@@ -277,17 +277,17 @@ class Attributes {
     this.cartTs,
   });
 
-  String image;
-  int storeId;
-  String shipping;
-  int vat;
+  dynamic image;
+  dynamic storeId;
+  dynamic shipping;
+  dynamic vat;
   dynamic commission;
-  List<int> categoryIds;
-  int shipsInsideOnly;
-  String price;
-  String discountedPrice;
-  int discount;
-  int cartTs;
+  List<dynamic> categoryIds;
+  dynamic shipsInsideOnly;
+  dynamic price;
+  dynamic discountedPrice;
+  dynamic discount;
+  dynamic cartTs;
 
   factory Attributes.fromJson(Map<String, dynamic> json) => Attributes(
         image: json["image"],
@@ -295,7 +295,7 @@ class Attributes {
         shipping: json["shipping"],
         vat: json["vat"],
         commission: json["commission"],
-        categoryIds: List<int>.from(json["category_ids"].map((x) => x)),
+        categoryIds: List<dynamic>.from(json["category_ids"].map((x) => x)),
         shipsInsideOnly: json["ships_inside_only"],
         price: json["price"],
         discountedPrice: json["discounted_price"],
@@ -325,11 +325,11 @@ class Condition {
 
   dynamic parsedRawValue;
 
-  factory Condition.fromJson(Map<String, dynamic> json) => Condition(
+  factory Condition.fromJson(Map<dynamic, dynamic> json) => Condition(
         parsedRawValue: json["parsedRawValue"],
       );
 
-  Map<String, dynamic> toJson() => {
+  Map<dynamic, dynamic> toJson() => {
         "parsedRawValue": parsedRawValue,
       };
 }

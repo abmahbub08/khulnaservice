@@ -16,8 +16,9 @@ import 'package:khulnaservice/widgets/customWdiget.dart';
 import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/screen.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter/src/widgets/image.dart' as im;
 import '../../config.dart';
+import '../pumpkin.dart';
 
 class DiscountItem extends StatelessWidget {
   final themeColor;
@@ -253,7 +254,7 @@ class DiscountItem extends StatelessWidget {
                               width: size.width * 0.35,
                               child: GFButton(
                                 onPressed: () {
-                                  CustomWidget.myDiaglog(context);
+                                CustomWidget.myDiaglog(context);
                                   fetchData
                                       .getAddToCart(
                                           product.id.toString(),
@@ -270,16 +271,16 @@ class DiscountItem extends StatelessWidget {
                                                   .toString())
                                       .then((value) {
                                     fetchData.getCart(context).then((value) {
-                                      Navigator.pop(context);
+                                      Navigator.of(context, rootNavigator: true).pop();
                                     }).catchError((onError) {
                                       print(onError);
-                                      Navigator.pop(context);
+                                      Navigator.of(context, rootNavigator: true).pop();
                                       CustomWidget.myShowDialog(
                                           context, "Something went wrong");
                                     });
                                   }).catchError((onError) {
                                     print(onError);
-                                    Navigator.pop(context);
+                                    Navigator.of(context, rootNavigator: true).pop();
                                     CustomWidget.myShowDialog(
                                         context, "Something went wrong");
                                   });

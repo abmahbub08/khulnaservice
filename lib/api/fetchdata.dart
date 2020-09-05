@@ -189,7 +189,7 @@ class FetchData {
     final catRep = repositories.placeOrderHttp("placeOrder");
     var results = await Future.wait([catRep]);
     if (results[0].statusCode == 200) {
-      print(results[0].body);
+      // debugPrint(results[0].body);
       Provider.of<placeOrderProvider>(context, listen: false)
           .addData(placeOrderModelFromJson(results[0].body));
 

@@ -14,19 +14,13 @@ import 'package:khulnaservice/provider/profile_data_provider.dart';
 import 'package:khulnaservice/widgets/customWdiget.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/main.dart';
-import 'package:khulnaservice/pages/credit_cart_page.dart';
 import 'package:khulnaservice/utils/commons/colors.dart';
 import 'package:khulnaservice/utils/navigator.dart';
 import 'package:khulnaservice/utils/screen.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-
-import '../config.dart';
 import '../webView.dart';
 import 'new_adress_page.dart';
 import 'order_confirm.dart';
-import 'orders_detail_page.dart';
 
 class OrderPage extends StatefulWidget {
   @override

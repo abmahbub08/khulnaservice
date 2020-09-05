@@ -458,8 +458,11 @@ class _SearchPageState extends State<SearchPage> {
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, index) {
                         if (index == SecondList.length) {
-                          return Center(
-                            child: Text(ProductLoading),
+                          return Container(
+                            height: 70,
+                            child: Center(
+                              child: Text(ProductLoading),
+                            ),
                           );
                         }
                         return Center(
@@ -809,16 +812,15 @@ class _SearchPageState extends State<SearchPage> {
                                                   .toString())
                                       .then((value) {
                                     fetchData.getCart(context).then((value) {
-                                      Navigator.pop(context);
+                                      Navigator.of(context, rootNavigator: true).pop();
                                     }).catchError((onError) {
-                                      print(onError);
-                                      Navigator.pop(context);
+                                      Navigator.of(context, rootNavigator: true).pop();
                                       CustomWidget.myShowDialog(
                                           context, "Something went wrong");
                                     });
                                   }).catchError((onError) {
-                                    print(onError);
-                                    Navigator.pop(context);
+
+                                    Navigator.of(context, rootNavigator: true).pop();
                                     CustomWidget.myShowDialog(
                                         context, "Something went wrong");
                                   });

@@ -120,16 +120,16 @@ class _AddressAllState extends State<AddressAll> {
                       same == false ? 0.toString() : 1.toString())
                   .then((value) {
                 fetchData.profileData(context).then((value) {
-                  Navigator.pop(context);
+                  Navigator.of(context, rootNavigator: true).pop();
                   Customwidget.myShowDialog(context, "Address Updated");
                 }).catchError((onError) {
                   print(onError);
-                  Navigator.pop(context);
+                  Navigator.of(context, rootNavigator: true).pop();
                   Customwidget.myShowDialog(context, "Something went wrong!");
                 });
               }).catchError((onError) {
                 print(onError);
-                Navigator.pop(context);
+                Navigator.of(context, rootNavigator: true).pop();
                 Customwidget.myShowDialog(context, "Something went wrong!");
               });
             },

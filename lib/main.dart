@@ -88,6 +88,10 @@ class MyApp extends StatelessWidget {
     return LocalizationProvider(
       state: LocalizationProvider.of(context).state,
       child: MaterialApp(
+        routes: {
+          '/initPage': (context) => InitPage(),
+          '/myApp': (context) => MyApp(),
+        },
         debugShowCheckedModeBanner: false,
         title: 'Khulna Service',
         localizationsDelegates: [
@@ -171,7 +175,7 @@ class _InitPageState extends State<InitPage> {
               color: Colors.white.withOpacity(0.6), fontSize: 19.0),
           colorLineSelected: Colors.orange,
         ),
-        SearchPage(false,true)));
+        SearchPage(false, true)));
     items.add(new ScreenHiddenDrawer(
         new ItemHiddenMenu(
           icon: Icon(

@@ -18,9 +18,11 @@ import 'package:khulnaservice/utils/screen.dart';
 import 'package:khulnaservice/utils/theme_notifier.dart';
 import 'package:khulnaservice/widgets/customWdiget.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/src/widgets/image.dart'as im;
 
 import '../../config.dart';
 import '../../testPrDEtails.dart';
+import '../pumpkin.dart';
 
 class ProductCard extends StatelessWidget {
   ProductCard({Key key, @required this.themeColor, this.imageUrl, this.product})
@@ -273,16 +275,16 @@ class ProductCard extends StatelessWidget {
                                                   .toString())
                                       .then((value) {
                                     fetchData.getCart(context).then((value) {
-                                      Navigator.pop(context);
+                                      Navigator.of(context, rootNavigator: true).pop();
                                     }).catchError((onError) {
                                       print(onError);
-                                      Navigator.pop(context);
+                                      Navigator.of(context, rootNavigator: true).pop();
                                       CustomWidget.myShowDialog(
                                           context, "Something went wrong");
                                     });
                                   }).catchError((onError) {
                                     print(onError);
-                                    Navigator.pop(context);
+                                    Navigator.of(context, rootNavigator: true).pop();
                                     CustomWidget.myShowDialog(
                                         context, "Something went wrong");
                                   });

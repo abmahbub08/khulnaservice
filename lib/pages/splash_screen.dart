@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void _getUser() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     var token = sp.getString('token');
-    onBoard = sp.getBool('onboard') == null ? false : sp.getBool('onboard');
+
 
     if (token != null) {
       fetchData.profileData(context).then((value) {
@@ -43,11 +43,8 @@ class _SplashScreenState extends State<SplashScreen> {
         print(sp.get("email"));
         CustomWidget.myShowDialog(context, "Something went wrong");
       });
-    } else if (onBoard) {
-      Nav.routeReplacement(context, LoginPage());
     } else {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (BuildContext context) => OnboardingPage()));
+      Nav.routeReplacement(context, LoginPage());
     }
   }
 

@@ -653,7 +653,7 @@ class _testPrDetailsState extends State<testPrDetails>
                                               fetchData
                                                   .getCart(context)
                                                   .then((value) {
-                                                Navigator.pop(context);
+                                                Navigator.of(context, rootNavigator: true).pop();
                                               });
                                             });
                                           },

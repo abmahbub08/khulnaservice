@@ -103,10 +103,12 @@ class _HiddenMenuState extends State<HiddenMenu> {
                     style: GoogleFonts.poppins(color: Colors.white),
                   ),
                   leading: FadeInImage.assetNetwork(
-
-                      placeholder: "assets/images/man.png",
-                      image:
-                          "${imageLink}ims/?src=/uploads/user/${user.id}/profile/cropped/${user.image}&p=small",height: 40,width: 40,)),
+                    placeholder: "assets/images/man.png",
+                    image:
+                        "${imageLink}ims/?src=/uploads/user/${user.id}/profile/cropped/${user.image}&p=small",
+                    height: 40,
+                    width: 40,
+                  )),
               Container(
                 padding: EdgeInsets.only(
                   top: 20.0,
@@ -295,7 +297,7 @@ class _HiddenMenuState extends State<HiddenMenu> {
                               await SharedPreferences.getInstance();
                           sp.remove("token");
                           sp.remove("user");
-                          Nav.routeReplacement(context, MyApp());
+                          Navigator.pushReplacementNamed(context, "/myApp");
                         },
                         child: ItemHiddenMenu(
                           icon: Icon(

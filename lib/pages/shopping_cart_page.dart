@@ -212,7 +212,7 @@ class HomeWidgetState extends State<ShoppingCartPage>
                                     .then((value) {
                                   fetchData.getCart(context).then((value) {
                                     total = 0;
-                                    Navigator.pop(context);
+                                    Navigator.of(context, rootNavigator: true).pop();
                                     setState(() {});
                                   });
                                 });
@@ -428,11 +428,11 @@ class HomeWidgetState extends State<ShoppingCartPage>
                 } else {
                   CustomWidget.myDiaglog(context);
                   fetchData.getPlaceOrderData(context).then((value) {
-                    Navigator.pop(context);
+                    Navigator.of(context, rootNavigator: true).pop();
                     Nav.route(context, OrderPage());
                   }).catchError((e) {
                     print(e);
-                    Navigator.pop(context);
+                    Navigator.of(context, rootNavigator: true).pop();
                     CustomWidget.myShowDialog(context, "Something went wrong");
                   });
                 }
