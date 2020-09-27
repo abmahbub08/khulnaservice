@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
@@ -27,7 +28,7 @@ class _HomeNavigatorState extends State<HomeNavigator> {
     HomePage(),
     CategoryPage(),
     ShoppingCartPage(),
-    SearchPage(false,false),
+    SearchPage(false, false),
     MyProfilePage()
   ];
   bool IsLoading = false;
@@ -47,41 +48,79 @@ class _HomeNavigatorState extends State<HomeNavigator> {
     super.initState();
   }
 
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("No"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Yes"),
+      onPressed: () {
+        SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop');
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text("Do You Want To Exit?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
-    return Scaffold(
-      bottomNavigationBar: IsLoading
-          ? Padding(
-              padding: EdgeInsets.only(bottom: 12),
-              child: ConvexAppBar(
-                color: Color(0xFF5D6A78),
-                backgroundColor: Colors.white,
-                activeColor: themeColor.getColor(),
-                elevation: 0.0,
-                top: -28,
-                onTap: (int val) {
-                  if (val == _currentPage) return;
-                  setState(() {
-                    _currentPage = val;
-                  });
-                },
-                curveSize: 0,
-                initialActiveIndex: _currentPage,
-                style: TabStyle.fixedCircle,
-                items: <TabItem>[
-                  TabItem(icon: Feather.home, title: ''),
-                  TabItem(icon: Feather.list, title: ''),
-                  TabItem(icon: bottomCenterItem(themeColor), title: ''),
-                  TabItem(icon: Feather.search, title: ''),
-                  TabItem(icon: Feather.user, title: ''),
-                ],
-              ),
-            )
-          : SizedBox(),
-      body: IsLoading
-          ? _pages[_currentPage]
-          : Center(child: CircularProgressIndicator()),
+    return WillPopScope(
+      onWillPop: () {
+        showAlertDialog(context);
+      },
+      child: Scaffold(
+        bottomNavigationBar: IsLoading
+            ? Padding(
+                padding: EdgeInsets.only(bottom: 12),
+                child: ConvexAppBar(
+                  color: Color(0xFF5D6A78),
+                  backgroundColor: Colors.white,
+                  activeColor: themeColor.getColor(),
+                  elevation: 0.0,
+                  top: -28,
+                  onTap: (int val) {
+                    if (val == _currentPage) return;
+                    setState(() {
+                      _currentPage = val;
+                    });
+                  },
+                  curveSize: 0,
+                  initialActiveIndex: _currentPage,
+                  style: TabStyle.fixedCircle,
+                  items: <TabItem>[
+                    TabItem(icon: Feather.home, title: ''),
+                    TabItem(icon: Feather.list, title: ''),
+                    TabItem(icon: bottomCenterItem(themeColor), title: ''),
+                    TabItem(icon: Feather.search, title: ''),
+                    TabItem(icon: Feather.user, title: ''),
+                  ],
+                ),
+              )
+            : SizedBox(),
+        body: IsLoading
+            ? _pages[_currentPage]
+            : Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 

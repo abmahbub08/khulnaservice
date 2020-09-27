@@ -33,6 +33,7 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
+    print(context.watch<CategoryProvider>().tabName.length);
     return Scaffold(
       backgroundColor: greyBackground,
       body: context.watch<CategoryProvider>().tabName.length == 0
@@ -55,21 +56,18 @@ class _CategoryPageState extends State<CategoryPage> {
                 });
               },
               tabsTitle: context.watch<CategoryProvider>().tabName,
-              tabs: [1, 2, 3, 4, 5, 6, 7]
+              tabs: context
+                  .watch<CategoryProvider>()
+                  .tabName
                   .map((e) => Tab(
                         icon: Icon(Icons.add),
                       ))
                   .toList(),
-              contents: <Widget>[
-                tabsContent(themeColor, 'Flutter',
-                    'Change page by scrolling content is disabled in settings. Changing contents pages is only available via tapping on tabs'),
-                tabsContent(themeColor, 'Dart'),
-                tabsContent(themeColor, 'Javascript'),
-                tabsContent(themeColor, 'NodeJS'),
-                tabsContent(themeColor, 'HTML 5'),
-                tabsContent(themeColor, 'HTML 5'),
-                tabsContent(themeColor, 'HTML 5'),
-              ],
+              contents: context
+                  .watch<CategoryProvider>()
+                  .tabName
+                  .map((e) => tabsContent(themeColor, "s"))
+                  .toList(),
             ),
     );
   }

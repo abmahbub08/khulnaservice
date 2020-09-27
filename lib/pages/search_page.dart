@@ -340,66 +340,66 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       ),
                     ),
-                    Material(
-                      color: Colors.white,
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            isLoading = true;
-                            SecondList = List<Datum>();
-                          });
-
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder: (c, a1, a2) => TestFilter(
-                                isFromSearch: true,
-                              ),
-                              transitionsBuilder: (c, anim, a2, child) =>
-                                  FadeTransition(opacity: anim, child: child),
-                              transitionDuration: Duration(milliseconds: 280),
-                            ),
-                          ).then((value) {
-                            indexNUm = 1;
-                            fetchData
-                                .searchData(
-                                    context,
-                                    myKeyWord,
-                                    indexNUm,
-                                    Provider.of<CategoryProvider>(context,
-                                            listen: false)
-                                        .minPrice,
-                                    Provider.of<CategoryProvider>(context,
-                                            listen: false)
-                                        .maxPrice)
-                                .then((value) {
-                              getList();
-                              isLoading = false;
-
-                              setState(() {});
-                            });
-                          });
-                        },
-                        child: Container(
-                          margin: EdgeInsets.all(12),
-                          child: Row(children: <Widget>[
-                            SvgPicture.asset(
-                              "assets/icons/funnel.svg",
-                              height: 14,
-                              color: Color(0xFF5D6A78),
-                            ),
-                            SizedBox(
-                              width: 3,
-                            ),
-                            Text(
-                              "Filter",
-                              style: GoogleFonts.poppins(
-                                  fontSize: 13, color: Color(0xFF5D6A78)),
-                            )
-                          ]),
-                        ),
-                      ),
-                    )
+                    // Material(
+                    //   color: Colors.white,
+                    //   child: InkWell(
+                    //     onTap: () {
+                    //       setState(() {
+                    //         isLoading = true;
+                    //         SecondList = List<Datum>();
+                    //       });
+                    //
+                    //       Navigator.push(
+                    //         context,
+                    //         PageRouteBuilder(
+                    //           pageBuilder: (c, a1, a2) => TestFilter(
+                    //             isFromSearch: true,
+                    //           ),
+                    //           transitionsBuilder: (c, anim, a2, child) =>
+                    //               FadeTransition(opacity: anim, child: child),
+                    //           transitionDuration: Duration(milliseconds: 280),
+                    //         ),
+                    //       ).then((value) {
+                    //         indexNUm = 1;
+                    //         fetchData
+                    //             .searchData(
+                    //                 context,
+                    //                 myKeyWord,
+                    //                 indexNUm,
+                    //                 Provider.of<CategoryProvider>(context,
+                    //                         listen: false)
+                    //                     .minPrice,
+                    //                 Provider.of<CategoryProvider>(context,
+                    //                         listen: false)
+                    //                     .maxPrice)
+                    //             .then((value) {
+                    //           getList();
+                    //           isLoading = false;
+                    //
+                    //           setState(() {});
+                    //         });
+                    //       });
+                    //     },
+                    //     child: Container(
+                    //       margin: EdgeInsets.all(12),
+                    //       child: Row(children: <Widget>[
+                    //         SvgPicture.asset(
+                    //           "assets/icons/funnel.svg",
+                    //           height: 14,
+                    //           color: Color(0xFF5D6A78),
+                    //         ),
+                    //         SizedBox(
+                    //           width: 3,
+                    //         ),
+                    //         Text(
+                    //           "Filter",
+                    //           style: GoogleFonts.poppins(
+                    //               fontSize: 13, color: Color(0xFF5D6A78)),
+                    //         )
+                    //       ]),
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
               ),
