@@ -175,6 +175,7 @@ class _LoginFormState extends State<LoginForm> {
               setState(() {
                 _isLoading = false;
               });
+
               Scaffold.of(context).showSnackBar(SnackBar(
                 content:
                     Text("Something Went Wrong", textAlign: TextAlign.center),
@@ -192,9 +193,9 @@ class _LoginFormState extends State<LoginForm> {
           setState(() {
             _isLoading = false;
           });
-
+          print(e);
           Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text("Something Went Wrong", textAlign: TextAlign.center),
+            content: Text(e, textAlign: TextAlign.center),
           ));
         });
       }

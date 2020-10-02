@@ -455,7 +455,7 @@ class _OrderPageState extends State<OrderPage> {
                     Route route = MaterialPageRoute(
                         builder: (context) => OrderConfirm(
                             data["order_id"],
-                            "Your order has been placed. We would like to extend a very heartfelt thanks for placing your order. - KhulnaService Team",
+                            "Your order has been placed. Khulna Service team will make a call very soon.",
                             Colors.green[100]));
                     Navigator.push(context, route);
                   } else {
@@ -603,7 +603,7 @@ class _OrderPageState extends State<OrderPage> {
                     },
                     child: data.billingAddress == null
                         ? Text("Add billing")
-                        : Text("Change billing"),
+                        : Text("Write billing"),
                   ),
                   GFButton(
                     focusColor: themeColor.getColor().withOpacity(0.5),
@@ -629,7 +629,7 @@ class _OrderPageState extends State<OrderPage> {
                     },
                     child: data.shippingAddress == null
                         ? Text("Add Shipping")
-                        : Text("Change Shipping"),
+                        : Text("Write Shipping"),
                   ),
                 ],
               ),

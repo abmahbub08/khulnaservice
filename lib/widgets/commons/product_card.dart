@@ -161,7 +161,8 @@ class ProductCard extends StatelessWidget {
                                   "${product.price}",
                                   style: GoogleFonts.poppins(
                                       decoration: TextDecoration.lineThrough,
-                                      fontSize: 14,
+                                      decorationColor: Colors.grey[400],
+                                      fontSize: 15,
                                       fontWeight: FontWeight.w300),
                                 )
                               : Container(),
@@ -249,7 +250,34 @@ class ProductCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Container(
+                      product.stock ==0 ? Container(
+                        width: size.width * 0.35,
+                        child: Center(
+                          child: Text(
+                            "Not In Stock",
+                            style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                            color: themeColor.getColor(),
+                            borderRadius: BorderRadius.circular(3),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(.2),
+                                blurRadius: 6.0, // soften the shadow
+                                spreadRadius: 0.0, //extend the shadow
+                                offset: Offset(
+                                  0.0, // Move to right 10  horizontally
+                                  1.0, // Move to bottom 10 Vertically
+                                ),
+                              )
+                            ]),
+                        height: 32,
+                        margin: EdgeInsets.only(right: 2),
+                      ) :Container(
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -606,21 +606,38 @@ class _testPrDetailsState extends State<testPrDetails>
                                     )
                                   ],
                                 ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 24),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Container(
-                                        width: 150,
-                                        child: GFButton(
-                                          icon: Icon(
-                                            Icons.shopping_cart,
-                                            color: Colors.white,
-                                            size: 16,
-                                          ),
-                                          onPressed: () {
+                                widget.data.stock == 0
+                                    ? Container(
+                                        margin: EdgeInsets.only(top: 24),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Container(
+                                              width: 150,
+                                              child: Text("Not In Stock",
+                                                  style: GoogleFonts.poppins(
+                                                      fontWeight:
+                                                          FontWeight.w400)),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : Container(
+                                        margin: EdgeInsets.only(top: 24),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Container(
+                                              width: 150,
+                                              child: GFButton(
+                                                icon: Icon(
+                                                  Icons.shopping_cart,
+                                                  color: Colors.white,
+                                                  size: 16,
+                                                ),
+                                                onPressed: () {
 //                                            Hive.box("myCart")
 //                                                .put(widget.data.id, {
 //                                              "id": "${widget.data.id}",
@@ -629,42 +646,51 @@ class _testPrDetailsState extends State<testPrDetails>
 //                                              "name": "${widget.data.name}",
 //                                              "image": "${widget.data.image}",
 //                                            });
-                                            CustomWidget.myDiaglog(context);
-                                            fetchData
-                                                .getAddToCart(
-                                                    widget.data.id.toString(),
-                                                    Provider.of<CartProvider>(
-                                                                    context,
-                                                                    listen:
-                                                                        false)
-                                                                .getQuantity(
-                                                                    widget.data
-                                                                        .id) ==
-                                                            null
-                                                        ? "1"
-                                                        : Provider.of<
-                                                                    CartProvider>(
-                                                                context,
-                                                                listen: false)
-                                                            .getQuantity(
-                                                                widget.data.id)
-                                                            .toString())
-                                                .then((value) {
-                                              fetchData
-                                                  .getCart(context)
-                                                  .then((value) {
-                                                Navigator.of(context, rootNavigator: true).pop();
-                                              });
-                                            });
-                                          },
-                                          child: Text("Buy Now",
-                                              style: GoogleFonts.poppins(
-                                                  fontWeight: FontWeight.w400)),
-                                          shape: GFButtonShape.pills,
-                                          type: GFButtonType.solid,
-                                          color: themeColor.getColor(),
-                                        ),
-                                      ),
+                                                  CustomWidget.myDiaglog(
+                                                      context);
+                                                  fetchData
+                                                      .getAddToCart(
+                                                          widget.data.id
+                                                              .toString(),
+                                                          Provider.of<CartProvider>(
+                                                                          context,
+                                                                          listen:
+                                                                              false)
+                                                                      .getQuantity(widget
+                                                                          .data
+                                                                          .id) ==
+                                                                  null
+                                                              ? "1"
+                                                              : Provider.of<
+                                                                          CartProvider>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .getQuantity(
+                                                                      widget
+                                                                          .data
+                                                                          .id)
+                                                                  .toString())
+                                                      .then((value) {
+                                                    fetchData
+                                                        .getCart(context)
+                                                        .then((value) {
+                                                      Navigator.of(context,
+                                                              rootNavigator:
+                                                                  true)
+                                                          .pop();
+                                                    });
+                                                  });
+                                                },
+                                                child: Text("Buy Now",
+                                                    style: GoogleFonts.poppins(
+                                                        fontWeight:
+                                                            FontWeight.w400)),
+                                                shape: GFButtonShape.pills,
+                                                type: GFButtonType.solid,
+                                                color: themeColor.getColor(),
+                                              ),
+                                            ),
 //                                      Container(
 //                                        width: 140,
 //                                        child: GFButton(
@@ -687,9 +713,9 @@ class _testPrDetailsState extends State<testPrDetails>
 //                                          color: themeColor.getColor(),
 //                                        ),
 //                                      )
-                                    ],
-                                  ),
-                                ),
+                                          ],
+                                        ),
+                                      ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[

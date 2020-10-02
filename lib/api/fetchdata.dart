@@ -71,14 +71,19 @@ class FetchData {
     SharedPreferences Sp = await SharedPreferences.getInstance();
     if (results[0].statusCode == 200) {
       var data = jsonDecode(results[0].body);
+      print(data);
+      if(data['message']=="Invalid credentials"){
+        throw "Invalid credentials";
+      }else{
 
-      Sp.setString('token', data['access_token']);
-      Sp.setString('name', data['name']);
-      Sp.setString('email', email);
-      Sp.setString('password', password);
-      Provider.of<userProvider>(context, listen: false)
-          .addData(userDataModelFromJson(results[0].body));
-      return results[0].body;
+        Sp.setString('token', data['access_token']);
+        Sp.setString('name', data['name']);
+        Sp.setString('email', email);
+        Sp.setString('password', password);
+        Provider.of<userProvider>(context, listen: false)
+            .addData(userDataModelFromJson(results[0].body));
+        return results[0].body;
+      }
     } else {
       throw results[0].body;
     }

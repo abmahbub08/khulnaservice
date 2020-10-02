@@ -157,7 +157,8 @@ class DiscountItem extends StatelessWidget {
                                   "${product.price}",
                                   style: GoogleFonts.poppins(
                                       decoration: TextDecoration.lineThrough,
-                                      fontSize: 14,
+                                      decorationColor: Colors.grey[400],
+                                      fontSize: 15,
                                       fontWeight: FontWeight.w300),
                                 )
                               : Container(),
@@ -245,80 +246,121 @@ class DiscountItem extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Container(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                              width: size.width * 0.35,
-                              child: GFButton(
-                                onPressed: () {
-                                CustomWidget.myDiaglog(context);
-                                  fetchData
-                                      .getAddToCart(
-                                          product.id.toString(),
-                                          Provider.of<CartProvider>(context,
-                                                          listen: false)
-                                                      .getQuantity(
-                                                          product.id) ==
-                                                  null
-                                              ? "1"
-                                              : Provider.of<CartProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .getQuantity(product.id)
-                                                  .toString())
-                                      .then((value) {
-                                    fetchData.getCart(context).then((value) {
-                                      Navigator.of(context, rootNavigator: true).pop();
-                                    }).catchError((onError) {
-                                      print(onError);
-                                      Navigator.of(context, rootNavigator: true).pop();
-                                      CustomWidget.myShowDialog(
-                                          context, "Something went wrong");
-                                    });
-                                  }).catchError((onError) {
-                                    print(onError);
-                                    Navigator.of(context, rootNavigator: true).pop();
-                                    CustomWidget.myShowDialog(
-                                        context, "Something went wrong");
-                                  });
-                                },
-                                icon: SvgPicture.asset(
-                                  "assets/icons/ic_product_shopping_cart.svg",
-                                  color: Colors.white,
-                                  height: 12,
-                                ),
-                                child: Text(
-                                  "Buy Now",
-                                  style: GoogleFonts.poppins(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                type: GFButtonType.transparent,
-                              ),
-                              decoration: BoxDecoration(
-                                  color: themeColor.getColor(),
-                                  borderRadius: BorderRadius.circular(3),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(.2),
-                                      blurRadius: 6.0, // soften the shadow
-                                      spreadRadius: 0.0, //extend the shadow
-                                      offset: Offset(
-                                        0.0, // Move to right 10  horizontally
-                                        1.0, // Move to bottom 10 Vertically
-                                      ),
-                                    )
-                                  ]),
-                              height: 32,
-                              margin: EdgeInsets.only(right: 2),
-                            ),
-                          ],
+                      product.stock == 0
+                          ? Container(
+                        width: size.width * 0.35,
+                        child: Center(
+                          child: Text(
+                            "Not In Stock",
+                            style: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w400),
+                          ),
                         ),
-                      ),
+                        decoration: BoxDecoration(
+                            color: themeColor.getColor(),
+                            borderRadius: BorderRadius.circular(3),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(.2),
+                                blurRadius: 6.0, // soften the shadow
+                                spreadRadius: 0.0, //extend the shadow
+                                offset: Offset(
+                                  0.0, // Move to right 10  horizontally
+                                  1.0, // Move to bottom 10 Vertically
+                                ),
+                              )
+                            ]),
+                        height: 32,
+                        margin: EdgeInsets.only(right: 2),
+                      )
+                          : Container(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    width: size.width * 0.35,
+                                    child: GFButton(
+                                      onPressed: () {
+                                        CustomWidget.myDiaglog(context);
+                                        fetchData
+                                            .getAddToCart(
+                                                product.id.toString(),
+                                                Provider.of<CartProvider>(
+                                                                context,
+                                                                listen: false)
+                                                            .getQuantity(
+                                                                product.id) ==
+                                                        null
+                                                    ? "1"
+                                                    : Provider.of<CartProvider>(
+                                                            context,
+                                                            listen: false)
+                                                        .getQuantity(product.id)
+                                                        .toString())
+                                            .then((value) {
+                                          fetchData
+                                              .getCart(context)
+                                              .then((value) {
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pop();
+                                          }).catchError((onError) {
+                                            print(onError);
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pop();
+                                            CustomWidget.myShowDialog(context,
+                                                "Something went wrong");
+                                          });
+                                        }).catchError((onError) {
+                                          print(onError);
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop();
+                                          CustomWidget.myShowDialog(
+                                              context, "Something went wrong");
+                                        });
+                                      },
+                                      icon: SvgPicture.asset(
+                                        "assets/icons/ic_product_shopping_cart.svg",
+                                        color: Colors.white,
+                                        height: 12,
+                                      ),
+                                      child: Text(
+                                        "Buy Now",
+                                        style: GoogleFonts.poppins(
+                                            color: Colors.white,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                      type: GFButtonType.transparent,
+                                    ),
+                                    decoration: BoxDecoration(
+                                        color: themeColor.getColor(),
+                                        borderRadius: BorderRadius.circular(3),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(.2),
+                                            blurRadius:
+                                                6.0, // soften the shadow
+                                            spreadRadius:
+                                                0.0, //extend the shadow
+                                            offset: Offset(
+                                              0.0, // Move to right 10  horizontally
+                                              1.0, // Move to bottom 10 Vertically
+                                            ),
+                                          )
+                                        ]),
+                                    height: 32,
+                                    margin: EdgeInsets.only(right: 2),
+                                  ),
+                                ],
+                              ),
+                            ),
                     ],
                   ),
                 )

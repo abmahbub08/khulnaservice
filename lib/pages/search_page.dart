@@ -474,7 +474,9 @@ class _SearchPageState extends State<SearchPage> {
                               SecondList[index].price,
                               SecondList[index].discountedPrice,
                               SecondList[index].id,
-                              SecondList[index].image),
+                              SecondList[index].image,
+                              SecondList[index].stock,
+                          ),
                         );
                       },
 //                    crossAxisCount: 2,
@@ -610,7 +612,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   productSearchItem(BuildContext context, data, ThemeNotifier themeColor, name,
-      price, diPrice, id, image) {
+      price, diPrice, id, image,stock) {
     var size = MediaQuery.of(context).size;
     return InkWell(
       onTap: () {
@@ -703,7 +705,8 @@ class _SearchPageState extends State<SearchPage> {
                                   "${price}",
                                   style: GoogleFonts.poppins(
                                       decoration: TextDecoration.lineThrough,
-                                      fontSize: 14,
+                                      decorationColor: Colors.grey[400],
+                                      fontSize: 15,
                                       fontWeight: FontWeight.w300),
                                 )
                               : Container(),
@@ -787,13 +790,40 @@ class _SearchPageState extends State<SearchPage> {
                           ),
                         ],
                       ),
-                      Container(
+                     stock==0? Container(
+                       width: size.width * 0.35,
+                       child: Center(
+                         child: Text(
+                           "Not In Stock",
+                           style: GoogleFonts.poppins(
+                               color: Colors.white,
+                               fontSize: 10,
+                               fontWeight: FontWeight.w400),
+                         ),
+                       ),
+                       decoration: BoxDecoration(
+                           color: themeColor.getColor(),
+                           borderRadius: BorderRadius.circular(3),
+                           boxShadow: [
+                             BoxShadow(
+                               color: Colors.grey.withOpacity(.2),
+                               blurRadius: 6.0, // soften the shadow
+                               spreadRadius: 0.0, //extend the shadow
+                               offset: Offset(
+                                 0.0, // Move to right 10  horizontally
+                                 1.0, // Move to bottom 10 Vertically
+                               ),
+                             )
+                           ]),
+                       height: 32,
+                       margin: EdgeInsets.only(right: 2),
+                     ) : Container(
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                              width: 150,
+                              width: size.width * 0.35,
                               child: GFButton(
                                 onPressed: () {
                                   CustomWidget.myDiaglog(context);
@@ -865,48 +895,7 @@ class _SearchPageState extends State<SearchPage> {
               ],
             ),
           ),
-//          Positioned(
-//            bottom: 16,
-//            right: 8,
-//            child: Container(
-//              child: GFButton(
-//                onPressed: () {
-//                  Scaffold.of(context).showSnackBar(SnackBar(
-//                      backgroundColor: mainColor,
-//                      content: Text('Product added to cart')));
-//                  Nav.route(context, ShoppingCartPage());
-//                },
-//                icon: SvgPicture.asset(
-//                  "assets/icons/ic_product_shopping_cart.svg",
-//                  height: 12,
-//                ),
-//                child: Text(
-//                  "Add to Basket",
-//                  style: GoogleFonts.poppins(
-//                      color: Color(0xFF5D6A78),
-//                      fontSize: 10,
-//                      fontWeight: FontWeight.w400),
-//                ),
-//                type: GFButtonType.transparent,
-//              ),
-//              decoration: BoxDecoration(
-//                  color: Colors.white,
-//                  borderRadius: BorderRadius.circular(3),
-//                  boxShadow: [
-//                    BoxShadow(
-//                      color: Colors.grey.withOpacity(.2),
-//                      blurRadius: 6.0, // soften the shadow
-//                      spreadRadius: 0.0, //extend the shadow
-//                      offset: Offset(
-//                        0.0, // Move to right 10  horizontally
-//                        1.0, // Move to bottom 10 Vertically
-//                      ),
-//                    )
-//                  ]),
-//              height: 32,
-//              margin: EdgeInsets.only(right: 2),
-//            ),
-//          )
+
         ],
       ),
     );
