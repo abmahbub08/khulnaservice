@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
@@ -139,18 +140,23 @@ class _LoginFormState extends State<LoginForm> {
               setState(() {
                 _isLoading = false;
               });
-              Scaffold.of(context).showSnackBar(SnackBar(
-                content:
-                    Text("Something Went Wrong", textAlign: TextAlign.center),
-              ));
+              Flushbar(
+                duration: Duration(seconds: 2),
+                title: "Status",
+                message: "Something went wrong",
+              )..show(context);
             });
           } else {
             setState(() {
               _isLoading = false;
             });
-            Scaffold.of(context).showSnackBar(SnackBar(
-              content: Text(body['message'], textAlign: TextAlign.center),
-            ));
+            Flushbar(
+              duration: Duration(seconds: 2),
+              flushbarPosition: FlushbarPosition.TOP,
+              title: "Status",
+              message: body['message'],
+            )..show(context);
+
           }
         }).catchError((e) {
           print("login $e");
@@ -158,9 +164,12 @@ class _LoginFormState extends State<LoginForm> {
             _isLoading = false;
           });
 
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text("Something Went Wrong", textAlign: TextAlign.center),
-          ));
+          Flushbar(
+            duration: Duration(seconds: 2),
+            flushbarPosition: FlushbarPosition.TOP,
+            title: "Status",
+            message: "Something went wrong",
+          )..show(context);
         });
       } catch (e) {
         fetchData.getLog(context, "email", email, password).then((value) {
@@ -176,27 +185,37 @@ class _LoginFormState extends State<LoginForm> {
                 _isLoading = false;
               });
 
-              Scaffold.of(context).showSnackBar(SnackBar(
-                content:
-                    Text("Something Went Wrong", textAlign: TextAlign.center),
-              ));
+              Flushbar(
+                duration: Duration(seconds: 2),
+                flushbarPosition: FlushbarPosition.TOP,
+                title: "Status",
+                message: "Something went wrong",
+              )..show(context);
             });
           } else {
             setState(() {
               _isLoading = false;
             });
-            Scaffold.of(context).showSnackBar(SnackBar(
-              content: Text(body['message'], textAlign: TextAlign.center),
-            ));
+
+            Flushbar(
+              duration: Duration(seconds: 2),
+              flushbarPosition: FlushbarPosition.TOP,
+              title: "Status",
+              message: body['message'],
+            )..show(context);
+
           }
         }).catchError((e) {
           setState(() {
             _isLoading = false;
           });
-          print(e);
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text(e, textAlign: TextAlign.center),
-          ));
+
+          Flushbar(
+            duration: Duration(seconds: 2),
+            flushbarPosition: FlushbarPosition.TOP,
+            title: "Status",
+            message: e,
+          )..show(context);
         });
       }
     }

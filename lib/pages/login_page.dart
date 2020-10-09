@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:khulnaservice/utils/screen.dart';
+import 'package:khulnaservice/widgets/commons/shadow_button.dart';
 import 'package:provider/provider.dart';
 import 'package:khulnaservice/pages/register_page.dart';
 import 'package:khulnaservice/utils/navigator.dart';
@@ -66,48 +68,89 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(
                 height: 8,
               ),
-
+              Column(
+                children: <Widget>[
+                  Text(
+                    "Don't you have an account?",
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w200,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Container(
+                    height: 42,
+                    padding: EdgeInsets.only(right: 42, left: 42),
+                    width: ScreenUtil.getWidth(context),
+                    margin: EdgeInsets.only(top: 15, bottom: 12),
+                    child: ShadowButton(
+                      borderRadius: 12,
+                      height: 40,
+                      child: FlatButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(8.0),
+                        ),
+                        color: themeColor.getColor(),
+                        onPressed: () {
+                          Nav.routeReplacement(context, RegisterPage());
+                        },
+                        child: Text(
+                          "Register",
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               SocialLoginButtons(themeColor: themeColor)
             ],
           ),
         ),
-        bottomNavigationBar: routeRegisterWidget(themeColor, context),
+        // bottomNavigationBar: routeRegisterWidget(themeColor, context),
       ),
     );
   }
 
-  routeRegisterWidget(ThemeNotifier themeColor, BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(right: 36, left: 35, bottom: 12),
-      child: Row(
-        children: <Widget>[
-          Text(
-            "Do you have an account?",
-            style: GoogleFonts.poppins(
-              fontSize: 14,
-              color: Colors.black,
-              fontWeight: FontWeight.w200,
-            ),
-          ),
-          SizedBox(
-            width: 15,
-          ),
-          RaisedButton(
-            color: themeColor.getColor(),
-            child: Text(
-              "Register",
-              style: GoogleFonts.poppins(
-                fontSize: 14,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            onPressed: () {
-              Nav.routeReplacement(context, RegisterPage());
-            },
-          )
-        ],
-      ),
-    );
-  }
+// routeRegisterWidget(ThemeNotifier themeColor, BuildContext context) {
+//   return Container(
+//     padding: EdgeInsets.only(right: 36, left: 35, bottom: 12),
+//     child: Column(
+//       children: <Widget>[
+//         Text(
+//           "Don't you have an account?",
+//           style: GoogleFonts.poppins(
+//             fontSize: 14,
+//             color: Colors.black,
+//             fontWeight: FontWeight.w200,
+//           ),
+//         ),
+//         SizedBox(
+//           width: 15,
+//         ),
+//         RaisedButton(
+//           color: themeColor.getColor(),
+//           child: Text(
+//             "Register",
+//             style: GoogleFonts.poppins(
+//               fontSize: 14,
+//               color: Colors.white,
+//               fontWeight: FontWeight.bold,
+//             ),
+//           ),
+//           onPressed: () {
+//             Nav.routeReplacement(context, RegisterPage());
+//           },
+//         )
+//       ],
+//     ),
+//   );
+// }
 }

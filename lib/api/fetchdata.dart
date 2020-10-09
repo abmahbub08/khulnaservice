@@ -45,20 +45,24 @@ class FetchData {
 
   Future getRegPhone(context, name, phone, password) async {
     final regRep =
-        repositories.getRegPhoneHttp("register", name, phone, password);
+        repositories.getRegPhoneHttp("new_register", name, phone, password);
     var results = await Future.wait([regRep]);
     SharedPreferences Sp = await SharedPreferences.getInstance();
     if (results[0].statusCode == 200) {
       var data = jsonDecode(results[0].body);
 
-      print(data);
-      Sp.setString('token', data['access_token']);
-      Sp.setString('name', data['name']);
-      Sp.setString('email', phone);
-      Sp.setString('password', password);
-      Provider.of<userProvider>(context, listen: false)
-          .addData(userDataModelFromJson(results[0].body));
-      return results[0].body;
+
+     if(data['message']== "User exists!"){
+       throw results[0].body;
+     }else{
+       Sp.setString('token', data['access_token']);
+       Sp.setString('name', data['name']);
+       Sp.setString('email', phone);
+       Sp.setString('password', password);
+       Provider.of<userProvider>(context, listen: false)
+           .addData(userDataModelFromJson(results[0].body));
+       return results[0].body;
+     }
     } else {
       throw results[0].body;
     }

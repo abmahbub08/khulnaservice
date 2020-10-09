@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
@@ -186,6 +189,8 @@ class _OtpDataFormState extends State<OtpDataForm> {
       fetchData
           .getRegPhone(context, name, numberController.text, password)
           .then((value) async {
+
+
         fetchData.profileData(context).then((value) {
           setState(() {
             _isLoading = false;
@@ -197,10 +202,11 @@ class _OtpDataFormState extends State<OtpDataForm> {
           setState(() {
             _isLoading = false;
           });
-
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text("Something went wrong", textAlign: TextAlign.center),
-          ));
+          Flushbar(
+            duration: Duration(seconds: 2),
+            title: "Status",
+            message: "Something went wrong",
+          )..show(context);
         });
       }).catchError((onError) {
         print("reg $onError");
@@ -208,9 +214,25 @@ class _OtpDataFormState extends State<OtpDataForm> {
           _isLoading = false;
         });
 
-        Scaffold.of(context).showSnackBar(SnackBar(
-          content: Text("Something went wrong", textAlign: TextAlign.center),
-        ));
+        var data = jsonDecode(onError);
+
+        if(data['message']=="User exists!"){
+          Flushbar(
+            flushbarPosition: FlushbarPosition.TOP,
+            duration: Duration(seconds: 2),
+            title: "Status",
+            message: data['message'],
+          )..show(context);
+        }else{
+          Flushbar(
+            flushbarPosition: FlushbarPosition.TOP,
+            duration: Duration(seconds: 2),
+            title: "Status",
+            message: "Something went wrong",
+          )..show(context);
+        }
+
+
       });
     }
   }
