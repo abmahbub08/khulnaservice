@@ -175,4 +175,19 @@ class Repositories {
       throw Exception();
     }
   }
+  Future<http.Response> resetPass(String param,phone) {
+    try {
+      return apiService.resetPass(param,phone);
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> confirmPass(String param,phone,newPass,OTP) {
+    try {
+      return apiService.confirmRest(param,phone,newPass,OTP);
+    } catch (e) {
+      throw Exception();
+    }
+  }
 }

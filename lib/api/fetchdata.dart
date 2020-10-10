@@ -51,18 +51,17 @@ class FetchData {
     if (results[0].statusCode == 200) {
       var data = jsonDecode(results[0].body);
 
-
-     if(data['message']== "User exists!"){
-       throw results[0].body;
-     }else{
-       Sp.setString('token', data['access_token']);
-       Sp.setString('name', data['name']);
-       Sp.setString('email', phone);
-       Sp.setString('password', password);
-       Provider.of<userProvider>(context, listen: false)
-           .addData(userDataModelFromJson(results[0].body));
-       return results[0].body;
-     }
+      if (data['message'] == "User exists!") {
+        throw results[0].body;
+      } else {
+        Sp.setString('token', data['access_token']);
+        Sp.setString('name', data['name']);
+        Sp.setString('email', phone);
+        Sp.setString('password', password);
+        Provider.of<userProvider>(context, listen: false)
+            .addData(userDataModelFromJson(results[0].body));
+        return results[0].body;
+      }
     } else {
       throw results[0].body;
     }
@@ -76,10 +75,9 @@ class FetchData {
     if (results[0].statusCode == 200) {
       var data = jsonDecode(results[0].body);
       print(data);
-      if(data['message']=="Invalid credentials"){
+      if (data['message'] == "Invalid credentials") {
         throw "Invalid credentials";
-      }else{
-
+      } else {
         Sp.setString('token', data['access_token']);
         Sp.setString('name', data['name']);
         Sp.setString('email', email);
@@ -344,6 +342,35 @@ class FetchData {
     if (results[0].statusCode == 200) {
       print(results[0].body);
       return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future resetPass(phone) async {
+    print("this");
+    final catRep = repositories.resetPass("forgetPasswordOTP", phone);
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      print(results[0].body);
+      return results[0].body;
+    } else {
+      throw results[0].body;
+    }
+  }
+
+  Future confirmReset(phone, newPass, OTP) async {
+    print("this");
+    final catRep =
+        repositories.confirmPass("updatePasswordByPhone", phone, newPass, OTP);
+    var results = await Future.wait([catRep]);
+    if (results[0].statusCode == 200) {
+      var data = jsonDecode(results[0].body);
+      if (data['msg'] == "Success") {
+        return results[0].body;
+      } else {
+        throw results[0].body;
+      }
     } else {
       throw results[0].body;
     }

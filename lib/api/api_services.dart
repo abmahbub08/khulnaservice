@@ -329,4 +329,37 @@ class ApiServices {
       throw Exception();
     }
   }
+
+  Future<http.Response> resetPass(String param, phone) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.post(Base + '$param', headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+      }, body: {
+        "phone": phone
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
+
+  Future<http.Response> confirmRest(
+      String param, phone, newpassword, OTP) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    try {
+      final result = http.post(Base + '$param', headers: {
+        "Authorization": "Bearer ${sharedPreferences.get("token")}",
+      }, body: {
+        "phone": phone,
+        "newpassword": newpassword,
+        "otp": OTP
+      });
+      return result;
+    } catch (e) {
+      throw Exception();
+    }
+  }
 }
