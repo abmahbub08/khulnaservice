@@ -11,12 +11,12 @@ import 'package:khulnaservice/widgets/commons/custom_textfield.dart';
 import 'package:khulnaservice/widgets/commons/shadow_button.dart';
 import 'package:provider/provider.dart';
 
-class ForgetNumber extends StatefulWidget {
+class forgetPage extends StatefulWidget {
   @override
-  _ForgetNumberState createState() => _ForgetNumberState();
+  _forgetPageState createState() => _forgetPageState();
 }
 
-class _ForgetNumberState extends State<ForgetNumber> {
+class _forgetPageState extends State<forgetPage> {
   TextEditingController textEditingController = TextEditingController();
 
   @override
@@ -81,6 +81,7 @@ class _ForgetNumberState extends State<ForgetNumber> {
           _isLoading = false;
         });
         Route route = MaterialPageRoute(builder: (context) => ResetPage(phone));
+
         Navigator.push(context, route);
       } else {
         setState(() {

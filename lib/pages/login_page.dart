@@ -12,10 +12,8 @@ import 'package:khulnaservice/widgets/commons/auth_header.dart';
 import 'package:khulnaservice/widgets/login/login_form.dart';
 import 'package:khulnaservice/widgets/login/social_auth_login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../config.dart';
 import '../main.dart';
-import 'forgetNumber.dart';
+import 'forgetPage.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -74,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                   InkWell(
                       onTap: () {
                         Route route = MaterialPageRoute(
-                            builder: (context) => ForgetNumber());
+                            builder: (context) => forgetPage());
                         Navigator.push(context, route);
                       },
                       child: Text(
