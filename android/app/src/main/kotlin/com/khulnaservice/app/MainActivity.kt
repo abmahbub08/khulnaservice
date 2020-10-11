@@ -1,4 +1,4 @@
-package com.home2globe.khulnaservice
+package com.khulnaservice.app
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
