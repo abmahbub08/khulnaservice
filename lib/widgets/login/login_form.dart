@@ -40,9 +40,10 @@ class _LoginFormState extends State<LoginForm> {
         child: Column(
           children: <Widget>[
             MyTextFormField(
-              labelText: "Email OR Mobile Number",
-              hintText: 'Email OR Mobile Number',
-              isEmail: true,
+              labelText: "Mobile Number",
+              hintText: 'Mobile Number',
+              howMany: 11,
+              isEmail: false,
 
 //              validator: (String value) {
 //                if (!validator.isEmail(value)) {
@@ -61,7 +62,7 @@ class _LoginFormState extends State<LoginForm> {
               suffixIcon: IconButton(
                 icon: Icon(
                   // Based on passwordVisible state choose the icon
-                  passwordVisible ? Icons.visibility : Icons.visibility_off,
+                  passwordVisible ? Icons.visibility_off : Icons.visibility,
                   color: themeColor.getColor(),
                 ),
                 onPressed: () {

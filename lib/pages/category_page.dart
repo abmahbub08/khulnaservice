@@ -33,42 +33,98 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     final themeColor = Provider.of<ThemeNotifier>(context);
-    print(context.watch<CategoryProvider>().tabName.length);
+    print(context
+        .watch<CategoryProvider>()
+        .tabName
+        .length);
     return Scaffold(
-      backgroundColor: greyBackground,
-      body: context.watch<CategoryProvider>().tabName.length == 0
-          ? Center(
-              child: CircularProgressIndicator(
+        backgroundColor: greyBackground,
+        body: context
+            .watch<CategoryProvider>()
+            .tabName
+            .length == 0
+            ? Center(
+            child: CircularProgressIndicator(
               backgroundColor: Colors.red,
             ))
-          : VerticalTabs(
-              indicatorColor: themeColor.getColor(),
-              selectedTabBackgroundColor: whiteColor,
-              tabBackgroundColor: themeColor.getColor(),
-              backgroundColor: greyBackground,
-              direction: TextDirection.rtl,
-              tabsWidth: 48,
-              onSelect: (data) {
-                Future.delayed(Duration(microseconds: 10), () {
+            : ListView.builder(
+            itemCount: context
+                .watch<CategoryProvider>()
+                .tabName
+                .length,
+            itemBuilder: (context, index) {
+              return ExpansionTile(
+                onExpansionChanged: (v) {
                   setState(() {
-                    indexTab = data;
+                    indexTab = index;
                   });
-                });
-              },
-              tabsTitle: context.watch<CategoryProvider>().tabName,
-              tabs: context
+
+                },
+                title:
+                Text(context
+                    .watch<CategoryProvider>()
+                    .tabName[index]),
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(left: 5, right: 5),
+                    color: greyBackground,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: context
+                          .watch<CategoryProvider>()
+                          .myCategory
+                          .category[indexTab]
+                          .children
+                          .length,
+                      itemBuilder: (context, index) {
+                        return expansionTile(
+                            themeColor,
+                            context
+                                .watch<CategoryProvider>()
+                                .myCategory
+                                .category[indexTab]
+                                .children[index]
+                                .name
+                                .toString(),
+                            index);
+                      },
+                    ),
+                  )
+                ],
+              );
+              Text(context
                   .watch<CategoryProvider>()
-                  .tabName
-                  .map((e) => Tab(
-                        icon: Icon(Icons.add),
-                      ))
-                  .toList(),
-              contents: context
-                  .watch<CategoryProvider>()
-                  .tabName
-                  .map((e) => tabsContent(themeColor, "s"))
-                  .toList(),
-            ),
+                  .tabName[index]);
+            })
+
+      // VerticalTabs(
+      //         indicatorColor: themeColor.getColor(),
+      //         selectedTabBackgroundColor: whiteColor,
+      //         tabBackgroundColor: themeColor.getColor(),
+      //         backgroundColor: greyBackground,
+      //         direction: TextDirection.rtl,
+      //         tabsWidth: 48,
+      //         onSelect: (data) {
+      //           Future.delayed(Duration(microseconds: 10), () {
+      //             setState(() {
+      //               indexTab = data;
+      //             });
+      //           });
+      //         },
+      //         tabsTitle: context.watch<CategoryProvider>().tabName,
+      //         tabs: context
+      //             .watch<CategoryProvider>()
+      //             .tabName
+      //             .map((e) => Tab(
+      //                   icon: Icon(Icons.add),
+      //                 ))
+      //             .toList(),
+      //         contents: context
+      //             .watch<CategoryProvider>()
+      //             .tabName
+      //             .map((e) => tabsContent(themeColor, "s"))
+      //             .toList(),
+      //       ),
     );
   }
 
@@ -105,15 +161,17 @@ class _CategoryPageState extends State<CategoryPage> {
       data: ThemeData(accentColor: themeColor.getColor()),
       child: ExpansionTile(
         onExpansionChanged: (ss) {
-          if (Provider.of<CategoryProvider>(context, listen: false)
-                  .myCategory
-                  .category[indexTab]
-                  .children[indexThird]
-                  .children
-                  .length ==
+          if (Provider
+              .of<CategoryProvider>(context, listen: false)
+              .myCategory
+              .category[indexTab]
+              .children[indexThird]
+              .children
+              .length ==
               0) {
             Provider.of<CategoryProvider>(context, listen: false).addCatSlug(
-                Provider.of<CategoryProvider>(context, listen: false)
+                Provider
+                    .of<CategoryProvider>(context, listen: false)
                     .myCategory
                     .category[indexTab]
                     .children[indexThird]
@@ -127,11 +185,7 @@ class _CategoryPageState extends State<CategoryPage> {
           style: GoogleFonts.poppins(color: Color(0xFF5D6A78)),
           textDirection: TextDirection.ltr,
         ),
-        leading: null,
-        //        trailing: Icon(
-        //          Icons.add,
-        //          size: 0,
-        //        ),
+
         children: [
           ListView(
             physics: NeverScrollableScrollPhysics(),
@@ -143,7 +197,8 @@ class _CategoryPageState extends State<CategoryPage> {
 
                 // Generate 100 widgets that display their index in the List.
                 children: List.generate(
-                    Provider.of<CategoryProvider>(context, listen: false)
+                    Provider
+                        .of<CategoryProvider>(context, listen: false)
                         .myCategory
                         .category[indexTab]
                         .children[indexThird]
@@ -155,8 +210,9 @@ class _CategoryPageState extends State<CategoryPage> {
                         alignment: Alignment.topLeft,
                         child: InkWell(
                             onTap: () {
-                              print(Provider.of<CategoryProvider>(context,
-                                      listen: false)
+                              print(Provider
+                                  .of<CategoryProvider>(context,
+                                  listen: false)
                                   .myCategory
                                   .category[indexTab]
                                   .children[indexThird]
@@ -164,15 +220,16 @@ class _CategoryPageState extends State<CategoryPage> {
                                   .slug);
 
                               Provider.of<CategoryProvider>(context,
-                                      listen: false)
-                                  .addCatSlug(Provider.of<CategoryProvider>(
-                                          context,
-                                          listen: false)
-                                      .myCategory
-                                      .category[indexTab]
-                                      .children[indexThird]
-                                      .children[index]
-                                      .slug);
+                                  listen: false)
+                                  .addCatSlug(Provider
+                                  .of<CategoryProvider>(
+                                  context,
+                                  listen: false)
+                                  .myCategory
+                                  .category[indexTab]
+                                  .children[indexThird]
+                                  .children[index]
+                                  .slug);
 
                               Nav.route(context, testProduct());
                             },
@@ -180,8 +237,9 @@ class _CategoryPageState extends State<CategoryPage> {
                               padding: EdgeInsets.only(
                                   left: 64, top: 2.0, bottom: 1.0),
                               child: AutoSizeText(
-                                Provider.of<CategoryProvider>(context,
-                                        listen: false)
+                                Provider
+                                    .of<CategoryProvider>(context,
+                                    listen: false)
                                     .myCategory
                                     .category[indexTab]
                                     .children[indexThird]

@@ -111,87 +111,7 @@ class _NewAddressPageState extends State<NewAddressPage> {
         .divisions;
     return SafeArea(
       child: Scaffold(
-          bottomNavigationBar: InkWell(
-            onTap: () {
-//            Nav.routeReplacement(context, CreditCartPage());
 
-              if (phoneCont.text.isEmpty) {
-                Customwidget.myShowDialog(context, "Set a number");
-              } else if (address1.text.isEmpty) {
-                Customwidget.myShowDialog(context, "Fill address");
-              } else {
-                Customwidget.myDiaglog(context);
-                fetchData
-                    .addressUpdate(
-                        context,
-                        phoneCont.text,
-                        address1.text,
-                        address2.text,
-                        StateId.toString(),
-                        CityId.toString(),
-                        widget.method.toString(),
-                        same == false ? 0.toString() : 1.toString())
-                    .then((value) {
-                  fetchData.getPlaceOrderData(context).then((value) {
-                    Navigator.of(context, rootNavigator: true).pop();
-                    showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (context) => Dialog(
-                            child: Container(
-                                color: Colors.transparent,
-                                height: 170,
-                                width: 150,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                        width: 160,
-                                        child: Center(
-                                            child: Text("Address Updated"))),
-                                    Divider(),
-                                    RaisedButton(
-                                      color: themeColor.getColor(),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        "Ok",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    )
-                                  ],
-                                ))));
-                  }).catchError((onError) {
-                    print(onError);
-                    Navigator.of(context, rootNavigator: true).pop();
-                    Customwidget.myShowDialog(context, "Something went wrong!");
-                  });
-                }).catchError((onError) {
-                  print(onError);
-                  Navigator.of(context, rootNavigator: true).pop();
-                  Customwidget.myShowDialog(context, "Something went wrong!");
-                });
-              }
-            },
-            child: Container(
-              margin: EdgeInsets.only(left: 14, right: 14),
-              child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "Save",
-                  style: GoogleFonts.poppins(color: Colors.white),
-                ),
-              ),
-              height: 42,
-              decoration: BoxDecoration(
-                  color: themeColor.getColor(),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(32),
-                      topRight: Radius.circular(32))),
-            ),
-          ),
           backgroundColor: Color(0xFFFCFCFC),
           body: Container(
             padding: EdgeInsets.all(24),
@@ -302,7 +222,95 @@ class _NewAddressPageState extends State<NewAddressPage> {
                               }),
                           Text("Make shipping and billing address same")
                         ],
-                      )
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      InkWell(
+                        onTap: () {
+//            Nav.routeReplacement(context, CreditCartPage());
+
+                          if (phoneCont.text.isEmpty) {
+                            Customwidget.myShowDialog(context, "Set a number");
+                          } else if (address1.text.isEmpty) {
+                            Customwidget.myShowDialog(context, "Fill address");
+                          } else {
+                            Customwidget.myDiaglog(context);
+                            fetchData
+                                .addressUpdate(
+                                    context,
+                                    phoneCont.text,
+                                    address1.text,
+                                    address2.text,
+                                    StateId.toString(),
+                                    CityId.toString(),
+                                    widget.method.toString(),
+                                    same == false ? 0.toString() : 1.toString())
+                                .then((value) {
+                              fetchData
+                                  .getPlaceOrderData(context)
+                                  .then((value) {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                                showDialog(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (context) => Dialog(
+                                        child: Container(
+                                            color: Colors.transparent,
+                                            height: 170,
+                                            width: 150,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                    width: 160,
+                                                    child: Center(
+                                                        child: Text(
+                                                            "Address Updated"))),
+                                                Divider(),
+                                                RaisedButton(
+                                                  color: themeColor.getColor(),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text(
+                                                    "Ok",
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                )
+                                              ],
+                                            ))));
+                              }).catchError((onError) {
+                                print(onError);
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                                Customwidget.myShowDialog(
+                                    context, "Something went wrong!");
+                              });
+                            }).catchError((onError) {
+                              print(onError);
+                              Navigator.of(context, rootNavigator: true).pop();
+                              Customwidget.myShowDialog(
+                                  context, "Something went wrong!");
+                            });
+                          }
+                        },
+                        child: Container(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Save",
+                              style: GoogleFonts.poppins(color: Colors.white),
+                            ),
+                          ),
+                          color: themeColor.getColor(),
+                          height: 42,
+                        ),
+                      ),
                     ],
                   )
                 ],

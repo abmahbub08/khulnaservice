@@ -11,6 +11,7 @@ import 'package:getflutter/types/gf_button_type.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:khulnaservice/api/api_services.dart';
 import 'package:khulnaservice/api/fetchdata.dart';
+import 'package:khulnaservice/main.dart';
 import 'package:khulnaservice/provider/cart_provider.dart';
 import 'package:khulnaservice/utils/drop_down_menu/find_dropdown.dart';
 import 'package:khulnaservice/utils/screen.dart';
@@ -406,38 +407,63 @@ class HomeWidgetState extends State<ShoppingCartPage>
               ),
             )
           ]),
-      height: size.height *0.09,
+      height: size.height *0.12,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          SizedBox(
-            height: size.height *0.09,
-            width: size.width *0.38,
-            child: RaisedButton(
-              color: themeColor.getColor(),
-              child: Text(
-                "Place Order",
-                style: GoogleFonts.poppins(
-                    color: whiteColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold),
+          Column(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  width: size.width * 0.5,
+                  child: RaisedButton(
+                    color: themeColor.getColor(),
+                    child: Text(
+                      "Place Order",
+                      style: GoogleFonts.poppins(
+                          color: whiteColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      if (data.length == 0) {
+                        CustomWidget.myShowDialog(context, "Your cart is empty");
+                      } else {
+                        CustomWidget.myDiaglog(context);
+                        fetchData.getPlaceOrderData(context).then((value) {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          Nav.route(context, OrderPage());
+                        }).catchError((e) {
+                          print(e);
+                          Navigator.of(context, rootNavigator: true).pop();
+                          CustomWidget.myShowDialog(context, "Something went wrong");
+                        });
+                      }
+                    },
+                  ),
+                ),
               ),
-              onPressed: () {
-                if (data.length == 0) {
-                  CustomWidget.myShowDialog(context, "Your cart is empty");
-                } else {
-                  CustomWidget.myDiaglog(context);
-                  fetchData.getPlaceOrderData(context).then((value) {
-                    Navigator.of(context, rootNavigator: true).pop();
-                    Nav.route(context, OrderPage());
-                  }).catchError((e) {
-                    print(e);
-                    Navigator.of(context, rootNavigator: true).pop();
-                    CustomWidget.myShowDialog(context, "Something went wrong");
-                  });
-                }
-              },
-            ),
+              Expanded(
+                child: SizedBox(
+                  width: size.width * 0.5,
+                  child: RaisedButton(
+                    color: Colors.red,
+                    child: Text(
+                      "Continue Shopping",
+                      style: GoogleFonts.poppins(
+                          color: whiteColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () {
+                      Nav.route(context, MyApp());
+                    },
+                  ),
+                ),
+              ),
+
+
+            ],
           ),
           Row(
             children: [

@@ -128,8 +128,8 @@ class FetchData {
       var data = jsonDecode(results[0].body);
       List myList = [];
       data['header_key'].values.toList().forEach((e) {
-        if (data["ecommerceSetting"]['$e']['link'] == null) {
-          print(data["ecommerceSetting"]['$e']);
+        if (data["ecommerceSetting"]['$e']['show'] == "1") {
+
 
           myList.add(data["ecommerceSetting"]['$e']['image']);
         }

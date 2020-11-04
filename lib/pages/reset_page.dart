@@ -38,7 +38,7 @@ class _ResetPageState extends State<ResetPage> {
               textEditingController: newPass,
               labelText: "New Password",
               hintText: 'New Password',
-              isEmail: false,
+              isEmail: true,
             ),
           ),
           Container(
@@ -47,16 +47,17 @@ class _ResetPageState extends State<ResetPage> {
               textEditingController: confirmPass,
               labelText: "Confirm Password",
               hintText: 'Confirm Password',
-              isEmail: false,
+              isEmail: true,
             ),
           ),
           Container(
             padding: EdgeInsets.only(top: 10, right: 42, left: 42),
             child: MyTextFormField(
               textEditingController: OTPController,
-              labelText: "OTP",
-              hintText: 'OTP',
+              labelText: "Enter 4 digit OTP here",
+              hintText: 'Enter 4 digit OTP here',
               isEmail: false,
+              
             ),
           ),
           Container(

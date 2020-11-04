@@ -87,6 +87,7 @@ class _RegisterPhoneState extends State<RegisterPhone> {
                               ReferralController.text, NumberController.text)
                           .then((value) {
                         var data = jsonDecode(value);
+                        print(value);
                         setState(() {
                           _isLoading = false;
                         });
@@ -116,12 +117,14 @@ class _RegisterPhoneState extends State<RegisterPhone> {
                         setState(() {
                           _isLoading = false;
                         });
+                        print(onError);
                         CustomWidget.myShowDialog(context, "Invalid Number");
                       });
                     } else {
                       setState(() {
                         _isLoading = false;
                       });
+                      print("heer");
                       CustomWidget.myShowDialog(context, "Invalid Number");
                     }
                   },

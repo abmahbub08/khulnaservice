@@ -34,9 +34,6 @@ class CategoryProvider extends ChangeNotifier {
       tabName.add(myCategory.category[i].name);
     }
 
-    tabName.add("");
-    tabName.add("");
-
     print(tabName.length);
     notifyListeners();
   }

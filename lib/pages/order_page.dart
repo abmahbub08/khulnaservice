@@ -602,8 +602,18 @@ class _OrderPageState extends State<OrderPage> {
                       });
                     },
                     child: data.billingAddress == null
-                        ? Text("Add billing")
-                        : Text("Write billing"),
+                        ? Row(
+                          children: [
+                            Text("Add billing"),
+                            Text("*",style: TextStyle(color: Colors.redAccent),),
+                          ],
+                        )
+                        : Row(
+                          children: [
+                            Text("Write billing"),
+                            Text("*",style: TextStyle(color: Colors.redAccent),),
+                          ],
+                        ),
                   ),
                   GFButton(
                     focusColor: themeColor.getColor().withOpacity(0.5),
@@ -628,8 +638,18 @@ class _OrderPageState extends State<OrderPage> {
                       });
                     },
                     child: data.shippingAddress == null
-                        ? Text("Add Shipping")
-                        : Text("Write Shipping"),
+                        ? Row(
+                          children: [
+                            Text("Add Shipping"),
+                            Text("*",style: TextStyle(color: Colors.redAccent),),
+                          ],
+                        )
+                        : Row(
+                          children: [
+                            Text("Write Shipping"),
+                            Text("*",style: TextStyle(color: Colors.redAccent),),
+                          ],
+                        ),
                   ),
                 ],
               ),

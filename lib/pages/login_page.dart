@@ -69,18 +69,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Column(
                 children: <Widget>[
-                  InkWell(
-                      onTap: () {
-                        Route route = MaterialPageRoute(
-                            builder: (context) => forgetPage());
-                        Navigator.push(context, route);
-                      },
-                      child: Text(
-                        "Reset your password",
-                        style: GoogleFonts.poppins(
-                          color: themeColor.getColor(),
-                        ),
-                      )),
+
                   Text(
                     "Don't you have an account?",
                     style: GoogleFonts.poppins(
@@ -119,6 +108,18 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
+                  InkWell(
+                      onTap: () {
+                        Route route = MaterialPageRoute(
+                            builder: (context) => forgetPage());
+                        Navigator.push(context, route);
+                      },
+                      child: Text(
+                        "Reset your password",
+                        style: GoogleFonts.poppins(
+                          color: themeColor.getColor(),
+                        ),
+                      )),
                 ],
               ),
               SocialLoginButtons(themeColor: themeColor)

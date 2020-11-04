@@ -86,7 +86,13 @@ class _HomeNavigatorState extends State<HomeNavigator> {
     final themeColor = Provider.of<ThemeNotifier>(context);
     return WillPopScope(
       onWillPop: () {
-        showAlertDialog(context);
+        if (_currentPage == 0) {
+          showAlertDialog(context);
+        } else {
+          setState(() {
+            _currentPage = 0;
+          });
+        }
       },
       child: Scaffold(
         bottomNavigationBar: IsLoading
